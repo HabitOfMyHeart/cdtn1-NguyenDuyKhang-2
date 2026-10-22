@@ -1,0 +1,2882 @@
+[
+  {
+    "product_id": 1,
+    "product_code": "SS0001",
+    "product_name": "Samsung Y2",
+    "brand": "Samsung",
+    "group": "Điện thoại phổ thông",
+    "price": 1890000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 2,
+    "product_code": "SS0002",
+    "product_name": "Samsung Pro Max 14",
+    "brand": "Samsung",
+    "group": "Điện thoại cao cấp",
+    "price": 36990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 3,
+    "product_code": "SS0003",
+    "product_name": "Samsung Tai nghe A8",
+    "brand": "Samsung",
+    "group": "Phụ kiện",
+    "price": 590000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 4,
+    "product_code": "SS0004",
+    "product_name": "Samsung Pin dự phòng A9",
+    "brand": "Samsung",
+    "group": "Phụ kiện",
+    "price": 320000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 5,
+    "product_code": "SS0005",
+    "product_name": "Samsung Plus 13",
+    "brand": "Samsung",
+    "group": "Điện thoại tầm trung",
+    "price": 7990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 6,
+    "product_code": "SS0006",
+    "product_name": "Samsung Tab A11",
+    "brand": "Samsung",
+    "group": "Máy tính bảng",
+    "price": 5990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 7,
+    "product_code": "SS0007",
+    "product_name": "Samsung Plus 14",
+    "brand": "Samsung",
+    "group": "Điện thoại tầm trung",
+    "price": 6490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 8,
+    "product_code": "SS0008",
+    "product_name": "Samsung Y3",
+    "brand": "Samsung",
+    "group": "Điện thoại phổ thông",
+    "price": 1890000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 9,
+    "product_code": "SS0009",
+    "product_name": "Samsung Sạc nhanh Pro7",
+    "brand": "Samsung",
+    "group": "Phụ kiện",
+    "price": 320000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 10,
+    "product_code": "SS0010",
+    "product_name": "Samsung Neo 11",
+    "brand": "Samsung",
+    "group": "Điện thoại tầm trung",
+    "price": 6490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 11,
+    "product_code": "SS0011",
+    "product_name": "Samsung Ultra 13",
+    "brand": "Samsung",
+    "group": "Điện thoại cao cấp",
+    "price": 36990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 12,
+    "product_code": "SS0012",
+    "product_name": "Samsung Pro Max 13",
+    "brand": "Samsung",
+    "group": "Điện thoại cao cấp",
+    "price": 27990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 13,
+    "product_code": "SS0013",
+    "product_name": "Samsung Pro Max 14",
+    "brand": "Samsung",
+    "group": "Điện thoại cao cấp",
+    "price": 27990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 14,
+    "product_code": "SS0014",
+    "product_name": "Samsung Pin dự phòng A4",
+    "brand": "Samsung",
+    "group": "Phụ kiện",
+    "price": 250000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 15,
+    "product_code": "SS0015",
+    "product_name": "Samsung S 14",
+    "brand": "Samsung",
+    "group": "Điện thoại tầm trung",
+    "price": 4990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 16,
+    "product_code": "SS0016",
+    "product_name": "Samsung Pro Max 14",
+    "brand": "Samsung",
+    "group": "Điện thoại cao cấp",
+    "price": 27990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 17,
+    "product_code": "SS0017",
+    "product_name": "Samsung Sạc nhanh B5",
+    "brand": "Samsung",
+    "group": "Phụ kiện",
+    "price": 320000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 18,
+    "product_code": "SS0018",
+    "product_name": "Samsung Neo 13",
+    "brand": "Samsung",
+    "group": "Điện thoại tầm trung",
+    "price": 9490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 19,
+    "product_code": "SS0019",
+    "product_name": "Samsung Plus 14",
+    "brand": "Samsung",
+    "group": "Điện thoại tầm trung",
+    "price": 11990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 20,
+    "product_code": "SS0020",
+    "product_name": "Samsung Tab M8",
+    "brand": "Samsung",
+    "group": "Máy tính bảng",
+    "price": 4590000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 21,
+    "product_code": "SS0021",
+    "product_name": "Samsung Note 13",
+    "brand": "Samsung",
+    "group": "Điện thoại tầm trung",
+    "price": 7990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 22,
+    "product_code": "SS0022",
+    "product_name": "Samsung S 10",
+    "brand": "Samsung",
+    "group": "Điện thoại tầm trung",
+    "price": 4990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 23,
+    "product_code": "SS0023",
+    "product_name": "Samsung Ultra 14",
+    "brand": "Samsung",
+    "group": "Điện thoại cao cấp",
+    "price": 36990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 24,
+    "product_code": "SS0024",
+    "product_name": "Samsung Plus 11",
+    "brand": "Samsung",
+    "group": "Điện thoại tầm trung",
+    "price": 6490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 25,
+    "product_code": "SS0025",
+    "product_name": "Samsung Y9",
+    "brand": "Samsung",
+    "group": "Điện thoại phổ thông",
+    "price": 3490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 26,
+    "product_code": "SS0026",
+    "product_name": "Samsung Ultra 16",
+    "brand": "Samsung",
+    "group": "Điện thoại cao cấp",
+    "price": 31990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 27,
+    "product_code": "SS0027",
+    "product_name": "Samsung Tab A5",
+    "brand": "Samsung",
+    "group": "Máy tính bảng",
+    "price": 12990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 28,
+    "product_code": "SS0028",
+    "product_name": "Samsung Tab S7",
+    "brand": "Samsung",
+    "group": "Máy tính bảng",
+    "price": 4590000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 29,
+    "product_code": "SS0029",
+    "product_name": "Samsung Ốp lưng Lite8",
+    "brand": "Samsung",
+    "group": "Phụ kiện",
+    "price": 250000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 30,
+    "product_code": "SS0030",
+    "product_name": "Samsung Plus 11",
+    "brand": "Samsung",
+    "group": "Điện thoại tầm trung",
+    "price": 6490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 31,
+    "product_code": "SS0031",
+    "product_name": "Samsung Plus 8",
+    "brand": "Samsung",
+    "group": "Điện thoại tầm trung",
+    "price": 6490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 32,
+    "product_code": "SS0032",
+    "product_name": "Samsung Neo 9",
+    "brand": "Samsung",
+    "group": "Điện thoại tầm trung",
+    "price": 11990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 33,
+    "product_code": "SS0033",
+    "product_name": "Samsung Sạc nhanh Lite7",
+    "brand": "Samsung",
+    "group": "Phụ kiện",
+    "price": 250000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 34,
+    "product_code": "SS0034",
+    "product_name": "Samsung Pro+ 13",
+    "brand": "Samsung",
+    "group": "Điện thoại cao cấp",
+    "price": 18990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 35,
+    "product_code": "SS0035",
+    "product_name": "Samsung Note 13",
+    "brand": "Samsung",
+    "group": "Điện thoại tầm trung",
+    "price": 7990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 36,
+    "product_code": "SS0036",
+    "product_name": "Samsung Cáp Type-C Pro5",
+    "brand": "Samsung",
+    "group": "Phụ kiện",
+    "price": 190000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 37,
+    "product_code": "SS0037",
+    "product_name": "Samsung Pin dự phòng B1",
+    "brand": "Samsung",
+    "group": "Phụ kiện",
+    "price": 120000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 38,
+    "product_code": "SS0038",
+    "product_name": "Samsung Note 8",
+    "brand": "Samsung",
+    "group": "Điện thoại tầm trung",
+    "price": 11990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 39,
+    "product_code": "SS0039",
+    "product_name": "Samsung Pro+ 15",
+    "brand": "Samsung",
+    "group": "Điện thoại cao cấp",
+    "price": 31990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 40,
+    "product_code": "SS0040",
+    "product_name": "Samsung Lite9",
+    "brand": "Samsung",
+    "group": "Điện thoại phổ thông",
+    "price": 1890000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 41,
+    "product_code": "XM0041",
+    "product_name": "Xiaomi Sạc nhanh B7",
+    "brand": "Xiaomi",
+    "group": "Phụ kiện",
+    "price": 190000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 42,
+    "product_code": "XM0042",
+    "product_name": "Xiaomi Plus 10",
+    "brand": "Xiaomi",
+    "group": "Điện thoại tầm trung",
+    "price": 9490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 43,
+    "product_code": "XM0043",
+    "product_name": "Xiaomi Plus 10",
+    "brand": "Xiaomi",
+    "group": "Điện thoại tầm trung",
+    "price": 9490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 44,
+    "product_code": "XM0044",
+    "product_name": "Xiaomi Lite3",
+    "brand": "Xiaomi",
+    "group": "Điện thoại phổ thông",
+    "price": 2990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 45,
+    "product_code": "XM0045",
+    "product_name": "Xiaomi Plus 10",
+    "brand": "Xiaomi",
+    "group": "Điện thoại tầm trung",
+    "price": 9490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 46,
+    "product_code": "XM0046",
+    "product_name": "Xiaomi S 14",
+    "brand": "Xiaomi",
+    "group": "Điện thoại tầm trung",
+    "price": 7990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 47,
+    "product_code": "XM0047",
+    "product_name": "Xiaomi Note 13",
+    "brand": "Xiaomi",
+    "group": "Điện thoại tầm trung",
+    "price": 6490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 48,
+    "product_code": "XM0048",
+    "product_name": "Xiaomi Neo 14",
+    "brand": "Xiaomi",
+    "group": "Điện thoại tầm trung",
+    "price": 6490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 49,
+    "product_code": "XM0049",
+    "product_name": "Xiaomi Lite5",
+    "brand": "Xiaomi",
+    "group": "Điện thoại phổ thông",
+    "price": 2490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 50,
+    "product_code": "XM0050",
+    "product_name": "Xiaomi Neo 14",
+    "brand": "Xiaomi",
+    "group": "Điện thoại tầm trung",
+    "price": 9490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 51,
+    "product_code": "XM0051",
+    "product_name": "Xiaomi Tai nghe Lite6",
+    "brand": "Xiaomi",
+    "group": "Phụ kiện",
+    "price": 450000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 52,
+    "product_code": "XM0052",
+    "product_name": "Xiaomi Pin dự phòng B3",
+    "brand": "Xiaomi",
+    "group": "Phụ kiện",
+    "price": 190000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 53,
+    "product_code": "XM0053",
+    "product_name": "Xiaomi Note 14",
+    "brand": "Xiaomi",
+    "group": "Điện thoại tầm trung",
+    "price": 9490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 54,
+    "product_code": "XM0054",
+    "product_name": "Xiaomi Tab A12",
+    "brand": "Xiaomi",
+    "group": "Máy tính bảng",
+    "price": 7490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 55,
+    "product_code": "XM0055",
+    "product_name": "Xiaomi Tab A10",
+    "brand": "Xiaomi",
+    "group": "Máy tính bảng",
+    "price": 9990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 56,
+    "product_code": "XM0056",
+    "product_name": "Xiaomi Neo 8",
+    "brand": "Xiaomi",
+    "group": "Điện thoại tầm trung",
+    "price": 6490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 57,
+    "product_code": "XM0057",
+    "product_name": "Xiaomi Pro Max 12",
+    "brand": "Xiaomi",
+    "group": "Điện thoại cao cấp",
+    "price": 36990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 58,
+    "product_code": "XM0058",
+    "product_name": "Xiaomi Tab S9",
+    "brand": "Xiaomi",
+    "group": "Máy tính bảng",
+    "price": 7490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 59,
+    "product_code": "XM0059",
+    "product_name": "Xiaomi Neo 13",
+    "brand": "Xiaomi",
+    "group": "Điện thoại tầm trung",
+    "price": 4990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 60,
+    "product_code": "XM0060",
+    "product_name": "Xiaomi Plus 8",
+    "brand": "Xiaomi",
+    "group": "Điện thoại tầm trung",
+    "price": 11990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 61,
+    "product_code": "XM0061",
+    "product_name": "Xiaomi Pin dự phòng Lite9",
+    "brand": "Xiaomi",
+    "group": "Phụ kiện",
+    "price": 750000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 62,
+    "product_code": "XM0062",
+    "product_name": "Xiaomi Ultra 12",
+    "brand": "Xiaomi",
+    "group": "Điện thoại cao cấp",
+    "price": 27990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 63,
+    "product_code": "XM0063",
+    "product_name": "Xiaomi Tab M8",
+    "brand": "Xiaomi",
+    "group": "Máy tính bảng",
+    "price": 5990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 64,
+    "product_code": "XM0064",
+    "product_name": "Xiaomi Pro+ 14",
+    "brand": "Xiaomi",
+    "group": "Điện thoại cao cấp",
+    "price": 18990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 65,
+    "product_code": "XM0065",
+    "product_name": "Xiaomi Ultra 15",
+    "brand": "Xiaomi",
+    "group": "Điện thoại cao cấp",
+    "price": 18990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 66,
+    "product_code": "XM0066",
+    "product_name": "Xiaomi Pin dự phòng Pro2",
+    "brand": "Xiaomi",
+    "group": "Phụ kiện",
+    "price": 750000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 67,
+    "product_code": "XM0067",
+    "product_name": "Xiaomi Pro Max 12",
+    "brand": "Xiaomi",
+    "group": "Điện thoại cao cấp",
+    "price": 18990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 68,
+    "product_code": "XM0068",
+    "product_name": "Xiaomi C9",
+    "brand": "Xiaomi",
+    "group": "Điện thoại phổ thông",
+    "price": 1890000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 69,
+    "product_code": "XM0069",
+    "product_name": "Xiaomi S 12",
+    "brand": "Xiaomi",
+    "group": "Điện thoại tầm trung",
+    "price": 4990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 70,
+    "product_code": "XM0070",
+    "product_name": "Xiaomi Y3",
+    "brand": "Xiaomi",
+    "group": "Điện thoại phổ thông",
+    "price": 1890000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 71,
+    "product_code": "XM0071",
+    "product_name": "Xiaomi Plus 13",
+    "brand": "Xiaomi",
+    "group": "Điện thoại tầm trung",
+    "price": 11990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 72,
+    "product_code": "XM0072",
+    "product_name": "Xiaomi S 11",
+    "brand": "Xiaomi",
+    "group": "Điện thoại tầm trung",
+    "price": 7990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 73,
+    "product_code": "XM0073",
+    "product_name": "Xiaomi Plus 9",
+    "brand": "Xiaomi",
+    "group": "Điện thoại tầm trung",
+    "price": 11990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 74,
+    "product_code": "XM0074",
+    "product_name": "Xiaomi Tab A12",
+    "brand": "Xiaomi",
+    "group": "Máy tính bảng",
+    "price": 5990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 75,
+    "product_code": "XM0075",
+    "product_name": "Xiaomi S 9",
+    "brand": "Xiaomi",
+    "group": "Điện thoại tầm trung",
+    "price": 6490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 76,
+    "product_code": "XM0076",
+    "product_name": "Xiaomi Ultra 16",
+    "brand": "Xiaomi",
+    "group": "Điện thoại cao cấp",
+    "price": 22990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 77,
+    "product_code": "XM0077",
+    "product_name": "Xiaomi Cáp Type-C Lite1",
+    "brand": "Xiaomi",
+    "group": "Phụ kiện",
+    "price": 250000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 78,
+    "product_code": "XM0078",
+    "product_name": "Xiaomi Cáp Type-C A7",
+    "brand": "Xiaomi",
+    "group": "Phụ kiện",
+    "price": 450000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 79,
+    "product_code": "XM0079",
+    "product_name": "Xiaomi Cáp Type-C Pro5",
+    "brand": "Xiaomi",
+    "group": "Phụ kiện",
+    "price": 190000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 80,
+    "product_code": "XM0080",
+    "product_name": "Xiaomi Neo 13",
+    "brand": "Xiaomi",
+    "group": "Điện thoại tầm trung",
+    "price": 9490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 81,
+    "product_code": "OP0081",
+    "product_name": "OPPO Note 13",
+    "brand": "OPPO",
+    "group": "Điện thoại tầm trung",
+    "price": 6490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 82,
+    "product_code": "OP0082",
+    "product_name": "OPPO C9",
+    "brand": "OPPO",
+    "group": "Điện thoại phổ thông",
+    "price": 2490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 83,
+    "product_code": "OP0083",
+    "product_name": "OPPO Ultra 16",
+    "brand": "OPPO",
+    "group": "Điện thoại cao cấp",
+    "price": 27990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 84,
+    "product_code": "OP0084",
+    "product_name": "OPPO Neo 8",
+    "brand": "OPPO",
+    "group": "Điện thoại tầm trung",
+    "price": 9490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 85,
+    "product_code": "OP0085",
+    "product_name": "OPPO Pro Max 13",
+    "brand": "OPPO",
+    "group": "Điện thoại cao cấp",
+    "price": 27990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 86,
+    "product_code": "OP0086",
+    "product_name": "OPPO Pro Max 13",
+    "brand": "OPPO",
+    "group": "Điện thoại cao cấp",
+    "price": 18990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 87,
+    "product_code": "OP0087",
+    "product_name": "OPPO Plus 14",
+    "brand": "OPPO",
+    "group": "Điện thoại tầm trung",
+    "price": 4990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 88,
+    "product_code": "OP0088",
+    "product_name": "OPPO Plus 14",
+    "brand": "OPPO",
+    "group": "Điện thoại tầm trung",
+    "price": 7990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 89,
+    "product_code": "OP0089",
+    "product_name": "OPPO Lite9",
+    "brand": "OPPO",
+    "group": "Điện thoại phổ thông",
+    "price": 3490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 90,
+    "product_code": "OP0090",
+    "product_name": "OPPO Tai nghe A3",
+    "brand": "OPPO",
+    "group": "Phụ kiện",
+    "price": 450000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 91,
+    "product_code": "OP0091",
+    "product_name": "OPPO Neo 8",
+    "brand": "OPPO",
+    "group": "Điện thoại tầm trung",
+    "price": 4990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 92,
+    "product_code": "OP0092",
+    "product_name": "OPPO Ốp lưng Lite6",
+    "brand": "OPPO",
+    "group": "Phụ kiện",
+    "price": 250000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 93,
+    "product_code": "OP0093",
+    "product_name": "OPPO Plus 10",
+    "brand": "OPPO",
+    "group": "Điện thoại tầm trung",
+    "price": 7990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 94,
+    "product_code": "OP0094",
+    "product_name": "OPPO Tab S6",
+    "brand": "OPPO",
+    "group": "Máy tính bảng",
+    "price": 5990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 95,
+    "product_code": "OP0095",
+    "product_name": "OPPO Note 13",
+    "brand": "OPPO",
+    "group": "Điện thoại tầm trung",
+    "price": 7990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 96,
+    "product_code": "OP0096",
+    "product_name": "OPPO Go2",
+    "brand": "OPPO",
+    "group": "Điện thoại phổ thông",
+    "price": 2990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 97,
+    "product_code": "OP0097",
+    "product_name": "OPPO Tab M11",
+    "brand": "OPPO",
+    "group": "Máy tính bảng",
+    "price": 4590000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 98,
+    "product_code": "OP0098",
+    "product_name": "OPPO Ultra 15",
+    "brand": "OPPO",
+    "group": "Điện thoại cao cấp",
+    "price": 36990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 99,
+    "product_code": "OP0099",
+    "product_name": "OPPO Tab S11",
+    "brand": "OPPO",
+    "group": "Máy tính bảng",
+    "price": 12990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 100,
+    "product_code": "OP0100",
+    "product_name": "OPPO Tab S9",
+    "brand": "OPPO",
+    "group": "Máy tính bảng",
+    "price": 9990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 101,
+    "product_code": "OP0101",
+    "product_name": "OPPO Pro Max 14",
+    "brand": "OPPO",
+    "group": "Điện thoại cao cấp",
+    "price": 18990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 102,
+    "product_code": "OP0102",
+    "product_name": "OPPO Lite6",
+    "brand": "OPPO",
+    "group": "Điện thoại phổ thông",
+    "price": 2490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 103,
+    "product_code": "OP0103",
+    "product_name": "OPPO Pro+ 15",
+    "brand": "OPPO",
+    "group": "Điện thoại cao cấp",
+    "price": 22990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 104,
+    "product_code": "OP0104",
+    "product_name": "OPPO Pro+ 12",
+    "brand": "OPPO",
+    "group": "Điện thoại cao cấp",
+    "price": 18990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 105,
+    "product_code": "OP0105",
+    "product_name": "OPPO Neo 12",
+    "brand": "OPPO",
+    "group": "Điện thoại tầm trung",
+    "price": 9490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 106,
+    "product_code": "OP0106",
+    "product_name": "OPPO Neo 8",
+    "brand": "OPPO",
+    "group": "Điện thoại tầm trung",
+    "price": 7990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 107,
+    "product_code": "OP0107",
+    "product_name": "OPPO Cáp Type-C Pro9",
+    "brand": "OPPO",
+    "group": "Phụ kiện",
+    "price": 320000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 108,
+    "product_code": "OP0108",
+    "product_name": "OPPO Pro Max 12",
+    "brand": "OPPO",
+    "group": "Điện thoại cao cấp",
+    "price": 31990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 109,
+    "product_code": "OP0109",
+    "product_name": "OPPO Tai nghe B1",
+    "brand": "OPPO",
+    "group": "Phụ kiện",
+    "price": 590000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 110,
+    "product_code": "OP0110",
+    "product_name": "OPPO Neo 14",
+    "brand": "OPPO",
+    "group": "Điện thoại tầm trung",
+    "price": 4990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 111,
+    "product_code": "OP0111",
+    "product_name": "OPPO Tab M7",
+    "brand": "OPPO",
+    "group": "Máy tính bảng",
+    "price": 7490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 112,
+    "product_code": "OP0112",
+    "product_name": "OPPO Pro Max 12",
+    "brand": "OPPO",
+    "group": "Điện thoại cao cấp",
+    "price": 27990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 113,
+    "product_code": "OP0113",
+    "product_name": "OPPO Pro+ 14",
+    "brand": "OPPO",
+    "group": "Điện thoại cao cấp",
+    "price": 18990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 114,
+    "product_code": "OP0114",
+    "product_name": "OPPO Ultra 11",
+    "brand": "OPPO",
+    "group": "Điện thoại cao cấp",
+    "price": 31990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 115,
+    "product_code": "OP0115",
+    "product_name": "OPPO Pro Max 13",
+    "brand": "OPPO",
+    "group": "Điện thoại cao cấp",
+    "price": 31990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 116,
+    "product_code": "OP0116",
+    "product_name": "OPPO Pro+ 16",
+    "brand": "OPPO",
+    "group": "Điện thoại cao cấp",
+    "price": 18990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 117,
+    "product_code": "OP0117",
+    "product_name": "OPPO Note 13",
+    "brand": "OPPO",
+    "group": "Điện thoại tầm trung",
+    "price": 11990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 118,
+    "product_code": "OP0118",
+    "product_name": "OPPO Ultra 15",
+    "brand": "OPPO",
+    "group": "Điện thoại cao cấp",
+    "price": 18990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 119,
+    "product_code": "OP0119",
+    "product_name": "OPPO Pin dự phòng Lite2",
+    "brand": "OPPO",
+    "group": "Phụ kiện",
+    "price": 120000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 120,
+    "product_code": "OP0120",
+    "product_name": "OPPO Y9",
+    "brand": "OPPO",
+    "group": "Điện thoại phổ thông",
+    "price": 3490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 121,
+    "product_code": "RM0121",
+    "product_name": "realme Tai nghe B2",
+    "brand": "realme",
+    "group": "Phụ kiện",
+    "price": 190000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 122,
+    "product_code": "RM0122",
+    "product_name": "realme Note 10",
+    "brand": "realme",
+    "group": "Điện thoại tầm trung",
+    "price": 4990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 123,
+    "product_code": "RM0123",
+    "product_name": "realme Y3",
+    "brand": "realme",
+    "group": "Điện thoại phổ thông",
+    "price": 2490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 124,
+    "product_code": "RM0124",
+    "product_name": "realme C3",
+    "brand": "realme",
+    "group": "Điện thoại phổ thông",
+    "price": 2990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 125,
+    "product_code": "RM0125",
+    "product_name": "realme Neo 9",
+    "brand": "realme",
+    "group": "Điện thoại tầm trung",
+    "price": 6490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 126,
+    "product_code": "RM0126",
+    "product_name": "realme Tab A10",
+    "brand": "realme",
+    "group": "Máy tính bảng",
+    "price": 5990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 127,
+    "product_code": "RM0127",
+    "product_name": "realme Plus 10",
+    "brand": "realme",
+    "group": "Điện thoại tầm trung",
+    "price": 6490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 128,
+    "product_code": "RM0128",
+    "product_name": "realme Sạc nhanh B6",
+    "brand": "realme",
+    "group": "Phụ kiện",
+    "price": 450000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 129,
+    "product_code": "RM0129",
+    "product_name": "realme Go5",
+    "brand": "realme",
+    "group": "Điện thoại phổ thông",
+    "price": 2990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 130,
+    "product_code": "RM0130",
+    "product_name": "realme Tab A11",
+    "brand": "realme",
+    "group": "Máy tính bảng",
+    "price": 7490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 131,
+    "product_code": "RM0131",
+    "product_name": "realme Ultra 11",
+    "brand": "realme",
+    "group": "Điện thoại cao cấp",
+    "price": 27990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 132,
+    "product_code": "RM0132",
+    "product_name": "realme S 10",
+    "brand": "realme",
+    "group": "Điện thoại tầm trung",
+    "price": 4990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 133,
+    "product_code": "RM0133",
+    "product_name": "realme Pro Max 13",
+    "brand": "realme",
+    "group": "Điện thoại cao cấp",
+    "price": 27990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 134,
+    "product_code": "RM0134",
+    "product_name": "realme Neo 14",
+    "brand": "realme",
+    "group": "Điện thoại tầm trung",
+    "price": 6490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 135,
+    "product_code": "RM0135",
+    "product_name": "realme Tab A6",
+    "brand": "realme",
+    "group": "Máy tính bảng",
+    "price": 5990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 136,
+    "product_code": "RM0136",
+    "product_name": "realme Neo 10",
+    "brand": "realme",
+    "group": "Điện thoại tầm trung",
+    "price": 4990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 137,
+    "product_code": "RM0137",
+    "product_name": "realme Y5",
+    "brand": "realme",
+    "group": "Điện thoại phổ thông",
+    "price": 3990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 138,
+    "product_code": "RM0138",
+    "product_name": "realme Tab M8",
+    "brand": "realme",
+    "group": "Máy tính bảng",
+    "price": 7490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 139,
+    "product_code": "RM0139",
+    "product_name": "realme S 14",
+    "brand": "realme",
+    "group": "Điện thoại tầm trung",
+    "price": 9490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 140,
+    "product_code": "RM0140",
+    "product_name": "realme Plus 13",
+    "brand": "realme",
+    "group": "Điện thoại tầm trung",
+    "price": 4990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 141,
+    "product_code": "RM0141",
+    "product_name": "realme Plus 9",
+    "brand": "realme",
+    "group": "Điện thoại tầm trung",
+    "price": 6490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 142,
+    "product_code": "RM0142",
+    "product_name": "realme S 9",
+    "brand": "realme",
+    "group": "Điện thoại tầm trung",
+    "price": 9490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 143,
+    "product_code": "RM0143",
+    "product_name": "realme Go5",
+    "brand": "realme",
+    "group": "Điện thoại phổ thông",
+    "price": 2490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 144,
+    "product_code": "RM0144",
+    "product_name": "realme Plus 13",
+    "brand": "realme",
+    "group": "Điện thoại tầm trung",
+    "price": 4990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 145,
+    "product_code": "RM0145",
+    "product_name": "realme Lite7",
+    "brand": "realme",
+    "group": "Điện thoại phổ thông",
+    "price": 2990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 146,
+    "product_code": "RM0146",
+    "product_name": "realme Tab S6",
+    "brand": "realme",
+    "group": "Máy tính bảng",
+    "price": 5990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 147,
+    "product_code": "RM0147",
+    "product_name": "realme Neo 8",
+    "brand": "realme",
+    "group": "Điện thoại tầm trung",
+    "price": 11990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 148,
+    "product_code": "RM0148",
+    "product_name": "realme Tab A11",
+    "brand": "realme",
+    "group": "Máy tính bảng",
+    "price": 5990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 149,
+    "product_code": "RM0149",
+    "product_name": "realme Pro Max 16",
+    "brand": "realme",
+    "group": "Điện thoại cao cấp",
+    "price": 31990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 150,
+    "product_code": "RM0150",
+    "product_name": "realme Tab S8",
+    "brand": "realme",
+    "group": "Máy tính bảng",
+    "price": 12990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 151,
+    "product_code": "RM0151",
+    "product_name": "realme Go8",
+    "brand": "realme",
+    "group": "Điện thoại phổ thông",
+    "price": 3490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 152,
+    "product_code": "RM0152",
+    "product_name": "realme Ultra 11",
+    "brand": "realme",
+    "group": "Điện thoại cao cấp",
+    "price": 22990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 153,
+    "product_code": "RM0153",
+    "product_name": "realme Pin dự phòng Pro2",
+    "brand": "realme",
+    "group": "Phụ kiện",
+    "price": 120000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 154,
+    "product_code": "RM0154",
+    "product_name": "realme Pro+ 11",
+    "brand": "realme",
+    "group": "Điện thoại cao cấp",
+    "price": 22990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 155,
+    "product_code": "RM0155",
+    "product_name": "realme Pro+ 16",
+    "brand": "realme",
+    "group": "Điện thoại cao cấp",
+    "price": 27990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 156,
+    "product_code": "RM0156",
+    "product_name": "realme Pro Max 12",
+    "brand": "realme",
+    "group": "Điện thoại cao cấp",
+    "price": 27990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 157,
+    "product_code": "RM0157",
+    "product_name": "realme Plus 8",
+    "brand": "realme",
+    "group": "Điện thoại tầm trung",
+    "price": 7990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 158,
+    "product_code": "RM0158",
+    "product_name": "realme Y2",
+    "brand": "realme",
+    "group": "Điện thoại phổ thông",
+    "price": 2990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 159,
+    "product_code": "RM0159",
+    "product_name": "realme Tab S7",
+    "brand": "realme",
+    "group": "Máy tính bảng",
+    "price": 12990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 160,
+    "product_code": "RM0160",
+    "product_name": "realme Y6",
+    "brand": "realme",
+    "group": "Điện thoại phổ thông",
+    "price": 2990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 161,
+    "product_code": "VV0161",
+    "product_name": "vivo Pro Max 11",
+    "brand": "vivo",
+    "group": "Điện thoại cao cấp",
+    "price": 18990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 162,
+    "product_code": "VV0162",
+    "product_name": "vivo Pro+ 13",
+    "brand": "vivo",
+    "group": "Điện thoại cao cấp",
+    "price": 18990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 163,
+    "product_code": "VV0163",
+    "product_name": "vivo Pro+ 13",
+    "brand": "vivo",
+    "group": "Điện thoại cao cấp",
+    "price": 18990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 164,
+    "product_code": "VV0164",
+    "product_name": "vivo C2",
+    "brand": "vivo",
+    "group": "Điện thoại phổ thông",
+    "price": 3990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 165,
+    "product_code": "VV0165",
+    "product_name": "vivo Note 8",
+    "brand": "vivo",
+    "group": "Điện thoại tầm trung",
+    "price": 6490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 166,
+    "product_code": "VV0166",
+    "product_name": "vivo Go3",
+    "brand": "vivo",
+    "group": "Điện thoại phổ thông",
+    "price": 3990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 167,
+    "product_code": "VV0167",
+    "product_name": "vivo Pro+ 14",
+    "brand": "vivo",
+    "group": "Điện thoại cao cấp",
+    "price": 36990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 168,
+    "product_code": "VV0168",
+    "product_name": "vivo Pro Max 14",
+    "brand": "vivo",
+    "group": "Điện thoại cao cấp",
+    "price": 27990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 169,
+    "product_code": "VV0169",
+    "product_name": "vivo Y7",
+    "brand": "vivo",
+    "group": "Điện thoại phổ thông",
+    "price": 3490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 170,
+    "product_code": "VV0170",
+    "product_name": "vivo Ultra 12",
+    "brand": "vivo",
+    "group": "Điện thoại cao cấp",
+    "price": 18990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 171,
+    "product_code": "VV0171",
+    "product_name": "vivo Go6",
+    "brand": "vivo",
+    "group": "Điện thoại phổ thông",
+    "price": 2490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 172,
+    "product_code": "VV0172",
+    "product_name": "vivo Y4",
+    "brand": "vivo",
+    "group": "Điện thoại phổ thông",
+    "price": 3490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 173,
+    "product_code": "VV0173",
+    "product_name": "vivo Pro+ 16",
+    "brand": "vivo",
+    "group": "Điện thoại cao cấp",
+    "price": 18990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 174,
+    "product_code": "VV0174",
+    "product_name": "vivo Neo 11",
+    "brand": "vivo",
+    "group": "Điện thoại tầm trung",
+    "price": 4990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 175,
+    "product_code": "VV0175",
+    "product_name": "vivo C2",
+    "brand": "vivo",
+    "group": "Điện thoại phổ thông",
+    "price": 2490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 176,
+    "product_code": "VV0176",
+    "product_name": "vivo Pro Max 11",
+    "brand": "vivo",
+    "group": "Điện thoại cao cấp",
+    "price": 31990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 177,
+    "product_code": "VV0177",
+    "product_name": "vivo Pro+ 15",
+    "brand": "vivo",
+    "group": "Điện thoại cao cấp",
+    "price": 36990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 178,
+    "product_code": "VV0178",
+    "product_name": "vivo Lite7",
+    "brand": "vivo",
+    "group": "Điện thoại phổ thông",
+    "price": 2990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 179,
+    "product_code": "VV0179",
+    "product_name": "vivo Ốp lưng B7",
+    "brand": "vivo",
+    "group": "Phụ kiện",
+    "price": 320000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 180,
+    "product_code": "VV0180",
+    "product_name": "vivo Lite4",
+    "brand": "vivo",
+    "group": "Điện thoại phổ thông",
+    "price": 2990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 181,
+    "product_code": "VV0181",
+    "product_name": "vivo S 11",
+    "brand": "vivo",
+    "group": "Điện thoại tầm trung",
+    "price": 4990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 182,
+    "product_code": "VV0182",
+    "product_name": "vivo Pro Max 12",
+    "brand": "vivo",
+    "group": "Điện thoại cao cấp",
+    "price": 36990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 183,
+    "product_code": "VV0183",
+    "product_name": "vivo Y7",
+    "brand": "vivo",
+    "group": "Điện thoại phổ thông",
+    "price": 2490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 184,
+    "product_code": "VV0184",
+    "product_name": "vivo Note 11",
+    "brand": "vivo",
+    "group": "Điện thoại tầm trung",
+    "price": 6490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 185,
+    "product_code": "VV0185",
+    "product_name": "vivo Go2",
+    "brand": "vivo",
+    "group": "Điện thoại phổ thông",
+    "price": 2990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 186,
+    "product_code": "VV0186",
+    "product_name": "vivo S 12",
+    "brand": "vivo",
+    "group": "Điện thoại tầm trung",
+    "price": 9490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 187,
+    "product_code": "VV0187",
+    "product_name": "vivo Note 10",
+    "brand": "vivo",
+    "group": "Điện thoại tầm trung",
+    "price": 4990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 188,
+    "product_code": "VV0188",
+    "product_name": "vivo Tab S9",
+    "brand": "vivo",
+    "group": "Máy tính bảng",
+    "price": 9990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 189,
+    "product_code": "VV0189",
+    "product_name": "vivo C4",
+    "brand": "vivo",
+    "group": "Điện thoại phổ thông",
+    "price": 1890000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 190,
+    "product_code": "VV0190",
+    "product_name": "vivo Go5",
+    "brand": "vivo",
+    "group": "Điện thoại phổ thông",
+    "price": 2990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 191,
+    "product_code": "VV0191",
+    "product_name": "vivo Neo 10",
+    "brand": "vivo",
+    "group": "Điện thoại tầm trung",
+    "price": 4990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 192,
+    "product_code": "VV0192",
+    "product_name": "vivo S 10",
+    "brand": "vivo",
+    "group": "Điện thoại tầm trung",
+    "price": 7990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 193,
+    "product_code": "VV0193",
+    "product_name": "vivo Pro Max 16",
+    "brand": "vivo",
+    "group": "Điện thoại cao cấp",
+    "price": 36990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 194,
+    "product_code": "VV0194",
+    "product_name": "vivo Neo 13",
+    "brand": "vivo",
+    "group": "Điện thoại tầm trung",
+    "price": 6490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 195,
+    "product_code": "VV0195",
+    "product_name": "vivo Go4",
+    "brand": "vivo",
+    "group": "Điện thoại phổ thông",
+    "price": 2490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 196,
+    "product_code": "VV0196",
+    "product_name": "vivo Note 9",
+    "brand": "vivo",
+    "group": "Điện thoại tầm trung",
+    "price": 4990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 197,
+    "product_code": "VV0197",
+    "product_name": "vivo Sạc nhanh B6",
+    "brand": "vivo",
+    "group": "Phụ kiện",
+    "price": 750000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 198,
+    "product_code": "VV0198",
+    "product_name": "vivo Note 8",
+    "brand": "vivo",
+    "group": "Điện thoại tầm trung",
+    "price": 11990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 199,
+    "product_code": "VV0199",
+    "product_name": "vivo Pro Max 14",
+    "brand": "vivo",
+    "group": "Điện thoại cao cấp",
+    "price": 36990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 200,
+    "product_code": "VV0200",
+    "product_name": "vivo Pro Max 16",
+    "brand": "vivo",
+    "group": "Điện thoại cao cấp",
+    "price": 27990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 201,
+    "product_code": "AP0201",
+    "product_name": "Apple S 10",
+    "brand": "Apple",
+    "group": "Điện thoại tầm trung",
+    "price": 4990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 202,
+    "product_code": "AP0202",
+    "product_name": "Apple S 14",
+    "brand": "Apple",
+    "group": "Điện thoại tầm trung",
+    "price": 11990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 203,
+    "product_code": "AP0203",
+    "product_name": "Apple Pro Max 16",
+    "brand": "Apple",
+    "group": "Điện thoại cao cấp",
+    "price": 27990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 204,
+    "product_code": "AP0204",
+    "product_name": "Apple Plus 10",
+    "brand": "Apple",
+    "group": "Điện thoại tầm trung",
+    "price": 9490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 205,
+    "product_code": "AP0205",
+    "product_name": "Apple S 14",
+    "brand": "Apple",
+    "group": "Điện thoại tầm trung",
+    "price": 6490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 206,
+    "product_code": "AP0206",
+    "product_name": "Apple Cáp Type-C Pro2",
+    "brand": "Apple",
+    "group": "Phụ kiện",
+    "price": 590000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 207,
+    "product_code": "AP0207",
+    "product_name": "Apple Go4",
+    "brand": "Apple",
+    "group": "Điện thoại phổ thông",
+    "price": 3990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 208,
+    "product_code": "AP0208",
+    "product_name": "Apple Sạc nhanh Lite8",
+    "brand": "Apple",
+    "group": "Phụ kiện",
+    "price": 120000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 209,
+    "product_code": "AP0209",
+    "product_name": "Apple Tab S7",
+    "brand": "Apple",
+    "group": "Máy tính bảng",
+    "price": 9990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 210,
+    "product_code": "AP0210",
+    "product_name": "Apple Note 10",
+    "brand": "Apple",
+    "group": "Điện thoại tầm trung",
+    "price": 6490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 211,
+    "product_code": "AP0211",
+    "product_name": "Apple Neo 14",
+    "brand": "Apple",
+    "group": "Điện thoại tầm trung",
+    "price": 6490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 212,
+    "product_code": "AP0212",
+    "product_name": "Apple S 10",
+    "brand": "Apple",
+    "group": "Điện thoại tầm trung",
+    "price": 7990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 213,
+    "product_code": "AP0213",
+    "product_name": "Apple Ultra 11",
+    "brand": "Apple",
+    "group": "Điện thoại cao cấp",
+    "price": 18990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 214,
+    "product_code": "AP0214",
+    "product_name": "Apple Pro Max 11",
+    "brand": "Apple",
+    "group": "Điện thoại cao cấp",
+    "price": 27990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 215,
+    "product_code": "AP0215",
+    "product_name": "Apple Pro+ 11",
+    "brand": "Apple",
+    "group": "Điện thoại cao cấp",
+    "price": 27990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 216,
+    "product_code": "AP0216",
+    "product_name": "Apple Go3",
+    "brand": "Apple",
+    "group": "Điện thoại phổ thông",
+    "price": 3990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 217,
+    "product_code": "AP0217",
+    "product_name": "Apple Ultra 14",
+    "brand": "Apple",
+    "group": "Điện thoại cao cấp",
+    "price": 22990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 218,
+    "product_code": "AP0218",
+    "product_name": "Apple Lite9",
+    "brand": "Apple",
+    "group": "Điện thoại phổ thông",
+    "price": 1890000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 219,
+    "product_code": "AP0219",
+    "product_name": "Apple Note 13",
+    "brand": "Apple",
+    "group": "Điện thoại tầm trung",
+    "price": 7990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 220,
+    "product_code": "AP0220",
+    "product_name": "Apple Tab A8",
+    "brand": "Apple",
+    "group": "Máy tính bảng",
+    "price": 12990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 221,
+    "product_code": "AP0221",
+    "product_name": "Apple Pro Max 11",
+    "brand": "Apple",
+    "group": "Điện thoại cao cấp",
+    "price": 18990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 222,
+    "product_code": "AP0222",
+    "product_name": "Apple Ultra 12",
+    "brand": "Apple",
+    "group": "Điện thoại cao cấp",
+    "price": 36990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 223,
+    "product_code": "AP0223",
+    "product_name": "Apple Tab M5",
+    "brand": "Apple",
+    "group": "Máy tính bảng",
+    "price": 5990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 224,
+    "product_code": "AP0224",
+    "product_name": "Apple Plus 10",
+    "brand": "Apple",
+    "group": "Điện thoại tầm trung",
+    "price": 7990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 225,
+    "product_code": "AP0225",
+    "product_name": "Apple Pro+ 13",
+    "brand": "Apple",
+    "group": "Điện thoại cao cấp",
+    "price": 27990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 226,
+    "product_code": "AP0226",
+    "product_name": "Apple Pro Max 11",
+    "brand": "Apple",
+    "group": "Điện thoại cao cấp",
+    "price": 18990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 227,
+    "product_code": "AP0227",
+    "product_name": "Apple Tab A10",
+    "brand": "Apple",
+    "group": "Máy tính bảng",
+    "price": 9990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 228,
+    "product_code": "AP0228",
+    "product_name": "Apple Go5",
+    "brand": "Apple",
+    "group": "Điện thoại phổ thông",
+    "price": 2490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 229,
+    "product_code": "AP0229",
+    "product_name": "Apple Cáp Type-C B6",
+    "brand": "Apple",
+    "group": "Phụ kiện",
+    "price": 250000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 230,
+    "product_code": "AP0230",
+    "product_name": "Apple Ốp lưng Lite7",
+    "brand": "Apple",
+    "group": "Phụ kiện",
+    "price": 250000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 231,
+    "product_code": "AP0231",
+    "product_name": "Apple Ultra 12",
+    "brand": "Apple",
+    "group": "Điện thoại cao cấp",
+    "price": 36990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 232,
+    "product_code": "AP0232",
+    "product_name": "Apple Tai nghe Lite8",
+    "brand": "Apple",
+    "group": "Phụ kiện",
+    "price": 750000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 233,
+    "product_code": "AP0233",
+    "product_name": "Apple Tai nghe B8",
+    "brand": "Apple",
+    "group": "Phụ kiện",
+    "price": 250000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 234,
+    "product_code": "AP0234",
+    "product_name": "Apple Plus 9",
+    "brand": "Apple",
+    "group": "Điện thoại tầm trung",
+    "price": 7990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 235,
+    "product_code": "AP0235",
+    "product_name": "Apple C3",
+    "brand": "Apple",
+    "group": "Điện thoại phổ thông",
+    "price": 3490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 236,
+    "product_code": "AP0236",
+    "product_name": "Apple Note 12",
+    "brand": "Apple",
+    "group": "Điện thoại tầm trung",
+    "price": 7990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 237,
+    "product_code": "AP0237",
+    "product_name": "Apple Note 11",
+    "brand": "Apple",
+    "group": "Điện thoại tầm trung",
+    "price": 9490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 238,
+    "product_code": "AP0238",
+    "product_name": "Apple Ultra 15",
+    "brand": "Apple",
+    "group": "Điện thoại cao cấp",
+    "price": 36990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 239,
+    "product_code": "AP0239",
+    "product_name": "Apple S 8",
+    "brand": "Apple",
+    "group": "Điện thoại tầm trung",
+    "price": 6490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 240,
+    "product_code": "AP0240",
+    "product_name": "Apple Tab M9",
+    "brand": "Apple",
+    "group": "Máy tính bảng",
+    "price": 5990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 241,
+    "product_code": "NK0241",
+    "product_name": "Nokia Tab A7",
+    "brand": "Nokia",
+    "group": "Máy tính bảng",
+    "price": 4590000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 242,
+    "product_code": "NK0242",
+    "product_name": "Nokia Tab S10",
+    "brand": "Nokia",
+    "group": "Máy tính bảng",
+    "price": 5990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 243,
+    "product_code": "NK0243",
+    "product_name": "Nokia Pro Max 11",
+    "brand": "Nokia",
+    "group": "Điện thoại cao cấp",
+    "price": 18990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 244,
+    "product_code": "NK0244",
+    "product_name": "Nokia Pro Max 16",
+    "brand": "Nokia",
+    "group": "Điện thoại cao cấp",
+    "price": 31990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 245,
+    "product_code": "NK0245",
+    "product_name": "Nokia Note 11",
+    "brand": "Nokia",
+    "group": "Điện thoại tầm trung",
+    "price": 9490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 246,
+    "product_code": "NK0246",
+    "product_name": "Nokia Cáp Type-C Lite7",
+    "brand": "Nokia",
+    "group": "Phụ kiện",
+    "price": 750000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 247,
+    "product_code": "NK0247",
+    "product_name": "Nokia Plus 11",
+    "brand": "Nokia",
+    "group": "Điện thoại tầm trung",
+    "price": 11990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 248,
+    "product_code": "NK0248",
+    "product_name": "Nokia Note 9",
+    "brand": "Nokia",
+    "group": "Điện thoại tầm trung",
+    "price": 11990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 249,
+    "product_code": "NK0249",
+    "product_name": "Nokia Tai nghe A3",
+    "brand": "Nokia",
+    "group": "Phụ kiện",
+    "price": 320000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 250,
+    "product_code": "NK0250",
+    "product_name": "Nokia Ốp lưng Pro2",
+    "brand": "Nokia",
+    "group": "Phụ kiện",
+    "price": 190000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 251,
+    "product_code": "NK0251",
+    "product_name": "Nokia Ultra 16",
+    "brand": "Nokia",
+    "group": "Điện thoại cao cấp",
+    "price": 27990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 252,
+    "product_code": "NK0252",
+    "product_name": "Nokia Sạc nhanh Lite7",
+    "brand": "Nokia",
+    "group": "Phụ kiện",
+    "price": 250000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 253,
+    "product_code": "NK0253",
+    "product_name": "Nokia Go3",
+    "brand": "Nokia",
+    "group": "Điện thoại phổ thông",
+    "price": 1890000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 254,
+    "product_code": "NK0254",
+    "product_name": "Nokia S 13",
+    "brand": "Nokia",
+    "group": "Điện thoại tầm trung",
+    "price": 7990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 255,
+    "product_code": "NK0255",
+    "product_name": "Nokia Pro+ 16",
+    "brand": "Nokia",
+    "group": "Điện thoại cao cấp",
+    "price": 27990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 256,
+    "product_code": "NK0256",
+    "product_name": "Nokia Sạc nhanh B7",
+    "brand": "Nokia",
+    "group": "Phụ kiện",
+    "price": 590000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 257,
+    "product_code": "NK0257",
+    "product_name": "Nokia S 12",
+    "brand": "Nokia",
+    "group": "Điện thoại tầm trung",
+    "price": 11990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 258,
+    "product_code": "NK0258",
+    "product_name": "Nokia Tab S12",
+    "brand": "Nokia",
+    "group": "Máy tính bảng",
+    "price": 5990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 259,
+    "product_code": "NK0259",
+    "product_name": "Nokia Pro+ 16",
+    "brand": "Nokia",
+    "group": "Điện thoại cao cấp",
+    "price": 36990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 260,
+    "product_code": "NK0260",
+    "product_name": "Nokia Pro Max 16",
+    "brand": "Nokia",
+    "group": "Điện thoại cao cấp",
+    "price": 18990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 261,
+    "product_code": "NK0261",
+    "product_name": "Nokia Plus 11",
+    "brand": "Nokia",
+    "group": "Điện thoại tầm trung",
+    "price": 9490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 262,
+    "product_code": "NK0262",
+    "product_name": "Nokia Tai nghe Lite3",
+    "brand": "Nokia",
+    "group": "Phụ kiện",
+    "price": 750000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 263,
+    "product_code": "NK0263",
+    "product_name": "Nokia S 8",
+    "brand": "Nokia",
+    "group": "Điện thoại tầm trung",
+    "price": 4990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 264,
+    "product_code": "NK0264",
+    "product_name": "Nokia Tab M7",
+    "brand": "Nokia",
+    "group": "Máy tính bảng",
+    "price": 9990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 265,
+    "product_code": "NK0265",
+    "product_name": "Nokia Pro+ 12",
+    "brand": "Nokia",
+    "group": "Điện thoại cao cấp",
+    "price": 31990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 266,
+    "product_code": "NK0266",
+    "product_name": "Nokia Sạc nhanh Pro2",
+    "brand": "Nokia",
+    "group": "Phụ kiện",
+    "price": 120000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 267,
+    "product_code": "NK0267",
+    "product_name": "Nokia Note 11",
+    "brand": "Nokia",
+    "group": "Điện thoại tầm trung",
+    "price": 9490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 268,
+    "product_code": "NK0268",
+    "product_name": "Nokia Ốp lưng A6",
+    "brand": "Nokia",
+    "group": "Phụ kiện",
+    "price": 450000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 269,
+    "product_code": "NK0269",
+    "product_name": "Nokia Ốp lưng B9",
+    "brand": "Nokia",
+    "group": "Phụ kiện",
+    "price": 450000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 270,
+    "product_code": "NK0270",
+    "product_name": "Nokia Tab S9",
+    "brand": "Nokia",
+    "group": "Máy tính bảng",
+    "price": 5990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 271,
+    "product_code": "NK0271",
+    "product_name": "Nokia Note 14",
+    "brand": "Nokia",
+    "group": "Điện thoại tầm trung",
+    "price": 6490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 272,
+    "product_code": "NK0272",
+    "product_name": "Nokia Plus 13",
+    "brand": "Nokia",
+    "group": "Điện thoại tầm trung",
+    "price": 9490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 273,
+    "product_code": "NK0273",
+    "product_name": "Nokia Note 11",
+    "brand": "Nokia",
+    "group": "Điện thoại tầm trung",
+    "price": 11990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 274,
+    "product_code": "NK0274",
+    "product_name": "Nokia Note 13",
+    "brand": "Nokia",
+    "group": "Điện thoại tầm trung",
+    "price": 11990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 275,
+    "product_code": "NK0275",
+    "product_name": "Nokia Tab A6",
+    "brand": "Nokia",
+    "group": "Máy tính bảng",
+    "price": 5990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 276,
+    "product_code": "NK0276",
+    "product_name": "Nokia Plus 12",
+    "brand": "Nokia",
+    "group": "Điện thoại tầm trung",
+    "price": 6490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 277,
+    "product_code": "NK0277",
+    "product_name": "Nokia Plus 11",
+    "brand": "Nokia",
+    "group": "Điện thoại tầm trung",
+    "price": 6490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 278,
+    "product_code": "NK0278",
+    "product_name": "Nokia S 9",
+    "brand": "Nokia",
+    "group": "Điện thoại tầm trung",
+    "price": 6490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 279,
+    "product_code": "NK0279",
+    "product_name": "Nokia Tab A6",
+    "brand": "Nokia",
+    "group": "Máy tính bảng",
+    "price": 4590000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 280,
+    "product_code": "NK0280",
+    "product_name": "Nokia Tab M10",
+    "brand": "Nokia",
+    "group": "Máy tính bảng",
+    "price": 4590000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 281,
+    "product_code": "TC0281",
+    "product_name": "TECNO Lite8",
+    "brand": "TECNO",
+    "group": "Điện thoại phổ thông",
+    "price": 3990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 282,
+    "product_code": "TC0282",
+    "product_name": "TECNO Neo 13",
+    "brand": "TECNO",
+    "group": "Điện thoại tầm trung",
+    "price": 7990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 283,
+    "product_code": "TC0283",
+    "product_name": "TECNO S 12",
+    "brand": "TECNO",
+    "group": "Điện thoại tầm trung",
+    "price": 9490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 284,
+    "product_code": "TC0284",
+    "product_name": "TECNO Y9",
+    "brand": "TECNO",
+    "group": "Điện thoại phổ thông",
+    "price": 2990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 285,
+    "product_code": "TC0285",
+    "product_name": "TECNO C5",
+    "brand": "TECNO",
+    "group": "Điện thoại phổ thông",
+    "price": 2490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 286,
+    "product_code": "TC0286",
+    "product_name": "TECNO Lite6",
+    "brand": "TECNO",
+    "group": "Điện thoại phổ thông",
+    "price": 3490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 287,
+    "product_code": "TC0287",
+    "product_name": "TECNO Plus 11",
+    "brand": "TECNO",
+    "group": "Điện thoại tầm trung",
+    "price": 4990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 288,
+    "product_code": "TC0288",
+    "product_name": "TECNO Go3",
+    "brand": "TECNO",
+    "group": "Điện thoại phổ thông",
+    "price": 3990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 289,
+    "product_code": "TC0289",
+    "product_name": "TECNO Plus 12",
+    "brand": "TECNO",
+    "group": "Điện thoại tầm trung",
+    "price": 11990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 290,
+    "product_code": "TC0290",
+    "product_name": "TECNO Ultra 14",
+    "brand": "TECNO",
+    "group": "Điện thoại cao cấp",
+    "price": 18990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 291,
+    "product_code": "TC0291",
+    "product_name": "TECNO C7",
+    "brand": "TECNO",
+    "group": "Điện thoại phổ thông",
+    "price": 3490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 292,
+    "product_code": "TC0292",
+    "product_name": "TECNO Neo 9",
+    "brand": "TECNO",
+    "group": "Điện thoại tầm trung",
+    "price": 6490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 293,
+    "product_code": "TC0293",
+    "product_name": "TECNO Go7",
+    "brand": "TECNO",
+    "group": "Điện thoại phổ thông",
+    "price": 2990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 294,
+    "product_code": "TC0294",
+    "product_name": "TECNO Tab M7",
+    "brand": "TECNO",
+    "group": "Máy tính bảng",
+    "price": 5990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 295,
+    "product_code": "TC0295",
+    "product_name": "TECNO Sạc nhanh B5",
+    "brand": "TECNO",
+    "group": "Phụ kiện",
+    "price": 750000,
+    "warranty_months": 6
+  },
+  {
+    "product_id": 296,
+    "product_code": "TC0296",
+    "product_name": "TECNO Pro+ 12",
+    "brand": "TECNO",
+    "group": "Điện thoại cao cấp",
+    "price": 22990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 297,
+    "product_code": "TC0297",
+    "product_name": "TECNO Note 9",
+    "brand": "TECNO",
+    "group": "Điện thoại tầm trung",
+    "price": 9490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 298,
+    "product_code": "TC0298",
+    "product_name": "TECNO Neo 10",
+    "brand": "TECNO",
+    "group": "Điện thoại tầm trung",
+    "price": 6490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 299,
+    "product_code": "TC0299",
+    "product_name": "TECNO Go4",
+    "brand": "TECNO",
+    "group": "Điện thoại phổ thông",
+    "price": 3490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 300,
+    "product_code": "TC0300",
+    "product_name": "TECNO Lite3",
+    "brand": "TECNO",
+    "group": "Điện thoại phổ thông",
+    "price": 1890000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 301,
+    "product_code": "TC0301",
+    "product_name": "TECNO Y3",
+    "brand": "TECNO",
+    "group": "Điện thoại phổ thông",
+    "price": 3990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 302,
+    "product_code": "TC0302",
+    "product_name": "TECNO Ultra 11",
+    "brand": "TECNO",
+    "group": "Điện thoại cao cấp",
+    "price": 36990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 303,
+    "product_code": "TC0303",
+    "product_name": "TECNO Pro Max 15",
+    "brand": "TECNO",
+    "group": "Điện thoại cao cấp",
+    "price": 18990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 304,
+    "product_code": "TC0304",
+    "product_name": "TECNO Note 13",
+    "brand": "TECNO",
+    "group": "Điện thoại tầm trung",
+    "price": 7990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 305,
+    "product_code": "TC0305",
+    "product_name": "TECNO Y6",
+    "brand": "TECNO",
+    "group": "Điện thoại phổ thông",
+    "price": 1890000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 306,
+    "product_code": "TC0306",
+    "product_name": "TECNO Go4",
+    "brand": "TECNO",
+    "group": "Điện thoại phổ thông",
+    "price": 1890000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 307,
+    "product_code": "TC0307",
+    "product_name": "TECNO Lite2",
+    "brand": "TECNO",
+    "group": "Điện thoại phổ thông",
+    "price": 3490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 308,
+    "product_code": "TC0308",
+    "product_name": "TECNO Pro+ 11",
+    "brand": "TECNO",
+    "group": "Điện thoại cao cấp",
+    "price": 22990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 309,
+    "product_code": "TC0309",
+    "product_name": "TECNO Ultra 16",
+    "brand": "TECNO",
+    "group": "Điện thoại cao cấp",
+    "price": 36990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 310,
+    "product_code": "TC0310",
+    "product_name": "TECNO Tab M5",
+    "brand": "TECNO",
+    "group": "Máy tính bảng",
+    "price": 5990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 311,
+    "product_code": "TC0311",
+    "product_name": "TECNO Lite2",
+    "brand": "TECNO",
+    "group": "Điện thoại phổ thông",
+    "price": 3990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 312,
+    "product_code": "TC0312",
+    "product_name": "TECNO Note 8",
+    "brand": "TECNO",
+    "group": "Điện thoại tầm trung",
+    "price": 4990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 313,
+    "product_code": "TC0313",
+    "product_name": "TECNO Go4",
+    "brand": "TECNO",
+    "group": "Điện thoại phổ thông",
+    "price": 2490000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 314,
+    "product_code": "TC0314",
+    "product_name": "TECNO Ultra 13",
+    "brand": "TECNO",
+    "group": "Điện thoại cao cấp",
+    "price": 27990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 315,
+    "product_code": "TC0315",
+    "product_name": "TECNO Tab A12",
+    "brand": "TECNO",
+    "group": "Máy tính bảng",
+    "price": 4590000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 316,
+    "product_code": "TC0316",
+    "product_name": "TECNO Lite9",
+    "brand": "TECNO",
+    "group": "Điện thoại phổ thông",
+    "price": 2990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 317,
+    "product_code": "TC0317",
+    "product_name": "TECNO Pro Max 15",
+    "brand": "TECNO",
+    "group": "Điện thoại cao cấp",
+    "price": 31990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 318,
+    "product_code": "TC0318",
+    "product_name": "TECNO Neo 13",
+    "brand": "TECNO",
+    "group": "Điện thoại tầm trung",
+    "price": 7990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 319,
+    "product_code": "TC0319",
+    "product_name": "TECNO C8",
+    "brand": "TECNO",
+    "group": "Điện thoại phổ thông",
+    "price": 2990000,
+    "warranty_months": 12
+  },
+  {
+    "product_id": 320,
+    "product_code": "TC0320",
+    "product_name": "TECNO Sạc nhanh Lite7",
+    "brand": "TECNO",
+    "group": "Phụ kiện",
+    "price": 320000,
+    "warranty_months": 6
+  }
+]

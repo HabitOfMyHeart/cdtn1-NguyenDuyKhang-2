@@ -1,0 +1,44 @@
+[
+  {
+    "center_id": "1",
+    "center_code": "TT01",
+    "center_name": "TTBH Quận 10",
+    "city": "TP. Hồ Chí Minh",
+    "is_active": true
+  },
+  {
+    "center_id": "2",
+    "center_code": "TT02",
+    "center_name": "TTBH Quận Tân Bình",
+    "city": "TP. Hồ Chí Minh",
+    "is_active": true
+  },
+  {
+    "center_id": "3",
+    "center_code": "TT03",
+    "center_name": "TTBH TP. Thủ Đức",
+    "city": "TP. Hồ Chí Minh",
+    "is_active": true
+  },
+  {
+    "center_id": "4",
+    "center_code": "TT04",
+    "center_name": "TTBH Ninh Kiều",
+    "city": "Cần Thơ",
+    "is_active": true
+  },
+  {
+    "center_id": "5",
+    "center_code": "TT05",
+    "center_name": "TTBH Cái Răng",
+    "city": "Cần Thơ",
+    "is_active": true
+  },
+  {
+    "center_id": "6",
+    "center_code": "TT06",
+    "center_name": "TTBH Cầu Giấy",
+    "city": "Hà Nội",
+    "is_active": true
+  }
+]
