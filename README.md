@@ -2,7 +2,7 @@
 
 **Luồng L2:** Tiếp nhận và phân loại yêu cầu bảo hành  
 **Track:** SE  
-**Phiên bản:** 0.2 – Bài tập 2 (Buổi 8–10)  
+**Phiên bản:** 0.2 – Bài tập 2 (Buổi 8–12)  
 **Sinh viên:** Nguyễn Duy Khang – MSSV 2374802010212
 
 ## 1. Giới thiệu
