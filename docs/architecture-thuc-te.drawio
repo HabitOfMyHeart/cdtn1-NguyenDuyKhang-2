@@ -1,0 +1,58 @@
+<mxfile host="app.diagrams.net" modified="2026-10-21T00:00:00.000Z" agent="OpenCode" version="24.7.17">
+  <diagram name="Kien truc thuc te" id="architecture-l2-clean">
+    <mxGraphModel dx="1300" dy="850" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="KIẾN TRÚC THỰC TẾ – SMART CRM MEKONG MOBILE (LUỒNG L2)" style="text;html=1;align=center;verticalAlign=middle;fontSize=16;fontStyle=1;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="40" y="10" width="1080" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="client" value="CLIENT&#10;Trình duyệt&#10;React 18 UMD + htm&#10;index.html · app.js&#10;apiClient.js" style="rounded=0;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=12;fillColor=#EFF6FF;strokeColor=#1D4ED8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="40" y="120" width="270" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="app" value="EXPRESS APP – src/app.js" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingLeft=12;spacingTop=10;fontSize=13;fontStyle=1;fillColor=#F8FAFC;strokeColor=#475569;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="370" y="70" width="450" height="470" as="geometry" />
+        </mxCell>
+        <mxCell id="routes" value="ROUTES&#10;auth · customers · devices&#10;tickets · catalogs" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=12;spacingTop=8;fontSize=11;fillColor=#FFFFFF;strokeColor=#64748B;" vertex="1" parent="1">
+          <mxGeometry x="400" y="120" width="390" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="middlewares" value="MIDDLEWARES&#10;requireAuth · asyncHandler&#10;errorHandler · notFoundHandler" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=12;spacingTop=8;fontSize=11;fillColor=#FFFFFF;strokeColor=#64748B;" vertex="1" parent="1">
+          <mxGeometry x="400" y="210" width="390" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="services" value="SERVICES&#10;ticket · customer · warrantyCheck&#10;category · slaCalculator · ticket.contract" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=12;spacingTop=8;fontSize=11;fillColor=#ECFDF5;strokeColor=#047857;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="400" y="300" width="390" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="repositories" value="REPOSITORIES&#10;customer · device · catalog · ticket" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=12;spacingTop=8;fontSize=11;fillColor=#FFFBEB;strokeColor=#B45309;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="400" y="400" width="390" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="mongo" value="MONGODB&#10;6 collection&#10;customer · device&#10;service_center · issue_category&#10;ticket · ticket_status_log" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fontSize=11;fillColor=#F5F3FF;strokeColor=#6D28D9;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="890" y="180" width="250" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="tests" value="KIỂM THỬ&#10;node:test&#10;in-memory repositories&#10;không cần MongoDB" style="rounded=0;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=11;fillColor=#FDF2F8;strokeColor=#BE185D;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="40" y="350" width="270" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" value="HTTP/JSON + JWT" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#334155;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="client" target="routes">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" value="gọi nghiệp vụ" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#334155;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="routes" target="services">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" value="đọc/ghi dữ liệu" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#334155;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="services" target="repositories">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" value="Mongoose" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#334155;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="repositories" target="mongo">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" value="bọc request và lỗi" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;endArrow=open;strokeColor=#B45309;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=0;entryX=0.5;entryY=1;" edge="1" parent="1" source="middlewares" target="routes">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" value="inject repository" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;endArrow=open;strokeColor=#BE185D;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="tests" target="services">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="note" value="Nguyên tắc: route chỉ đọc req và trả response; service không dùng req/res, không trả mã HTTP trực tiếp; repository là nơi duy nhất chạm Mongoose.&#10;Mọi lỗi được errorHandler chuẩn hóa thành { error, message, fields }; lỗi 500 chỉ trả mã tra cứu, không lộ stack hay chi tiết CSDL." style="text;html=1;align=left;verticalAlign=top;fontSize=11;fontColor=#334155;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="40" y="570" width="1080" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

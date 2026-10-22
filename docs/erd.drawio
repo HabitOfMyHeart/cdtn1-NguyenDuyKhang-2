@@ -1,209 +1,53 @@
-<mxfile host="app.diagrams.net">
-  <diagram name="Page-1" id="oT1pR0Cf12DliAh3mQSM">
-    <mxGraphModel dx="2049" dy="1086" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+<mxfile host="app.diagrams.net" modified="2026-10-21T00:00:00.000Z" agent="OpenCode" version="24.7.17">
+  <diagram name="ERD 3NF" id="erd-l2-clean">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="customer_table" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;marginBottom=0;" value="&lt;b&gt;customer — Khách hàng&lt;/b&gt;" vertex="1">
-          <mxGeometry height="212" width="260" x="90" y="80" as="geometry" />
+        <mxCell id="title" value="ERD 3NF – 6 BẢNG NGHIỆP VỤ L2" style="text;html=1;align=center;verticalAlign=middle;fontSize=16;fontStyle=1;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="40" y="10" width="1080" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="customer_pk" parent="customer_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="PK customer_id &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; ObjectId" vertex="1">
-          <mxGeometry height="26" width="260" y="30" as="geometry" />
+        <mxCell id="customer" value="CUSTOMER&#10;PK customer_id&#10;UQ phone&#10;full_name&#10;email&#10;address&#10;segment&#10;created_at&#10;is_deleted" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;fontSize=11;fillColor=#F8FAFC;strokeColor=#334155;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="40" y="90" width="250" height="200" as="geometry" />
         </mxCell>
-        <mxCell id="customer_fullname" parent="customer_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="full_name &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; string" vertex="1">
-          <mxGeometry height="26" width="260" y="56" as="geometry" />
+        <mxCell id="device" value="DEVICE&#10;PK device_id&#10;FK customer_id&#10;product_id&#10;product_code&#10;product_name&#10;UQ serial_no&#10;purchase_date (NULL = chưa xác minh)&#10;warranty_months&#10;is_deleted" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;fontSize=11;fillColor=#F8FAFC;strokeColor=#334155;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="40" y="350" width="250" height="230" as="geometry" />
         </mxCell>
-        <mxCell id="customer_phone" parent="customer_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontStyle=1;" value="U phone &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; string, unique" vertex="1">
-          <mxGeometry height="26" width="260" y="82" as="geometry" />
+        <mxCell id="center" value="SERVICE_CENTER&#10;PK center_id&#10;UQ center_code&#10;UQ center_name&#10;city&#10;is_active" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;fontSize=11;fillColor=#F8FAFC;strokeColor=#334155;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="790" y="90" width="250" height="180" as="geometry" />
         </mxCell>
-        <mxCell id="customer_email" parent="customer_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="email &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;...... string" vertex="1">
-          <mxGeometry height="26" width="260" y="108" as="geometry" />
+        <mxCell id="category" value="ISSUE_CATEGORY&#10;PK category_id&#10;UQ category_name&#10;default_priority&#10;is_active" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;fontSize=11;fillColor=#F8FAFC;strokeColor=#334155;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="790" y="330" width="250" height="180" as="geometry" />
         </mxCell>
-        <mxCell id="customer_address" parent="customer_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="address &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;...... string" vertex="1">
-          <mxGeometry height="26" width="260" y="134" as="geometry" />
+        <mxCell id="ticket" value="TICKET&#10;PK ticket_id&#10;UQ ticket_code&#10;FK customer_id&#10;FK device_id&#10;FK center_id&#10;FK category_id&#10;issue_desc&#10;accessories&#10;exterior_note&#10;priority&#10;priority_reason&#10;status&#10;is_warranty (NULL = chưa xác minh)&#10;received_at&#10;due_date&#10;closed_at&#10;is_deleted" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;fontSize=10;fillColor=#EFF6FF;strokeColor=#1D4ED8;fontColor=#0F172A;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="390" y="130" width="300" height="390" as="geometry" />
         </mxCell>
-        <mxCell id="customer_segment" parent="customer_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="segment &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;...... string" vertex="1">
-          <mxGeometry height="26" width="260" y="160" as="geometry" />
+        <mxCell id="log" value="TICKET_STATUS_LOG&#10;PK log_id&#10;FK ticket_id&#10;from_status&#10;to_status&#10;changed_at&#10;changed_by&#10;note" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;fontSize=11;fillColor=#F8FAFC;strokeColor=#334155;fontColor=#0F172A;" vertex="1" parent="1">
+          <mxGeometry x="390" y="590" width="300" height="190" as="geometry" />
         </mxCell>
-        <mxCell id="customer_created" parent="customer_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="created_at &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;...... date" vertex="1">
-          <mxGeometry height="26" width="260" y="186" as="geometry" />
-        </mxCell>
-        <mxCell id="device_table" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;marginBottom=0;" value="&lt;b&gt;device — Thiết bị&lt;/b&gt;" vertex="1">
-          <mxGeometry height="186" width="260" x="70" y="561" as="geometry" />
-        </mxCell>
-        <mxCell id="device_pk" parent="device_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="PK device_id &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp; ObjectId" vertex="1">
-          <mxGeometry height="26" width="260" y="30" as="geometry" />
-        </mxCell>
-        <mxCell id="device_fk_cust" parent="device_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontStyle=1;" value="FK customer_id &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;... ObjectId" vertex="1">
-          <mxGeometry height="26" width="260" y="56" as="geometry" />
-        </mxCell>
-        <mxCell id="device_product" parent="device_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="product_name &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;..... string" vertex="1">
-          <mxGeometry height="26" width="260" y="82" as="geometry" />
-        </mxCell>
-        <mxCell id="device_serial" parent="device_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontStyle=1;" value="U serial_no &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;..... string, unique" vertex="1">
-          <mxGeometry height="26" width="260" y="108" as="geometry" />
-        </mxCell>
-        <mxCell id="device_purchase" parent="device_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="purchase_date &amp;nbsp;&amp;nbsp;&amp;..... date" vertex="1">
-          <mxGeometry height="26" width="260" y="134" as="geometry" />
-        </mxCell>
-        <mxCell id="device_warranty" parent="device_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="warranty_months int, mặc định 12" vertex="1">
-          <mxGeometry height="26" width="260" y="160" as="geometry" />
-        </mxCell>
-        <mxCell id="rel_cust_device" edge="1" parent="1" source="customer_table" style="endArrow=none;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;jumpStyle=arc;rounded=0;" target="device_table" value="">
+        <mxCell id="r1" value="1..N" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;strokeColor=#475569;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="customer" target="device">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="rel_cust_device_1" parent="1" style="text;html=1;resizable=0;autosize=1;align=center;verticalAlign=middle;points=[];fillColor=none;strokeColor=none;rounded=0;fontSize=12;" value="1" vertex="1">
-          <mxGeometry height="20" width="20" x="200" y="295" as="geometry" />
-        </mxCell>
-        <mxCell id="rel_cust_device_n" parent="1" style="text;html=1;resizable=0;autosize=1;align=center;verticalAlign=middle;points=[];fillColor=none;strokeColor=none;rounded=0;fontSize=12;" value="N" vertex="1">
-          <mxGeometry height="20" width="20" x="200" y="528" as="geometry" />
-        </mxCell>
-        <mxCell id="ticket_table" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;fillColor=#fff2cc;strokeColor=#d6b656;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;marginBottom=0;" value="&lt;b&gt;ticket — Phiếu bảo hành&lt;/b&gt;" vertex="1">
-          <mxGeometry height="420" width="310" x="450" y="95" as="geometry" />
-        </mxCell>
-        <mxCell id="ticket_pk" parent="ticket_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="PK ticket_id &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;.... ObjectId" vertex="1">
-          <mxGeometry height="26" width="310" y="30" as="geometry" />
-        </mxCell>
-        <mxCell id="ticket_code" parent="ticket_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontStyle=1;" value="U ticket_code &amp;nbsp;&amp;nbsp; string, unique BH-..." vertex="1">
-          <mxGeometry height="26" width="310" y="56" as="geometry" />
-        </mxCell>
-        <mxCell id="ticket_fk_cust" parent="ticket_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontStyle=1;" value="FK customer_id &amp;nbsp;&amp;..... ObjectId" vertex="1">
-          <mxGeometry height="26" width="310" y="82" as="geometry" />
-        </mxCell>
-        <mxCell id="ticket_fk_dev" parent="ticket_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontStyle=1;" value="FK device_id &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;..... ObjectId" vertex="1">
-          <mxGeometry height="26" width="310" y="108" as="geometry" />
-        </mxCell>
-        <mxCell id="ticket_fk_center" parent="ticket_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontStyle=1;" value="FK center_id &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;...... ObjectId" vertex="1">
-          <mxGeometry height="26" width="310" y="134" as="geometry" />
-        </mxCell>
-        <mxCell id="ticket_fk_cat" parent="ticket_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontStyle=1;" value="FK category_id &amp;nbsp;&amp;.... ObjectId" vertex="1">
-          <mxGeometry height="26" width="310" y="160" as="geometry" />
-        </mxCell>
-        <mxCell id="ticket_issue" parent="ticket_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="issue_desc &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;...... string" vertex="1">
-          <mxGeometry height="26" width="310" y="186" as="geometry" />
-        </mxCell>
-        <mxCell id="ticket_acc" parent="ticket_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="accessories &amp;nbsp;&amp;.... array&amp;lt;string&amp;gt;" vertex="1">
-          <mxGeometry height="26" width="310" y="212" as="geometry" />
-        </mxCell>
-        <mxCell id="ticket_ext" parent="ticket_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="exterior_note &amp;nbsp;&amp;...... string" vertex="1">
-          <mxGeometry height="26" width="310" y="238" as="geometry" />
-        </mxCell>
-        <mxCell id="ticket_pri" parent="ticket_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="priority &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; CAO|TRUNG_BINH|THAP" vertex="1">
-          <mxGeometry height="26" width="310" y="264" as="geometry" />
-        </mxCell>
-        <mxCell id="ticket_status" parent="ticket_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="status &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; string — Hình 6.2" vertex="1">
-          <mxGeometry height="26" width="310" y="290" as="geometry" />
-        </mxCell>
-        <mxCell id="ticket_received" parent="ticket_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="received_at &amp;nbsp;&amp;nbsp;&amp;...... date" vertex="1">
-          <mxGeometry height="26" width="310" y="316" as="geometry" />
-        </mxCell>
-        <mxCell id="ticket_due" parent="ticket_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="due_date &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;...... date — QT-04" vertex="1">
-          <mxGeometry height="26" width="310" y="342" as="geometry" />
-        </mxCell>
-        <mxCell id="ticket_closed" parent="ticket_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="closed_at &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;....... date" vertex="1">
-          <mxGeometry height="26" width="310" y="368" as="geometry" />
-        </mxCell>
-        <mxCell id="ticket_warranty" parent="ticket_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="is_warranty &amp;nbsp;&amp;....... bool" vertex="1">
-          <mxGeometry height="26" width="310" y="394" as="geometry" />
-        </mxCell>
-        <mxCell id="rel_cust_ticket" edge="1" parent="1" source="customer_table" style="endArrow=none;html=1;exitX=1;exitY=0.25;entryX=0;entryY=0.15;jumpStyle=arc;rounded=0;" target="ticket_table" value="">
+        <mxCell id="r2" value="1..N" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;strokeColor=#475569;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.25;entryX=0;entryY=0.2;" edge="1" parent="1" source="customer" target="ticket">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="rel_cust_ticket_1" parent="1" style="text;html=1;resizable=0;autosize=1;align=center;verticalAlign=middle;points=[];fillColor=none;strokeColor=none;rounded=0;fontSize=12;" value="1" vertex="1">
-          <mxGeometry height="20" width="20" x="345" y="160" as="geometry" />
-        </mxCell>
-        <mxCell id="rel_cust_ticket_n" parent="1" style="text;html=1;resizable=0;autosize=1;align=center;verticalAlign=middle;points=[];fillColor=none;strokeColor=none;rounded=0;fontSize=12;" value="N" vertex="1">
-          <mxGeometry height="20" width="20" x="420" y="160" as="geometry" />
-        </mxCell>
-        <mxCell id="rel_dev_ticket" edge="1" parent="1" source="device_table" style="endArrow=none;html=1;exitX=1;exitY=0.25;entryX=0;entryY=0.35;jumpStyle=arc;rounded=0;" target="ticket_table" value="">
+        <mxCell id="r3" value="1..N" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;strokeColor=#475569;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;entryX=0;entryY=0.65;" edge="1" parent="1" source="device" target="ticket">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="rel_dev_ticket_1" parent="1" style="text;html=1;resizable=0;autosize=1;align=center;verticalAlign=middle;points=[];fillColor=none;strokeColor=none;rounded=0;fontSize=12;" value="1" vertex="1">
-          <mxGeometry height="20" width="20" x="345" y="280" as="geometry" />
-        </mxCell>
-        <mxCell id="rel_dev_ticket_n" parent="1" style="text;html=1;resizable=0;autosize=1;align=center;verticalAlign=middle;points=[];fillColor=none;strokeColor=none;rounded=0;fontSize=12;" value="N" vertex="1">
-          <mxGeometry height="20" width="20" x="420" y="280" as="geometry" />
-        </mxCell>
-        <mxCell id="issuecat_table" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;marginBottom=0;" value="&lt;b&gt;issue_category — Nhóm sự cố&lt;/b&gt;" vertex="1">
-          <mxGeometry height="134" width="280" x="1100" y="120" as="geometry" />
-        </mxCell>
-        <mxCell id="issuecat_pk" parent="issuecat_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="PK category_id &amp;nbsp;&amp;nbsp;&amp;... ObjectId" vertex="1">
-          <mxGeometry height="26" width="280" y="30" as="geometry" />
-        </mxCell>
-        <mxCell id="issuecat_name" parent="issuecat_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontStyle=1;" value="U category_name &amp;nbsp; string, unique" vertex="1">
-          <mxGeometry height="26" width="280" y="56" as="geometry" />
-        </mxCell>
-        <mxCell id="issuecat_pri" parent="issuecat_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="default_priority &amp;nbsp;&amp;.. string" vertex="1">
-          <mxGeometry height="26" width="280" y="82" as="geometry" />
-        </mxCell>
-        <mxCell id="issuecat_active" parent="issuecat_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="is_active &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;...... bool" vertex="1">
-          <mxGeometry height="26" width="280" y="108" as="geometry" />
-        </mxCell>
-        <mxCell id="rel_cat_ticket" edge="1" parent="1" source="issuecat_table" style="endArrow=none;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.15;jumpStyle=arc;rounded=0;" target="ticket_table" value="">
+        <mxCell id="r4" value="1..N" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;strokeColor=#475569;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.5;entryX=1;entryY=0.2;" edge="1" parent="1" source="center" target="ticket">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="rel_cat_ticket_1" parent="1" style="text;html=1;resizable=0;autosize=1;align=center;verticalAlign=middle;points=[];fillColor=none;strokeColor=none;rounded=0;fontSize=12;" value="1" vertex="1">
-          <mxGeometry height="20" width="20" x="1080" y="180" as="geometry" />
-        </mxCell>
-        <mxCell id="rel_cat_ticket_n" parent="1" style="text;html=1;resizable=0;autosize=1;align=center;verticalAlign=middle;points=[];fillColor=none;strokeColor=none;rounded=0;fontSize=12;" value="N" vertex="1">
-          <mxGeometry height="20" width="20" x="760" y="166" as="geometry" />
-        </mxCell>
-        <mxCell id="sc_table" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;marginBottom=0;" value="&lt;b&gt;service_center — Trung tâm BH&lt;/b&gt;" vertex="1">
-          <mxGeometry height="134" width="280" x="1100" y="320" as="geometry" />
-        </mxCell>
-        <mxCell id="sc_pk" parent="sc_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="PK center_id &amp;nbsp;&amp;nbsp;&amp;...... ObjectId" vertex="1">
-          <mxGeometry height="26" width="280" y="30" as="geometry" />
-        </mxCell>
-        <mxCell id="sc_name" parent="sc_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="center_name &amp;nbsp;&amp;..... string" vertex="1">
-          <mxGeometry height="26" width="280" y="56" as="geometry" />
-        </mxCell>
-        <mxCell id="sc_city" parent="sc_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="city &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;...... string" vertex="1">
-          <mxGeometry height="26" width="280" y="82" as="geometry" />
-        </mxCell>
-        <mxCell id="sc_active" parent="sc_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="is_active &amp;nbsp;&amp;nbsp;&amp;....... bool" vertex="1">
-          <mxGeometry height="26" width="280" y="108" as="geometry" />
-        </mxCell>
-        <mxCell id="rel_sc_ticket" edge="1" parent="1" source="sc_table" style="endArrow=none;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.4;jumpStyle=arc;rounded=0;" target="ticket_table" value="">
+        <mxCell id="r5" value="1..N" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;strokeColor=#475569;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.5;entryX=1;entryY=0.55;" edge="1" parent="1" source="category" target="ticket">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="rel_sc_ticket_1" parent="1" style="text;html=1;resizable=0;autosize=1;align=center;verticalAlign=middle;points=[];fillColor=none;strokeColor=none;rounded=0;fontSize=12;" value="1" vertex="1">
-          <mxGeometry height="20" width="20" x="1080" y="380" as="geometry" />
-        </mxCell>
-        <mxCell id="rel_sc_ticket_n" parent="1" style="text;html=1;resizable=0;autosize=1;align=center;verticalAlign=middle;points=[];fillColor=none;strokeColor=none;rounded=0;fontSize=12;" value="N" vertex="1">
-          <mxGeometry height="20" width="20" x="760" y="272" as="geometry" />
-        </mxCell>
-        <mxCell id="tsl_table" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;marginBottom=0;" value="&lt;b&gt;ticket_status_log — Log trạng thái&lt;/b&gt;" vertex="1">
-          <mxGeometry height="212" width="300" x="800" y="650" as="geometry" />
-        </mxCell>
-        <mxCell id="tsl_pk" parent="tsl_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="PK log_id &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;...... ObjectId" vertex="1">
-          <mxGeometry height="26" width="300" y="30" as="geometry" />
-        </mxCell>
-        <mxCell id="tsl_fk" parent="tsl_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontStyle=1;" value="FK ticket_id &amp;nbsp;&amp;...... ObjectId" vertex="1">
-          <mxGeometry height="26" width="300" y="56" as="geometry" />
-        </mxCell>
-        <mxCell id="tsl_from" parent="tsl_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="from_status &amp;nbsp;&amp;...... string" vertex="1">
-          <mxGeometry height="26" width="300" y="82" as="geometry" />
-        </mxCell>
-        <mxCell id="tsl_to" parent="tsl_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="to_status &amp;nbsp;&amp;nbsp;&amp;......... string" vertex="1">
-          <mxGeometry height="26" width="300" y="108" as="geometry" />
-        </mxCell>
-        <mxCell id="tsl_changed_at" parent="tsl_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="changed_at &amp;nbsp;&amp;...... date" vertex="1">
-          <mxGeometry height="26" width="300" y="134" as="geometry" />
-        </mxCell>
-        <mxCell id="tsl_by" parent="tsl_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="changed_by &amp;nbsp;&amp;.... string (mã NV)" vertex="1">
-          <mxGeometry height="26" width="300" y="160" as="geometry" />
-        </mxCell>
-        <mxCell id="tsl_note" parent="tsl_table" style="text;html=1;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;" value="note &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;.......... string" vertex="1">
-          <mxGeometry height="26" width="300" y="186" as="geometry" />
-        </mxCell>
-        <mxCell id="rel_ticket_tsl" edge="1" parent="1" source="ticket_table" style="endArrow=none;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;jumpStyle=arc;rounded=0;" target="tsl_table" value="">
+        <mxCell id="r6" value="1..N" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=ERone;endArrow=ERmany;strokeColor=#475569;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="ticket" target="log">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="rel_ticket_tsl_1" parent="1" style="text;html=1;resizable=0;autosize=1;align=center;verticalAlign=middle;points=[];fillColor=none;strokeColor=none;rounded=0;fontSize=12;" value="1" vertex="1">
-          <mxGeometry height="20" width="20" x="580" y="465" as="geometry" />
+        <mxCell id="legend" value="CHÚ THÍCH&#10;PK = khóa chính&#10;FK = khóa ngoại&#10;UQ = ràng buộc duy nhất&#10;1..N = quan hệ một-nhiều" style="text;html=1;align=left;verticalAlign=top;fontSize=11;fontColor=#334155;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="790" y="570" width="250" height="110" as="geometry" />
         </mxCell>
-        <mxCell id="rel_ticket_tsl_n" parent="1" style="text;html=1;resizable=0;autosize=1;align=center;verticalAlign=middle;points=[];fillColor=none;strokeColor=none;rounded=0;fontSize=12;" value="N" vertex="1">
-          <mxGeometry height="20" width="20" x="580" y="520" as="geometry" />
+        <mxCell id="note" value="GHI CHÚ THIẾT KẾ&#10;6 bảng độc lập, ticket chỉ lưu khóa ngoại.&#10;ticket_status_log giữ toàn bộ lịch sử QT-06.&#10;Xóa mềm bằng is_deleted, không xóa vật lý." style="text;html=1;align=left;verticalAlign=top;fontSize=11;fontColor=#334155;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="40" y="620" width="310" height="100" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
