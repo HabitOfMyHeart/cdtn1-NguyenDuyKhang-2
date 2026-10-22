@@ -1,0 +1,19 @@
+node_modules/
+dist/
+build/
+coverage/
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+.idea/
+.vscode/
+
+# Dataset gốc nặng hàng chục MB: không commit lên GitHub.
+dataset/
+data/raw/
+
+# Chỉ giữ mẫu nhỏ trong data/sample/ nếu có CSV.
+*.csv
+!data/sample/*.csv

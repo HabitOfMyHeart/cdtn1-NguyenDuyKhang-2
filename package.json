@@ -1,0 +1,28 @@
+{
+  "name": "mekong-mobile-warranty-crm",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Sprint 1 + 2 core warranty intake module for Smart CRM – Mekong Mobile (Luồng L2, Track SE)",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "db:migrate": "node migrations/001_init_collections.js",
+    "db:seed": "node seeds/seed_l2_data.js",
+    "migrate": "npm run db:migrate",
+    "seed": "npm run db:seed",
+    "test": "node --test tests/ticket.contract.test.js tests/ticket.service.test.js tests/static-assets.test.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0",
+    "htm": "^3.1.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.19.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  }
+}
