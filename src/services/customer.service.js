@@ -1,4 +1,6 @@
 const { conflict, invalid, notFound } = require('./errors');
+const { MAX_ATTEMPTS, duplicateField } = require('./duplicateKey');
+const { inputFields, CUSTOMER_FIELDS } = require('../validators/primitives');
 
 const SEGMENTS = Object.freeze(['VIP', 'THUONG', 'MOI']);
 const PHONE_PATTERN = /^0\d{9}$/;
@@ -59,9 +61,14 @@ function normalizeFullName(value) {
  * @param {{customerRepository: object, now?: () => Date}} deps Phụ thuộc.
  * @returns {object} Các hàm nghiệp vụ khách hàng.
  */
-function createCustomerService({ customerRepository, now = () => new Date() }) {
-  if (!customerRepository) {
-    throw new Error('createCustomerService cần customerRepository.');
+function createCustomerService({ customerRepository, deviceRepository, ticketRepository, now = () => new Date() }) {
+  if (!customerRepository || !deviceRepository || !ticketRepository) {
+    throw new Error('createCustomerService cần customerRepository, deviceRepository và ticketRepository.');
+  }
+
+  function assertInput(input) {
+    const fields = inputFields(input, CUSTOMER_FIELDS);
+    if (Object.keys(fields).length) throw invalid('Dữ liệu khách hàng không hợp lệ.', fields);
   }
 
   /**
@@ -77,10 +84,11 @@ function createCustomerService({ customerRepository, now = () => new Date() }) {
    * @throws {import('./errors').AppError} 422 dữ liệu sai, 409 trùng số điện thoại.
    */
   async function createCustomer(input = {}) {
+    assertInput(input);
     const phone = normalizePhone(input.phone);
     const fullName = normalizeFullName(input.full_name);
 
-    const existing = await customerRepository.findByPhone(phone);
+    const existing = await customerRepository.findByPhoneIncludingDeleted(phone);
     if (existing) {
       // QT-01: số điện thoại là duy nhất; API tạo mới phải báo xung đột để
       // giao diện quay về hồ sơ có sẵn thay vì tạo bản ghi thứ hai.
@@ -106,9 +114,7 @@ function createCustomerService({ customerRepository, now = () => new Date() }) {
       });
     }
 
-    const customerId = await customerRepository.nextId();
-    return customerRepository.create({
-      customer_id: customerId,
+    const data = {
       full_name: fullName,
       phone,
       email,
@@ -116,7 +122,18 @@ function createCustomerService({ customerRepository, now = () => new Date() }) {
       segment,
       created_at: input.created_at ? new Date(input.created_at) : now(),
       is_deleted: false
-    });
+    };
+    for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt += 1) {
+      const customerId = await customerRepository.nextId();
+      try {
+        return await customerRepository.create({ ...data, customer_id: customerId });
+      } catch (error) {
+        if (duplicateField(error, 'phone')) {
+          throw conflict('TRUNG_DU_LIEU', 'Số điện thoại đã tồn tại trong hệ thống (QT-01).', { phone: 'Hãy tra cứu hồ sơ có sẵn thay vì tạo mới.' });
+        }
+        if (!duplicateField(error, 'customer_id') || attempt === MAX_ATTEMPTS - 1) throw error;
+      }
+    }
   }
 
   /**
@@ -176,6 +193,7 @@ function createCustomerService({ customerRepository, now = () => new Date() }) {
    * @throws {import('./errors').AppError} 404, 409 hoặc 422.
    */
   async function updateCustomer(customerId, input = {}) {
+    assertInput(input);
     const current = await getCustomer(customerId);
     const patch = {};
 
@@ -184,7 +202,7 @@ function createCustomerService({ customerRepository, now = () => new Date() }) {
     }
     if (Object.prototype.hasOwnProperty.call(input, 'phone')) {
       const phone = normalizePhone(input.phone);
-      const duplicate = await customerRepository.findByPhone(phone);
+      const duplicate = await customerRepository.findByPhoneIncludingDeleted(phone);
       if (duplicate && duplicate.customer_id !== current.customer_id) {
         throw conflict('TRUNG_DU_LIEU', 'Số điện thoại đã thuộc khách hàng khác (QT-01).', {
           phone: 'Chọn số điện thoại khác hoặc tra cứu hồ sơ có sẵn.'
@@ -227,24 +245,14 @@ function createCustomerService({ customerRepository, now = () => new Date() }) {
    */
   async function deleteCustomer(customerId) {
     await getCustomer(customerId);
+    if (await ticketRepository.findByCustomer(customerId)) {
+      throw conflict('TRUNG_DU_LIEU', 'Không thể xóa khách hàng đang được tham chiếu bởi phiếu.');
+    }
+    if (await deviceRepository.findByCustomerIncludingDeleted(customerId)) {
+      throw conflict('TRUNG_DU_LIEU', 'Không thể xóa khách hàng còn thiết bị.');
+    }
     await customerRepository.softDelete(customerId);
     return { customerId, deleted: true };
-  }
-
-  /**
-   * Tìm hồ sơ theo số điện thoại, nếu chưa có thì tạo mới.
-   * Dùng cho luồng tiếp nhận để không tạo trùng khách hàng (QT-01).
-   *
-   * @param {object} input Dữ liệu khách hàng tối thiểu gồm full_name và phone.
-   * @returns {Promise<{customer: object, created: boolean}>} Hồ sơ và cờ tạo mới.
-   * @throws {import('./errors').AppError} 422 khi dữ liệu tạo mới sai.
-   */
-  async function findOrCreateByPhone(input) {
-    const phone = normalizePhone(input.phone);
-    const existing = await customerRepository.findByPhone(phone);
-    if (existing) return { customer: existing, created: false };
-    const customer = await createCustomer({ ...input, phone });
-    return { customer, created: true };
   }
 
   return {
@@ -253,16 +261,17 @@ function createCustomerService({ customerRepository, now = () => new Date() }) {
     listCustomers,
     getCustomer,
     updateCustomer,
-    deleteCustomer,
-    findOrCreateByPhone
+    deleteCustomer
   };
 }
 
 const customerRepository = require('../repositories/customer.repository');
+const deviceRepository = require('../repositories/device.repository');
+const ticketRepository = require('../repositories/ticket.repository');
 
 module.exports = {
   createCustomerService,
   normalizePhone,
   normalizeFullName,
-  ...createCustomerService({ customerRepository })
+  ...createCustomerService({ customerRepository, deviceRepository, ticketRepository })
 };

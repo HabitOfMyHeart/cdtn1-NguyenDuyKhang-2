@@ -6,7 +6,6 @@ const categoryService = require('../services/category.service');
 const {
   validateCreateTicket,
   validateUpdateTicket,
-  validateStatusChange,
   validatePreview,
   assertValid
 } = require('../validators/ticket.validator');
@@ -73,25 +72,6 @@ router.put(
   asyncHandler(async (req, res) => {
     assertValid(validateUpdateTicket(req.body));
     const detail = await ticketService.updateTicket(req.params.id, req.body, req.user);
-    res.json({ data: detail });
-  })
-);
-
-router.patch(
-  '/:id/status',
-  asyncHandler(async (req, res) => {
-    assertValid(validateStatusChange(req.body));
-    const detail = await ticketService.changeStatus(req.params.id, req.body, req.user);
-    res.json({ data: detail });
-  })
-);
-
-// Alias PUT để đúng danh sách route trong báo cáo thiết kế.
-router.put(
-  '/:id/status',
-  asyncHandler(async (req, res) => {
-    assertValid(validateStatusChange(req.body));
-    const detail = await ticketService.changeStatus(req.params.id, req.body, req.user);
     res.json({ data: detail });
   })
 );

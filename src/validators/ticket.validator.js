@@ -1,22 +1,12 @@
 const { invalid } = require('../services/errors');
 const { normalizePhone } = require('../services/customer.service');
 const { normalizeSerial } = require('../services/warrantyCheck.service');
+const { isRecord, isValidDate, inputFields, TICKET_FIELDS, CUSTOMER_FIELDS, DEVICE_FIELDS } = require('./primitives');
 
 const PRIORITIES = ['CAO', 'TRUNG_BINH', 'THAP'];
-const STATUSES = ['MOI', 'DA_PHAN_CONG', 'DANG_XU_LY', 'CHO_LINH_KIEN', 'HOAN_TAT', 'DA_DONG'];
 const ACCESSORIES = ['SAC', 'TAI_NGHE', 'HOP', 'KHAC'];
 const SEGMENTS = ['VIP', 'THUONG', 'MOI'];
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-/**
- * Kiểm tra một giá trị có phải ngày hợp lệ.
- *
- * @param {unknown} value Giá trị cần kiểm tra.
- * @returns {boolean} true nếu chuyển được sang Date hợp lệ.
- */
-function isValidDate(value) {
-  return value !== null && value !== undefined && value !== '' && !Number.isNaN(new Date(value).getTime());
-}
 
 /**
  * Kiểm tra dữ liệu tạo phiếu tại ranh giới trước khi vào service (Buổi 9).
@@ -25,7 +15,8 @@ function isValidDate(value) {
  * @returns {{valid: boolean, fields: Record<string,string>}} Kết quả kiểm tra.
  */
 function validateCreateTicket(body = {}) {
-  const fields = {};
+  const fields = inputFields(body, TICKET_FIELDS);
+  if (!isRecord(body)) return { valid: false, fields };
 
   if (!String(body.customer_id || '').trim()) fields.customer_id = 'Chọn khách hàng.';
   if (!String(body.device_id || '').trim()) fields.device_id = 'Chọn thiết bị.';
@@ -69,7 +60,8 @@ function validateCreateTicket(body = {}) {
  * @returns {{valid: boolean, fields: Record<string,string>}} Kết quả kiểm tra.
  */
 function validateUpdateTicket(body = {}) {
-  const fields = {};
+  const fields = inputFields(body, TICKET_FIELDS);
+  if (!isRecord(body)) return { valid: false, fields };
   if (body.issue_desc !== undefined) {
     const issueDesc = String(body.issue_desc || '').trim();
     if (issueDesc.length < 10 || issueDesc.length > 2000) {
@@ -102,7 +94,8 @@ function validateUpdateTicket(body = {}) {
  * @returns {{valid: boolean, fields: Record<string,string>}} Kết quả kiểm tra.
  */
 function validateCreateCustomer(body = {}) {
-  const fields = {};
+  const fields = inputFields(body, CUSTOMER_FIELDS);
+  if (!isRecord(body)) return { valid: false, fields };
   const fullName = String(body.full_name || '').trim();
   if (!fullName || fullName.length > 120) {
     fields.full_name = 'Họ tên là bắt buộc và không vượt quá 120 ký tự.';
@@ -136,7 +129,8 @@ function validateCreateCustomer(body = {}) {
  * @returns {{valid: boolean, fields: Record<string,string>}} Kết quả kiểm tra.
  */
 function validateUpdateCustomer(body = {}) {
-  const fields = {};
+  const fields = inputFields(body, CUSTOMER_FIELDS);
+  if (!isRecord(body)) return { valid: false, fields };
   if (body.full_name !== undefined) {
     const fullName = String(body.full_name || '').trim();
     if (!fullName || fullName.length > 120) {
@@ -171,7 +165,8 @@ function validateUpdateCustomer(body = {}) {
  * @returns {{valid: boolean, fields: Record<string,string>}} Kết quả kiểm tra.
  */
 function validateCreateDevice(body = {}) {
-  const fields = {};
+  const fields = inputFields(body, DEVICE_FIELDS);
+  if (!isRecord(body)) return { valid: false, fields };
   if (!String(body.customer_id || '').trim()) fields.customer_id = 'Chọn khách hàng.';
 
   const productName = String(body.product_name || '').trim();
@@ -207,7 +202,8 @@ function validateCreateDevice(body = {}) {
  * @returns {{valid: boolean, fields: Record<string,string>}} Kết quả kiểm tra.
  */
 function validateUpdateDevice(body = {}) {
-  const fields = {};
+  const fields = inputFields(body, DEVICE_FIELDS);
+  if (!isRecord(body)) return { valid: false, fields };
   if (body.product_name !== undefined) {
     const productName = String(body.product_name || '').trim();
     if (!productName || productName.length > 120) {
@@ -236,34 +232,14 @@ function validateUpdateDevice(body = {}) {
 }
 
 /**
- * Kiểm tra yêu cầu chuyển trạng thái tại ranh giới (QT-06).
- *
- * @param {object} body Body từ HTTP request.
- * @returns {{valid: boolean, fields: Record<string,string>}} Kết quả kiểm tra.
- */
-function validateStatusChange(body = {}) {
-  const fields = {};
-  const toStatus = body.to_status || body.status;
-  if (!STATUSES.includes(toStatus)) {
-    fields.to_status = `Chỉ nhận ${STATUSES.join(', ')}.`;
-  }
-  if (body.note !== undefined && String(body.note).length > 300) {
-    fields.note = 'Ghi chú không vượt quá 300 ký tự.';
-  }
-  if (body.changed_at !== undefined && !isValidDate(body.changed_at)) {
-    fields.changed_at = 'Cần ngày giờ hợp lệ theo ISO 8601.';
-  }
-  return { valid: Object.keys(fields).length === 0, fields };
-}
-
-/**
  * Kiểm tra dữ liệu đăng nhập.
  *
  * @param {object} body Body từ HTTP request.
  * @returns {{valid: boolean, fields: Record<string,string>}} Kết quả kiểm tra.
  */
 function validateLogin(body = {}) {
-  const fields = {};
+  const fields = inputFields(body, { username: 'text', password: 'text' });
+  if (!isRecord(body)) return { valid: false, fields };
   if (!String(body.username || '').trim()) fields.username = 'Nhập tên đăng nhập.';
   if (!String(body.password || '').trim()) fields.password = 'Nhập mật khẩu.';
   return { valid: Object.keys(fields).length === 0, fields };
@@ -276,7 +252,8 @@ function validateLogin(body = {}) {
  * @returns {{valid: boolean, fields: Record<string,string>}} Kết quả kiểm tra.
  */
 function validatePreview(body = {}) {
-  const fields = {};
+  const fields = inputFields(body, { priority: 'text', received_at: 'date' });
+  if (!isRecord(body)) return { valid: false, fields };
   if (!PRIORITIES.includes(body.priority)) {
     fields.priority = 'Mức ưu tiên chỉ nhận CAO, TRUNG_BINH hoặc THAP.';
   }
@@ -307,12 +284,10 @@ module.exports = {
   validateUpdateCustomer,
   validateCreateDevice,
   validateUpdateDevice,
-  validateStatusChange,
   validateLogin,
   validatePreview,
   assertValid,
   PRIORITIES,
-  STATUSES,
   ACCESSORIES,
   SEGMENTS
 };

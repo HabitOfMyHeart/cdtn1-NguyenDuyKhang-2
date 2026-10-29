@@ -2,31 +2,12 @@ const { conflict, forbidden, invalid, notFound } = require('./errors');
 const { calculateDueDate, getSlaHours } = require('./slaCalculator.service');
 const { checkWarranty } = require('./warrantyCheck.service');
 const { toTicketView, toStatusLogView, toVietnamIso } = require('./ticket.contract');
+const { MAX_ATTEMPTS, duplicateField } = require('./duplicateKey');
+const { inputFields, TICKET_FIELDS } = require('../validators/primitives');
 
 const PRIORITIES = Object.freeze(['CAO', 'TRUNG_BINH', 'THAP']);
-const STATUSES = Object.freeze([
-  'MOI',
-  'DA_PHAN_CONG',
-  'DANG_XU_LY',
-  'CHO_LINH_KIEN',
-  'HOAN_TAT',
-  'DA_DONG'
-]);
 const ACCESSORIES = Object.freeze(['SAC', 'TAI_NGHE', 'HOP', 'KHAC']);
 const VN_OFFSET_MS = 7 * 60 * 60 * 1000;
-
-/**
- * Vòng đời trạng thái một chiều theo QT-06. Mọi chuyển trạng thái không nằm
- * trong bảng này bị từ chối với mã CHUYEN_TRANG_THAI_KHONG_HOP_LE.
- */
-const NEXT_STATUSES = Object.freeze({
-  MOI: Object.freeze(['DA_PHAN_CONG', 'DANG_XU_LY']),
-  DA_PHAN_CONG: Object.freeze(['DANG_XU_LY']),
-  DANG_XU_LY: Object.freeze(['CHO_LINH_KIEN', 'HOAN_TAT']),
-  CHO_LINH_KIEN: Object.freeze(['DANG_XU_LY', 'HOAN_TAT']),
-  HOAN_TAT: Object.freeze(['DA_DONG']),
-  DA_DONG: Object.freeze([])
-});
 
 /**
  * Lấy năm theo lịch Việt Nam để sinh mã phiếu BH-xxxxxx/năm.
@@ -36,17 +17,6 @@ const NEXT_STATUSES = Object.freeze({
  */
 function vietnamYear(date) {
   return new Date(date.getTime() + VN_OFFSET_MS).getUTCFullYear();
-}
-
-/**
- * Kiểm tra một chuyển trạng thái có đúng vòng đời QT-06 hay không.
- *
- * @param {string} fromStatus Trạng thái hiện tại.
- * @param {string} toStatus Trạng thái muốn chuyển.
- * @returns {boolean} true nếu hợp lệ.
- */
-function isValidTransition(fromStatus, toStatus) {
-  return Boolean(NEXT_STATUSES[fromStatus]?.includes(toStatus));
 }
 
 /**
@@ -83,10 +53,35 @@ function createTicketService({
    * @throws {import('./errors').AppError} KHONG_DU_QUYEN khi khác trung tâm.
    */
   function assertCenterAccess(ticket, actor) {
-    if (!actor || actor.role === 'QUAN_LY') return;
-    if (actor.center_id && ticket.center_id !== actor.center_id) {
+    assertActor(actor);
+    if (ticket.center_id !== actor.center_id) {
       throw forbidden('Bạn chỉ được xem và thao tác phiếu thuộc trung tâm của mình (QT-14).');
     }
+  }
+
+  function assertActor(actor) {
+    if (!actor || actor.role !== 'NHAN_VIEN' || typeof actor.center_id !== 'string' || !actor.center_id.trim() || typeof actor.username !== 'string' || !actor.username.trim()) {
+      throw forbidden('Cần nhân viên có tài khoản và trung tâm hợp lệ.');
+    }
+  }
+
+  function assertIntakeTicket(ticket) {
+    if (ticket.status !== 'MOI') {
+      throw conflict('PHIEU_CHI_DOC', 'Phiếu sau bước tiếp nhận chỉ được tra cứu; không thể sửa hoặc xóa trong luồng L2.');
+    }
+  }
+
+  function assertInput(input) {
+    const fields = inputFields(input, TICKET_FIELDS);
+    if (Object.keys(fields).length) throw invalid('Dữ liệu tiếp nhận không hợp lệ.', fields);
+  }
+
+  function integrityError(message, cause, ticketId, compensationError) {
+    const error = new Error(message, { cause });
+    error.code = 'LOI_TOAN_VEN_PHIEU';
+    error.ticketId = ticketId;
+    if (compensationError) error.compensationError = compensationError;
+    return error;
   }
 
   /**
@@ -133,7 +128,7 @@ function createTicketService({
       ngoaiQuan: ticket.exterior_note || '',
       lyDoUuTien: ticket.priority_reason || '',
       lichSuTrangThai: logs.map(toStatusLogView),
-      trangThaiKeTiep: [...(NEXT_STATUSES[ticket.status] || [])]
+      trangThaiKeTiep: []
     };
   }
 
@@ -146,6 +141,8 @@ function createTicketService({
    * @throws {import('./errors').AppError} 422 dữ liệu sai, 404 thiếu tham chiếu, 409 phiếu đang mở, 403 sai trung tâm.
    */
   async function createTicket(input = {}, actor = null) {
+    assertActor(actor);
+    assertInput(input);
     const fields = {};
     const customerId = String(input.customer_id || '').trim();
     const deviceId = String(input.device_id || '').trim();
@@ -233,12 +230,7 @@ function createTicketService({
     }
 
     const dueDate = calculateDueDate(receivedAt, priority);
-    const ticketId = await ticketRepository.nextId();
-    const ticketCode = await ticketRepository.nextTicketCode(vietnamYear(receivedAt));
-
-    const created = await ticketRepository.create({
-      ticket_id: ticketId,
-      ticket_code: ticketCode,
+    const data = {
       customer_id: customer.customer_id,
       device_id: device.device_id,
       center_id: center.center_id,
@@ -254,17 +246,64 @@ function createTicketService({
       due_date: dueDate,
       closed_at: null,
       is_deleted: false
-    });
+    };
+    let created;
+    for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt += 1) {
+      const ticketId = await ticketRepository.nextId();
+      const ticketCode = await ticketRepository.nextTicketCode(vietnamYear(receivedAt));
+      try {
+        created = await ticketRepository.create({ ...data, ticket_id: ticketId, ticket_code: ticketCode });
+        break;
+      } catch (error) {
+        if (duplicateField(error, 'device_id')) {
+          throw conflict('PHIEU_DANG_MO', 'Thiết bị đang có phiếu chưa đóng (QT-03).', { device_id: 'Hãy xử lý phiếu đang mở trước.' });
+        }
+        if (duplicateField(error, 'ticket_id') || duplicateField(error, 'ticket_code')) {
+          if (attempt === MAX_ATTEMPTS - 1) throw error;
+          continue;
+        }
+        if (error?.code === 11000 || error?.name === 'ValidationError') throw error;
+        throw integrityError('Không xác định được kết quả tạo phiếu; cần đối soát trước khi thử lại.', error, ticketId);
+      }
+    }
 
-    await ticketRepository.addStatusLog({
-      log_id: await ticketRepository.nextLogId(),
-      ticket_id: ticketId,
-      from_status: null,
-      to_status: 'MOI',
-      changed_at: receivedAt,
-      changed_by: actor?.username || 'SYSTEM',
-      note: 'Tạo phiếu tiếp nhận mới.'
-    });
+    let logWriteAttempted = false;
+    try {
+      for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt += 1) {
+        const logId = await ticketRepository.nextLogId();
+        try {
+          logWriteAttempted = true;
+          await ticketRepository.addStatusLog({
+            log_id: logId,
+            ticket_id: created.ticket_id,
+            from_status: null,
+            to_status: 'MOI',
+            changed_at: receivedAt,
+            changed_by: actor.username,
+            note: 'Tạo phiếu tiếp nhận mới.'
+          });
+          break;
+        } catch (error) {
+          if (!duplicateField(error, 'log_id') || attempt === MAX_ATTEMPTS - 1) throw error;
+          logWriteAttempted = false;
+        }
+      }
+    } catch (error) {
+      const definitelyNotWritten = !logWriteAttempted || error?.code === 11000 || error?.name === 'ValidationError';
+      let compensationError;
+      let removed = false;
+      if (definitelyNotWritten && created._id) {
+        try {
+          removed = await ticketRepository.removeUnchangedCreated(created);
+        } catch (failure) {
+          compensationError = failure;
+        }
+      }
+      throw integrityError(
+        removed ? 'Không ghi được lịch sử khởi tạo; phiếu đã được bù trừ.' : 'Không xác định được tính toàn vẹn phiếu và lịch sử; cần đối soát.',
+        error, created.ticket_id, compensationError
+      );
+    }
 
     return buildDetail(created);
   }
@@ -278,6 +317,7 @@ function createTicketService({
    * @throws {import('./errors').AppError} Khi tầng dữ liệu lỗi.
    */
   async function listTickets(filters = {}, actor = null) {
+    assertActor(actor);
     const query = {
       status: filters.status || '',
       category_id: filters.category_id || '',
@@ -286,7 +326,7 @@ function createTicketService({
       q: String(filters.q || '').trim()
     };
 
-    if (actor && actor.role !== 'QUAN_LY' && actor.center_id) {
+    if (actor && actor.center_id) {
       query.center_id = actor.center_id;
     }
 
@@ -309,6 +349,7 @@ function createTicketService({
    * @throws {import('./errors').AppError} 404 hoặc 403.
    */
   async function getTicket(ticketId, actor = null) {
+    assertActor(actor);
     const ticket = await ticketRepository.findById(ticketId);
     if (!ticket) throw notFound('Không tìm thấy phiếu bảo hành.');
     assertCenterAccess(ticket, actor);
@@ -325,11 +366,14 @@ function createTicketService({
    * @throws {import('./errors').AppError} 404, 403, 409 hoặc 422.
    */
   async function updateTicket(ticketId, input = {}, actor = null) {
+    assertActor(actor);
+    assertInput(input);
     const ticket = await ticketRepository.findById(ticketId);
     if (!ticket) throw notFound('Không tìm thấy phiếu bảo hành.');
     assertCenterAccess(ticket, actor);
 
     const patch = {};
+    assertIntakeTicket(ticket);
     if (Object.prototype.hasOwnProperty.call(input, 'issue_desc')) {
       const issueDesc = String(input.issue_desc || '').trim();
       if (issueDesc.length < 10 || issueDesc.length > 2000) {
@@ -386,68 +430,18 @@ function createTicketService({
         patch.due_date = calculateDueDate(ticket.received_at, input.priority);
       }
     } else if (Object.prototype.hasOwnProperty.call(input, 'priority_reason')) {
-      patch.priority_reason = String(input.priority_reason || '').trim().slice(0, 300);
+      const reason = String(input.priority_reason || '').trim().slice(0, 300);
+      const category = await catalogRepository.findCategoryById(ticket.category_id);
+      if (category && ticket.priority !== category.default_priority && !reason) {
+        throw invalid('Cần nhập lý do khi đổi mức ưu tiên khác gợi ý của nhóm sự cố.', {
+          priority_reason: `Nhóm ${category.category_name} gợi ý ${category.default_priority}.`
+        });
+      }
+      patch.priority_reason = reason;
     }
 
     const updated = await ticketRepository.update(ticketId, patch);
-    return buildDetail(updated);
-  }
-
-  /**
-   * Chuyển trạng thái theo vòng đời một chiều QT-06 và ghi ticket_status_log.
-   *
-   * @param {string} ticketId Mã TCKxxxx.
-   * @param {{to_status?: string, status?: string, note?: string, changed_at?: string|Date}} input Trạng thái đích và ghi chú.
-   * @param {{username?: string, role?: string, center_id?: string}|null} [actor] Người thực hiện.
-   * @returns {Promise<{ticket: object, lichSuTrangThai: Array<object>, trangThaiKeTiep: string[]}>} Chi tiết sau chuyển.
-   * @throws {import('./errors').AppError} 404, 403, 409 hoặc 422.
-   */
-  async function changeStatus(ticketId, input = {}, actor = null) {
-    const ticket = await ticketRepository.findById(ticketId);
-    if (!ticket) throw notFound('Không tìm thấy phiếu bảo hành.');
-    assertCenterAccess(ticket, actor);
-
-    const toStatus = input.to_status || input.status;
-    if (!STATUSES.includes(toStatus)) {
-      throw invalid('Trạng thái đích không hợp lệ.', {
-        to_status: `Chỉ nhận ${STATUSES.join(', ')}.`
-      });
-    }
-
-    if (!isValidTransition(ticket.status, toStatus)) {
-      throw conflict(
-        'CHUYEN_TRANG_THAI_KHONG_HOP_LE',
-        `Không thể chuyển từ ${ticket.status} sang ${toStatus} (QT-06).`,
-        {
-          to_status: `Bước hợp lệ: ${(NEXT_STATUSES[ticket.status] || []).join(', ') || 'không còn bước nào'}.`
-        }
-      );
-    }
-
-    const changedAt = input.changed_at ? new Date(input.changed_at) : now();
-    if (Number.isNaN(changedAt.getTime())) {
-      throw invalid('Thời điểm chuyển trạng thái không hợp lệ.', {
-        changed_at: 'Cần ngày giờ hợp lệ theo ISO 8601.'
-      });
-    }
-    const note = String(input.note || '').trim().slice(0, 300);
-
-    const patch = { status: toStatus };
-    if (toStatus === 'DA_DONG') {
-      patch.closed_at = changedAt;
-    }
-
-    const updated = await ticketRepository.update(ticketId, patch);
-    await ticketRepository.addStatusLog({
-      log_id: await ticketRepository.nextLogId(),
-      ticket_id: ticketId,
-      from_status: ticket.status,
-      to_status: toStatus,
-      changed_at: changedAt,
-      changed_by: actor?.username || input.changed_by || 'SYSTEM',
-      note
-    });
-
+    if (!updated) throw conflict('PHIEU_CHI_DOC', 'Phiếu đã thay đổi hoặc không còn ở bước tiếp nhận. Hãy tải lại trước khi tiếp tục.');
     return buildDetail(updated);
   }
 
@@ -460,10 +454,13 @@ function createTicketService({
    * @throws {import('./errors').AppError} 404 hoặc 403.
    */
   async function deleteTicket(ticketId, actor = null) {
+    assertActor(actor);
     const ticket = await ticketRepository.findById(ticketId);
     if (!ticket) throw notFound('Không tìm thấy phiếu bảo hành.');
     assertCenterAccess(ticket, actor);
-    await ticketRepository.softDelete(ticketId);
+    assertIntakeTicket(ticket);
+    const deleted = await ticketRepository.softDelete(ticketId);
+    if (!deleted) throw conflict('PHIEU_CHI_DOC', 'Phiếu đã thay đổi hoặc không còn ở bước tiếp nhận. Hãy tải lại trước khi tiếp tục.');
     return { ticketId, deleted: true };
   }
 
@@ -476,6 +473,7 @@ function createTicketService({
    * @throws {import('./errors').AppError} 404 hoặc 403.
    */
   async function getHistory(ticketId, actor = null) {
+    assertActor(actor);
     const ticket = await ticketRepository.findById(ticketId);
     if (!ticket) throw notFound('Không tìm thấy phiếu bảo hành.');
     assertCenterAccess(ticket, actor);
@@ -491,6 +489,7 @@ function createTicketService({
    * @throws {import('./errors').AppError} DU_LIEU_KHONG_HOP_LE khi đầu vào sai.
    */
   async function previewDueDate(input = {}) {
+    assertInput(input);
     const priority = input.priority;
     if (!PRIORITIES.includes(priority)) {
       throw invalid('Mức ưu tiên không hợp lệ.', {
@@ -517,11 +516,9 @@ function createTicketService({
     listTickets,
     getTicket,
     updateTicket,
-    changeStatus,
     deleteTicket,
     getHistory,
-    previewDueDate,
-    isValidTransition
+    previewDueDate
   };
 }
 
@@ -532,8 +529,6 @@ const catalogRepository = require('../repositories/catalog.repository');
 
 module.exports = {
   createTicketService,
-  NEXT_STATUSES,
-  isValidTransition,
   ...createTicketService({
     ticketRepository,
     customerRepository,

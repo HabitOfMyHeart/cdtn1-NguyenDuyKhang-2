@@ -1,115 +1,85 @@
-const { randomBytes, randomInt } = require('node:crypto');
+const { randomUUID } = require('node:crypto');
 const { AppError, notFound } = require('../services/errors');
+const { logger: defaultLogger } = require('../logger');
 
-/**
- * Bọc handler async để mọi Promise rejection đi vào error middleware.
- *
- * @param {Function} handler Hàm xử lý route.
- * @returns {import('express').RequestHandler} Handler đã bọc.
- */
+// The only application-error-to-HTTP translation table.
+const STATUS = Object.freeze({ bad_request: 400, unauthorized: 401, forbidden: 403,
+  not_found: 404, conflict: 409, payload_too_large: 413, validation: 422,
+  unavailable: 503, internal: 500 });
+const INTERNAL_MESSAGE = 'Hệ thống đang gặp sự cố. Vui lòng thử lại sau.';
+const UNAVAILABLE_MESSAGE = 'Dịch vụ dữ liệu tạm thời không sẵn sàng. Vui lòng thử lại sau.';
+const DATABASE_ERRORS = new Set(['MongoNetworkError', 'MongoNetworkTimeoutError',
+  'MongoServerSelectionError', 'MongooseServerSelectionError', 'MongoNotConnectedError',
+  'MongoTopologyClosedError', 'MongoServerClosedError', 'MongoPoolClearedError']);
+
 function asyncHandler(handler) {
   return function wrapped(req, res, next) {
-    Promise.resolve(handler(req, res, next)).catch(next);
+    return Promise.resolve().then(() => handler(req, res, next)).catch(next);
   };
 }
 
-/**
- * Sinh mã tra cứu ngắn cho lỗi 500, dạng 7F3A-21.
- *
- * @returns {string} Mã tra cứu.
- */
 function makeRetrievalCode() {
-  return `${randomBytes(2).toString('hex').toUpperCase()}-${randomInt(10, 100)}`;
+  return randomUUID();
 }
 
-/**
- * Middleware 404 cho đường dẫn API không tồn tại.
- *
- * @param {import('express').Request} req Request Express.
- * @param {import('express').Response} res Response Express.
- * @param {import('express').NextFunction} next Hàm next.
- * @returns {void}
- * @throws {import('../services/errors').AppError} KHONG_TIM_THAY.
- */
 function notFoundHandler(req, res, next) {
-  next(notFound(`Không tìm thấy đường dẫn ${req.method} ${req.originalUrl}.`));
+  next(notFound('Không tìm thấy đường dẫn được yêu cầu.'));
 }
 
-/**
- * Chuẩn hóa mọi lỗi về đúng ba trường { error, message, fields }.
- * Không trả stack trace, tên collection hay chi tiết kỹ thuật của CSDL ra ngoài.
- *
- * @param {unknown} error Lỗi bắt được.
- * @param {import('express').Request} req Request Express.
- * @param {import('express').Response} res Response Express.
- * @param {import('express').NextFunction} next Hàm next.
- * @returns {void}
- */
-function errorHandler(error, req, res, next) {
-  if (res.headersSent) return next(error);
+function safeFieldKey(key) {
+  return typeof key === 'string' && /^[A-Za-z_][A-Za-z0-9_.]{0,63}$/.test(key) &&
+    !['__proto__', 'constructor', 'prototype'].includes(key) ? key : 'du_lieu';
+}
 
+function normalizeError(error) {
   if (error instanceof AppError) {
-    return res.status(error.statusCode).json({
-      error: error.code,
-      message: error.message,
-      fields: error.fields || {}
-    });
+    const kind = Object.hasOwn(STATUS, error.kind) ? error.kind : 'internal';
+    if (kind === 'internal') return { kind, code: 'LOI_HE_THONG', message: INTERNAL_MESSAGE, fields: {} };
+    if (kind === 'unavailable') return { kind, code: 'DICH_VU_KHONG_SAN_SANG', message: UNAVAILABLE_MESSAGE, fields: {} };
+    return { kind, code: error.code, message: error.message, fields: error.fields || {} };
   }
-
-  // Lỗi validation của Mongoose: đưa tên trường vào fields để giao diện tô đỏ.
-  if (error?.name === 'ValidationError' && error.errors) {
-    const fields = {};
-    for (const [key, value] of Object.entries(error.errors)) {
-      fields[key] = value.message;
-    }
-    return res.status(422).json({
-      error: 'DU_LIEU_KHONG_HOP_LE',
-      message: 'Dữ liệu không hợp lệ. Vui lòng kiểm tra các trường được đánh dấu.',
-      fields
-    });
+  if (error?.type === 'entity.too.large') {
+    return { kind: 'payload_too_large', code: 'NOI_DUNG_QUA_LON', message: 'Nội dung yêu cầu vượt quá giới hạn cho phép.', fields: {} };
   }
-
-  // Lỗi unique index (ví dụ trùng SĐT, serial, mã phiếu).
+  if (error instanceof SyntaxError && error.type === 'entity.parse.failed') {
+    return { kind: 'bad_request', code: 'DU_LIEU_KHONG_HOP_LE', message: 'Nội dung JSON không hợp lệ.', fields: { body: 'Kiểm tra lại cú pháp JSON.' } };
+  }
   if (error?.code === 11000) {
-    const key = Object.keys(error.keyPattern || error.keyValue || { du_lieu: 1 })[0];
-    return res.status(409).json({
-      error: 'TRUNG_DU_LIEU',
-      message: 'Dữ liệu đã tồn tại trong hệ thống.',
-      fields: { [key]: 'Giá trị này đã được sử dụng.' }
-    });
+    const key = safeFieldKey(Object.keys(error.keyPattern || error.keyValue || {})[0]);
+    return { kind: 'conflict', code: 'TRUNG_DU_LIEU', message: 'Dữ liệu đã tồn tại trong hệ thống.', fields: { [key]: 'Giá trị này đã được sử dụng.' } };
   }
-
-  // Lỗi ép kiểu của Mongoose (ví dụ ID không đúng dạng).
+  if (error?.name === 'ValidationError' && error.errors) {
+    const fields = Object.fromEntries(Object.keys(error.errors).slice(0, 50).map((key) => [safeFieldKey(key), 'Giá trị không hợp lệ.']));
+    return { kind: 'validation', code: 'DU_LIEU_KHONG_HOP_LE', message: 'Dữ liệu không hợp lệ. Vui lòng kiểm tra các trường được đánh dấu.', fields };
+  }
   if (error?.name === 'CastError') {
-    return res.status(422).json({
-      error: 'DU_LIEU_KHONG_HOP_LE',
-      message: 'Dữ liệu không đúng định dạng.',
-      fields: { [error.path || 'du_lieu']: 'Giá trị không hợp lệ.' }
-    });
+    return { kind: 'validation', code: 'DU_LIEU_KHONG_HOP_LE', message: 'Dữ liệu không đúng định dạng.', fields: { [safeFieldKey(error.path)]: 'Giá trị không hợp lệ.' } };
   }
-
-  // Body JSON hỏng do express.json().
-  if (error instanceof SyntaxError && error.status === 400 && 'body' in error) {
-    return res.status(400).json({
-      error: 'DU_LIEU_KHONG_HOP_LE',
-      message: 'Nội dung JSON không hợp lệ.',
-      fields: { body: 'Kiểm tra lại cú pháp JSON.' }
-    });
+  if (DATABASE_ERRORS.has(error?.name) || (error?.name === 'MongooseError' &&
+      /before initial connection|buffering timed out|connection (?:is )?(?:closed|not open)/i.test(error.message || ''))) {
+    return { kind: 'unavailable', code: 'DICH_VU_KHONG_SAN_SANG', message: UNAVAILABLE_MESSAGE, fields: {} };
   }
-
-  const retrievalCode = makeRetrievalCode();
-  // Chỉ log phía máy chủ; người dùng chỉ nhận mã tra cứu, không nhận stack.
-  console.error(`[LOI_HE_THONG ${retrievalCode}]`, error);
-  return res.status(500).json({
-    error: 'LOI_HE_THONG',
-    message: `Hệ thống đang gặp sự cố. Vui lòng thử lại sau. Mã tra cứu: ${retrievalCode}.`,
-    fields: { maTraCuu: retrievalCode }
-  });
+  return { kind: 'internal', code: 'LOI_HE_THONG', message: INTERNAL_MESSAGE, fields: {} };
 }
 
-module.exports = {
-  asyncHandler,
-  makeRetrievalCode,
-  notFoundHandler,
-  errorHandler
-};
+function createErrorHandler({ logger = defaultLogger } = {}) {
+  return function errorHandler(error, req, res, next) {
+    if (res.headersSent) return next(error);
+    const normalized = normalizeError(error);
+    const statusCode = STATUS[normalized.kind];
+    const requestId = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(req.requestId || '') ? req.requestId : makeRetrievalCode();
+    req.requestId = requestId;
+    res.setHeader('X-Request-ID', requestId);
+    logger[statusCode >= 500 ? 'error' : 'warn']('http.request.failed', {
+      requestId, statusCode, kind: normalized.kind, code: normalized.code, error
+    });
+    return res.status(statusCode).json({
+      error: normalized.code,
+      message: normalized.message,
+      fields: { ...normalized.fields, maTraCuu: requestId }
+    });
+  };
+}
+
+module.exports = { asyncHandler, makeRetrievalCode, notFoundHandler,
+  normalizeError, createErrorHandler, errorHandler: createErrorHandler() };

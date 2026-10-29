@@ -3,6 +3,7 @@ const { signAccessToken, requireAuth } = require('../middlewares/auth.middleware
 const { asyncHandler } = require('../middlewares/error.middleware');
 const { unauthorized } = require('../services/errors');
 const { validateLogin, assertValid } = require('../validators/ticket.validator');
+const { getConfig } = require('../config');
 
 const router = express.Router();
 
@@ -12,22 +13,7 @@ const router = express.Router();
  * @returns {Array<{username: string, password: string, fullName: string, role: string, center_id: string}>} Tài khoản demo.
  */
 function getDemoUsers() {
-  return [
-    {
-      username: process.env.DEMO_STAFF_USERNAME || 'nhanvien',
-      password: process.env.DEMO_STAFF_PASSWORD || 'nhanvien123',
-      fullName: process.env.DEMO_STAFF_NAME || 'Nguyễn Duy Khang',
-      role: 'NHAN_VIEN',
-      center_id: process.env.DEMO_STAFF_CENTER || '1'
-    },
-    {
-      username: process.env.DEMO_MANAGER_USERNAME || 'quanly',
-      password: process.env.DEMO_MANAGER_PASSWORD || 'quanly123',
-      fullName: process.env.DEMO_MANAGER_NAME || 'Quản lý trung tâm',
-      role: 'QUAN_LY',
-      center_id: process.env.DEMO_MANAGER_CENTER || '1'
-    }
-  ];
+  return [getConfig().demoStaff];
 }
 
 /**

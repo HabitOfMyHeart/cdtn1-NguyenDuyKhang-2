@@ -1,23 +1,15 @@
 const { invalid } = require('./errors');
+const { isValidDate } = require('../validators/primitives');
 
 const HOUR_MS = 60 * 60 * 1000;
 const DAY_MS = 24 * HOUR_MS;
+const VN_OFFSET_MS = 7 * HOUR_MS;
 
 const SLA_HOURS = Object.freeze({
   CAO: 24,
   TRUNG_BINH: 72,
   THAP: 120
 });
-
-/**
- * Kiểm tra một giá trị có phải ngày hợp lệ.
- *
- * @param {Date|string|number} value Giá trị cần kiểm tra.
- * @returns {boolean} true nếu `new Date(value)` hợp lệ.
- */
-function isValidDate(value) {
-  return !Number.isNaN(new Date(value).getTime());
-}
 
 /**
  * Lấy số giờ cam kết theo mức ưu tiên (QT-04).
@@ -43,7 +35,7 @@ function getSlaHours(priority) {
  * @returns {boolean} true nếu không phải Chủ Nhật.
  */
 function isWorkingDay(date) {
-  return date.getDay() !== 0;
+  return new Date(date.getTime() + VN_OFFSET_MS).getUTCDay() !== 0;
 }
 
 /**
@@ -54,8 +46,8 @@ function isWorkingDay(date) {
  */
 function moveOffSunday(date) {
   const result = new Date(date);
-  if (result.getDay() === 0) {
-    result.setDate(result.getDate() + 1);
+  if (!isWorkingDay(result)) {
+    result.setTime(result.getTime() + DAY_MS);
   }
   return result;
 }
@@ -86,10 +78,11 @@ function addWorkingHours(receivedAt, hours) {
   let remaining = hours;
 
   while (remaining > 0) {
-    const step = Math.min(remaining, 24);
-    cursor = new Date(cursor.getTime() + step * HOUR_MS);
-    cursor = moveOffSunday(cursor);
-    remaining -= step;
+    const vn = new Date(cursor.getTime() + VN_OFFSET_MS);
+    const untilMidnight = DAY_MS - (vn.getUTCHours() * HOUR_MS + vn.getUTCMinutes() * 60000 + vn.getUTCSeconds() * 1000 + vn.getUTCMilliseconds());
+    const step = Math.min(remaining * HOUR_MS, untilMidnight);
+    cursor = moveOffSunday(new Date(cursor.getTime() + step));
+    remaining -= step / HOUR_MS;
   }
 
   return cursor;
@@ -107,29 +100,12 @@ function calculateDueDate(receivedAt, priority) {
   return addWorkingHours(receivedAt, getSlaHours(priority));
 }
 
-/**
- * Mô tả mục tiêu SLA để hiển thị ngữ cảnh so sánh trên giao diện.
- *
- * @param {'CAO'|'TRUNG_BINH'|'THAP'} priority Mức ưu tiên.
- * @returns {{priority: string, hours: number, label: string}} Ngữ cảnh SLA.
- * @throws {AppError} DU_LIEU_KHONG_HOP_LE khi mức ưu tiên sai.
- */
-function describeSla(priority) {
-  const hours = getSlaHours(priority);
-  return {
-    priority,
-    hours,
-    label: `${priority} = ${hours} giờ làm việc (Thứ Hai – Thứ Bảy, bỏ Chủ Nhật)`
-  };
-}
-
 module.exports = {
   SLA_HOURS,
   DAY_MS,
   HOUR_MS,
   addWorkingHours,
   calculateDueDate,
-  describeSla,
   getSlaHours,
   isWorkingDay,
   isValidDate,

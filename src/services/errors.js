@@ -1,77 +1,57 @@
-/**
- * Lỗi nghiệp vụ có mã đọc được, HTTP status và fields để lớp route trả về
- * đúng định dạng { error, message, fields }.
- */
+/** Semantic application errors. Transport status belongs exclusively to middleware. */
 class AppError extends Error {
-  /**
-   * @param {string} code Mã lỗi máy đọc, ví dụ KHONG_TIM_THAY.
-   * @param {string} message Câu thông báo tiếng Việt cho người dùng.
-   * @param {number} [statusCode=500] HTTP status tương ứng.
-   * @param {Record<string, string>} [fields={}] Chi tiết từng trường sai.
-   */
-  constructor(code, message, statusCode = 500, fields = {}) {
-    super(message);
+  constructor(code, message, kind = 'internal', fields = {}, options = {}) {
+    super(message, options);
     this.name = 'AppError';
+    this.kind = kind;
     this.code = code;
-    this.statusCode = statusCode;
     this.fields = fields;
-    Error.captureStackTrace?.(this, AppError);
+    Error.captureStackTrace?.(this, this.constructor);
   }
 }
 
-/** @param {string} message @param {Record<string,string>} [fields] @returns {AppError} */
 function badRequest(message, fields = {}) {
-  return new AppError('DU_LIEU_KHONG_HOP_LE', message, 400, fields);
+  return new AppError('DU_LIEU_KHONG_HOP_LE', message, 'bad_request', fields);
 }
-
-/** @param {string} message @param {Record<string,string>} [fields] @returns {AppError} */
 function invalid(message, fields = {}) {
-  return new AppError('DU_LIEU_KHONG_HOP_LE', message, 422, fields);
+  return new AppError('DU_LIEU_KHONG_HOP_LE', message, 'validation', fields);
 }
-
-/** @param {string} message @param {Record<string,string>} [fields] @returns {AppError} */
 function notFound(message, fields = {}) {
-  return new AppError('KHONG_TIM_THAY', message, 404, fields);
+  return new AppError('KHONG_TIM_THAY', message, 'not_found', fields);
 }
-
-/**
- * @param {'PHIEU_DANG_MO'|'TRUNG_DU_LIEU'|'CHUYEN_TRANG_THAI_KHONG_HOP_LE'} code Mã xung đột.
- * @param {string} message Câu thông báo nghiệp vụ.
- * @param {Record<string,string>} [fields] Trường liên quan.
- * @returns {AppError}
- */
 function conflict(code, message, fields = {}) {
-  return new AppError(code, message, 409, fields);
+  return new AppError(code, message, 'conflict', fields);
 }
-
-/** @param {string} [message] @returns {AppError} */
 function unauthorized(message = 'Bạn chưa đăng nhập hoặc phiên đăng nhập đã hết hạn.') {
-  return new AppError('CHUA_DANG_NHAP', message, 401);
+  return new AppError('CHUA_DANG_NHAP', message, 'unauthorized');
 }
-
-/** @param {string} [message] @returns {AppError} */
 function forbidden(message = 'Bạn không đủ quyền thực hiện thao tác này.') {
-  return new AppError('KHONG_DU_QUYEN', message, 403);
+  return new AppError('KHONG_DU_QUYEN', message, 'forbidden');
 }
-
-/** @param {string} [message] @returns {AppError} */
 function internal(message = 'Hệ thống đang gặp sự cố. Vui lòng thử lại sau.') {
-  return new AppError('LOI_HE_THONG', message, 500);
+  return new AppError('LOI_HE_THONG', message, 'internal');
 }
 
-/** @param {unknown} error @returns {error is AppError} */
+/** Repository adapters can preserve the private cause without exposing its message. */
+class DataAccessError extends AppError {
+  constructor(message = 'Dịch vụ dữ liệu tạm thời không sẵn sàng.', { cause } = {}) {
+    super('DICH_VU_KHONG_SAN_SANG', message, 'unavailable', {}, { cause });
+    this.name = 'DataAccessError';
+  }
+}
+
+class DuplicateKeyError extends AppError {
+  constructor(fields = {}, { cause } = {}) {
+    super('TRUNG_DU_LIEU', 'Dữ liệu đã tồn tại trong hệ thống.', 'conflict', fields, { cause });
+    this.name = 'DuplicateKeyError';
+  }
+}
+
 function isAppError(error) {
   return error instanceof AppError;
 }
 
 module.exports = {
-  AppError,
-  badRequest,
-  invalid,
-  notFound,
-  conflict,
-  unauthorized,
-  forbidden,
-  internal,
-  isAppError
+  AppError, DataAccessError, DuplicateKeyError,
+  badRequest, invalid, notFound, conflict, unauthorized, forbidden, internal, isAppError
 };

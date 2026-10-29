@@ -60,6 +60,10 @@ function findByPhone(phone) {
   return Customer.findOne({ phone, is_deleted: false }).lean();
 }
 
+function findByPhoneIncludingDeleted(phone) {
+  return Customer.findOne({ phone }).lean();
+}
+
 /**
  * Cập nhật khách hàng theo mã nghiệp vụ.
  *
@@ -113,6 +117,7 @@ module.exports = {
   findAll,
   findById,
   findByPhone,
+  findByPhoneIncludingDeleted,
   update,
   softDelete,
   nextId

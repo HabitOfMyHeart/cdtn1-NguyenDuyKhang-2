@@ -42,21 +42,6 @@ function createCategoryService({ catalogRepository }) {
   }
 
   /**
-   * Lấy một trung tâm bảo hành đang hoạt động.
-   *
-   * @param {string} centerId Mã trung tâm.
-   * @returns {Promise<object>} Trung tâm.
-   * @throws {import('./errors').AppError} KHONG_TIM_THAY khi không có.
-   */
-  async function getCenter(centerId) {
-    const center = await catalogRepository.findCenterById(centerId);
-    if (!center || center.is_active === false) {
-      throw notFound('Không tìm thấy trung tâm bảo hành.');
-    }
-    return center;
-  }
-
-  /**
    * Gợi ý mức ưu tiên mặc định và số giờ SLA theo nhóm sự cố (UC5, FR5, QT-04).
    *
    * @param {string} categoryId Mã nhóm sự cố.
@@ -75,7 +60,6 @@ function createCategoryService({ catalogRepository }) {
   return {
     listCatalogs,
     getCategory,
-    getCenter,
     suggestPriority
   };
 }

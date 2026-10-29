@@ -61,6 +61,14 @@ function findBySerial(serialNo) {
   return Device.findOne({ serial_no: serialNo, is_deleted: false }).lean();
 }
 
+function findBySerialIncludingDeleted(serialNo) {
+  return Device.findOne({ serial_no: serialNo }).lean();
+}
+
+function findByCustomerIncludingDeleted(customerId) {
+  return Device.findOne({ customer_id: customerId }).lean();
+}
+
 /**
  * Cập nhật thiết bị theo mã nghiệp vụ.
  *
@@ -112,6 +120,8 @@ module.exports = {
   findAll,
   findById,
   findBySerial,
+  findBySerialIncludingDeleted,
+  findByCustomerIncludingDeleted,
   update,
   softDelete,
   nextId

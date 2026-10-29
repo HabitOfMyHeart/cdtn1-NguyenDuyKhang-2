@@ -1,4 +1,6 @@
 const { conflict, invalid, notFound } = require('./errors');
+const { MAX_ATTEMPTS, duplicateField } = require('./duplicateKey');
+const { isValidDate, inputFields, DEVICE_FIELDS } = require('../validators/primitives');
 
 const SERIAL_PATTERN = /^[A-Z0-9-]{8,40}$/;
 const VN_OFFSET_MS = 7 * 60 * 60 * 1000;
@@ -28,7 +30,7 @@ function normalizeSerial(raw) {
  * @returns {Date} Ngày hết hạn.
  */
 function addMonths(value, months) {
-  const date = new Date(value);
+  const date = new Date(new Date(value).getTime() + VN_OFFSET_MS);
   const day = date.getUTCDate();
   date.setUTCDate(1);
   date.setUTCMonth(date.getUTCMonth() + Number(months));
@@ -36,7 +38,7 @@ function addMonths(value, months) {
     Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + 1, 0)
   ).getUTCDate();
   date.setUTCDate(Math.min(day, lastDay));
-  return date;
+  return new Date(date.getTime() - VN_OFFSET_MS);
 }
 
 /**
@@ -59,6 +61,9 @@ function vietnamDateKey(value) {
  * @throws {import('./errors').AppError} DU_LIEU_KHONG_HOP_LE khi đầu vào sai.
  */
 function calculateExpiryDate(purchaseDate, warrantyMonths) {
+  if (!isValidDate(purchaseDate)) {
+    throw invalid('Ngày mua không hợp lệ.', { purchase_date: 'Cần ngày lịch có thật.' });
+  }
   const purchase = new Date(purchaseDate);
   if (Number.isNaN(purchase.getTime())) {
     throw invalid('Ngày mua không hợp lệ.', { purchase_date: 'Cần ngày hợp lệ.' });
@@ -81,6 +86,9 @@ function calculateExpiryDate(purchaseDate, warrantyMonths) {
  * @throws {import('./errors').AppError} DU_LIEU_KHONG_HOP_LE khi ngày tiếp nhận sai.
  */
 function checkWarranty(device, receivedAt = new Date()) {
+  if (!isValidDate(receivedAt)) {
+    throw invalid('Ngày tiếp nhận không hợp lệ.', { received_at: 'Cần ngày lịch có thật.' });
+  }
   const received = new Date(receivedAt);
   if (Number.isNaN(received.getTime())) {
     throw invalid('Ngày tiếp nhận không hợp lệ.', {
@@ -112,9 +120,14 @@ function checkWarranty(device, receivedAt = new Date()) {
  * @param {{deviceRepository: object, customerRepository: object, now?: () => Date}} deps Phụ thuộc.
  * @returns {object} Các hàm nghiệp vụ thiết bị.
  */
-function createWarrantyCheckService({ deviceRepository, customerRepository, now = () => new Date() }) {
-  if (!deviceRepository || !customerRepository) {
-    throw new Error('createWarrantyCheckService cần deviceRepository và customerRepository.');
+function createWarrantyCheckService({ deviceRepository, customerRepository, ticketRepository, now = () => new Date() }) {
+  if (!deviceRepository || !customerRepository || !ticketRepository) {
+    throw new Error('createWarrantyCheckService cần deviceRepository, customerRepository và ticketRepository.');
+  }
+
+  function assertInput(input) {
+    const fields = inputFields(input, DEVICE_FIELDS);
+    if (Object.keys(fields).length) throw invalid('Dữ liệu thiết bị không hợp lệ.', fields);
   }
 
   /**
@@ -125,6 +138,7 @@ function createWarrantyCheckService({ deviceRepository, customerRepository, now 
    * @throws {import('./errors').AppError} 404, 409 hoặc 422.
    */
   async function createDevice(input = {}) {
+    assertInput(input);
     const customerId = typeof input.customer_id === 'string' ? input.customer_id.trim() : '';
     if (!customerId) {
       throw invalid('Thiếu khách hàng của thiết bị.', {
@@ -139,7 +153,7 @@ function createWarrantyCheckService({ deviceRepository, customerRepository, now 
     }
 
     const serialNo = normalizeSerial(input.serial_no);
-    const existing = await deviceRepository.findBySerial(serialNo);
+    const existing = await deviceRepository.findBySerialIncludingDeleted(serialNo);
     if (existing) {
       // QT-03: serial/IMEI xác định duy nhất một thiết bị.
       throw conflict('TRUNG_DU_LIEU', 'Serial/IMEI đã tồn tại trong hệ thống (QT-03).', {
@@ -175,9 +189,7 @@ function createWarrantyCheckService({ deviceRepository, customerRepository, now 
       });
     }
 
-    const deviceId = await deviceRepository.nextId();
-    const device = await deviceRepository.create({
-      device_id: deviceId,
+    const data = {
       customer_id: customerId,
       product_id: input.product_id ?? null,
       product_code: input.product_code ? String(input.product_code).trim() : '',
@@ -186,7 +198,20 @@ function createWarrantyCheckService({ deviceRepository, customerRepository, now 
       purchase_date: purchaseDate,
       warranty_months: warrantyMonths,
       is_deleted: false
-    });
+    };
+    let device;
+    for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt += 1) {
+      const deviceId = await deviceRepository.nextId();
+      try {
+        device = await deviceRepository.create({ ...data, device_id: deviceId });
+        break;
+      } catch (error) {
+        if (duplicateField(error, 'serial_no')) {
+          throw conflict('TRUNG_DU_LIEU', 'Serial/IMEI đã tồn tại trong hệ thống (QT-03).', { serial_no: 'Hãy tra cứu thiết bị có sẵn.' });
+        }
+        if (!duplicateField(error, 'device_id') || attempt === MAX_ATTEMPTS - 1) throw error;
+      }
+    }
 
     return buildWarrantyResult(device, customer);
   }
@@ -246,6 +271,7 @@ function createWarrantyCheckService({ deviceRepository, customerRepository, now 
    * @throws {import('./errors').AppError} 404, 409 hoặc 422.
    */
   async function updateDevice(deviceId, input = {}) {
+    assertInput(input);
     const current = await getDevice(deviceId);
     const patch = {};
 
@@ -261,7 +287,7 @@ function createWarrantyCheckService({ deviceRepository, customerRepository, now 
 
     if (Object.prototype.hasOwnProperty.call(input, 'serial_no')) {
       const serialNo = normalizeSerial(input.serial_no);
-      const duplicate = await deviceRepository.findBySerial(serialNo);
+      const duplicate = await deviceRepository.findBySerialIncludingDeleted(serialNo);
       if (duplicate && duplicate.device_id !== current.device_id) {
         throw conflict('TRUNG_DU_LIEU', 'Serial/IMEI đã thuộc thiết bị khác (QT-03).', {
           serial_no: 'Chọn serial khác.'
@@ -306,6 +332,9 @@ function createWarrantyCheckService({ deviceRepository, customerRepository, now 
    */
   async function deleteDevice(deviceId) {
     await getDevice(deviceId);
+    if (await ticketRepository.findByDevice(deviceId)) {
+      throw conflict('TRUNG_DU_LIEU', 'Không thể xóa thiết bị đang được tham chiếu bởi phiếu.');
+    }
     await deviceRepository.softDelete(deviceId);
     return { deviceId, deleted: true };
   }
@@ -356,11 +385,12 @@ function createWarrantyCheckService({ deviceRepository, customerRepository, now 
 
 const deviceRepository = require('../repositories/device.repository');
 const customerRepository = require('../repositories/customer.repository');
+const ticketRepository = require('../repositories/ticket.repository');
 
 module.exports = {
   createWarrantyCheckService,
   normalizeSerial,
   calculateExpiryDate,
   checkWarranty,
-  ...createWarrantyCheckService({ deviceRepository, customerRepository })
+  ...createWarrantyCheckService({ deviceRepository, customerRepository, ticketRepository })
 };

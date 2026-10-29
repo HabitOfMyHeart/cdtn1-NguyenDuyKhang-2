@@ -26,6 +26,18 @@ async function create(data) {
   return document.toObject();
 }
 
+// Only remove the exact, unchanged document returned by an acknowledged insert.
+async function removeUnchangedCreated(ticket) {
+  if (!ticket._id) return false;
+  const fields = ['ticket_id', 'ticket_code', 'customer_id', 'device_id', 'center_id',
+    'category_id', 'issue_desc', 'accessories', 'exterior_note', 'priority',
+    'priority_reason', 'status', 'is_warranty', 'received_at', 'due_date', 'closed_at', 'is_deleted'];
+  const query = { _id: ticket._id };
+  for (const field of fields) query[field] = ticket[field];
+  const result = await Ticket.deleteOne(query);
+  return result.acknowledged && result.deletedCount === 1;
+}
+
 /**
  * Liệt kê phiếu chưa xóa mềm theo bộ lọc nghiệp vụ, sắp xếp theo hạn cam kết.
  *
@@ -86,6 +98,14 @@ function findOpenByDevice(deviceId) {
   }).lean();
 }
 
+function findByCustomer(customerId) {
+  return Ticket.findOne({ customer_id: customerId, is_deleted: false }).lean();
+}
+
+function findByDevice(deviceId) {
+  return Ticket.findOne({ device_id: deviceId, is_deleted: false }).lean();
+}
+
 /**
  * Cập nhật phiếu theo mã nghiệp vụ.
  *
@@ -96,7 +116,7 @@ function findOpenByDevice(deviceId) {
  */
 function update(ticketId, patch) {
   return Ticket.findOneAndUpdate(
-    { ticket_id: ticketId, is_deleted: false },
+    { ticket_id: ticketId, is_deleted: false, status: 'MOI' },
     { $set: patch },
     { new: true, runValidators: true }
   ).lean();
@@ -111,7 +131,7 @@ function update(ticketId, patch) {
  */
 function softDelete(ticketId) {
   return Ticket.findOneAndUpdate(
-    { ticket_id: ticketId, is_deleted: false },
+    { ticket_id: ticketId, is_deleted: false, status: 'MOI' },
     { $set: { is_deleted: true } },
     { new: true }
   ).lean();
@@ -194,9 +214,12 @@ async function nextLogId() {
 
 module.exports = {
   create,
+  removeUnchangedCreated,
   findAll,
   findById,
   findOpenByDevice,
+  findByCustomer,
+  findByDevice,
   update,
   softDelete,
   nextId,
