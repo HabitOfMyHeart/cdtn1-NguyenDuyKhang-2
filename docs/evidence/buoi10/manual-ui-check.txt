@@ -1,0 +1,49 @@
+Biên bản kiểm tra giao diện thủ công – Buổi 10
+Ngày: 24/10/2026 (giờ Việt Nam)
+Trình duyệt: Chromium tích hợp công cụ OpenCode
+Tab: http://localhost:3000/
+CSDL: mekong_warranty_buoi10_20261024
+
+1. Danh sách và tiếp nhận
+- Đăng nhập nhanvien/nhanvien123 thành công.
+- Danh sách tải 6 phiếu của TTBH Quận 10, gồm TCK0031.
+- Mở màn Tiếp nhận phiếu bảo hành mới: danh mục tải thành công,
+  có 6 trung tâm và 6 nhóm sự cố.
+- Ảnh: 01-danh-sach.png, 02-tiep-nhan.png.
+
+2. Tạo phiếu thật
+- Tra cứu SĐT 0945883117 -> CUS0022 (Võ Thị Cường).
+- Tra cứu serial SN353496038427 -> DEV0022 (Apple Pro Max 11).
+- Chọn nhóm SAC, ưu tiên TRUNG_BINH, nhập mô tả lỗi,
+  phụ kiện SAC + HOP, ngoại quan "Trầy nhẹ viền phải.".
+- Lưu thành công: TCK0031 / BH-000097/2026, trạng thái MOI,
+  hạn cam kết 2026-10-28T14:15:23+07:00.
+- Chi tiết hiển thị đúng 14 khóa, SĐT 0945***117,
+  lịch sử LOG000100 với null -> MOI.
+- Ảnh: 03-tao-phieu-thanh-cong.png.
+
+3. Mất kết nối thật và Thử lại
+- Giữ tab danh sách đã tải; dừng tiến trình Express cổng 3000.
+- Bấm mở phiếu TCK0023 từ danh sách đã tải.
+- Kết quả: DataState lỗi "Chưa tải được chi tiết phiếu.",
+  mã tra cứu 238A-27, có nút "Thử lại".
+- Ảnh: 06-error.png.
+- Khởi động lại Express với cùng CSDL và cổng 3000.
+- Bấm "Thử lại": chi tiết TCK0023 tải được, SĐT 0372***442,
+  trạng thái DA_DONG, 5 bước lịch sử.
+
+4. Phiên hết hạn thật (401)
+- Đặt mekong_crm_token thành chuỗi không hợp lệ.
+- Mở lại danh sách: API trả 401.
+- Ứng dụng xóa mekong_crm_token và mekong_crm_user;
+  cả hai trả null; quay về màn đăng nhập.
+- Ảnh: 07-phien-het-han.png.
+- Đăng nhập lại nhanvien/nhanvien123 thành công;
+  danh sách tải lại 6 dòng.
+
+5. Ghi chú
+- 04-loading.png được chụp bằng thanh mô phỏng DataState,
+  không phải lỗi mạng thật.
+- 05-empty-filter.png là bộ lọc thật với từ khóa
+  BUOI10_KHONG_CO_KET_QUA trên dữ liệu đã tải.
+- Không thay đổi CSDL mekong_warranty trong các bước trên.

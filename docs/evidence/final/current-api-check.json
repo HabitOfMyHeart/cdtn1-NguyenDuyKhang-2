@@ -1,0 +1,29 @@
+{
+  "checkedAt": "2026-10-27T17:11:27.396Z",
+  "target": "mongodb://127.0.0.1:27018/mekong_bt2_final_check",
+  "loginStatus": 200,
+  "sourceTicketStatus": "DA_PHAN_CONG",
+  "unchanged": true,
+  "results": [
+    {
+      "method": "PUT",
+      "status": 409,
+      "code": "PHIEU_CHI_DOC"
+    },
+    {
+      "method": "DELETE",
+      "status": 409,
+      "code": "PHIEU_CHI_DOC"
+    },
+    {
+      "input": "issue_desc",
+      "status": 422,
+      "code": "DU_LIEU_KHONG_HOP_LE"
+    },
+    {
+      "input": "received_at",
+      "status": 422,
+      "code": "DU_LIEU_KHONG_HOP_LE"
+    }
+  ]
+}

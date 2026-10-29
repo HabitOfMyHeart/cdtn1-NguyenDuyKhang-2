@@ -1,0 +1,76 @@
+{
+  "checkedAt": "2026-10-24T07:17:48.220Z",
+  "database": "mekong_warranty_buoi10_20261024",
+  "databaseNote": "CSDL tạm do sinh viên tự tạo để kiểm chứng mà không sửa mekong_warranty; PDF không yêu cầu tên này. CSDL đã được xóa sau khi lưu bằng chứng.",
+  "databaseDropped": true,
+  "mainDatabase": "mekong_warranty",
+  "health": {
+    "status": "ok",
+    "service": "Smart CRM – Mekong Mobile (Luồng L2)",
+    "database": "connected",
+    "time": "2026-10-24T07:17:48.144Z"
+  },
+  "detail": {
+    "ticket": {
+      "ticketId": "TCK0031",
+      "ticketCode": "BH-000097/2026",
+      "tenKhach": "Võ Thị Cường",
+      "sdtHienThi": "0945***117",
+      "tenThietBi": "Apple Pro Max 11",
+      "serialNo": "SN353496038427",
+      "nhomSuCo": "SAC",
+      "mucUuTien": "TRUNG_BINH",
+      "trangThai": "MOI",
+      "conBaoHanh": true,
+      "ketLuanBaoHanh": "Còn bảo hành",
+      "hanCamKet": "2026-10-28T14:15:23+07:00",
+      "ngayTiepNhan": "2026-10-24T14:15:23+07:00",
+      "trungTam": "TTBH Quận 10"
+    },
+    "moTaLoi": "Máy không nhận sạc, đã thử đổi cáp và củ sạc.",
+    "phuKien": [
+      "SAC",
+      "HOP"
+    ],
+    "ngoaiQuan": "Trầy nhẹ viền phải.",
+    "lyDoUuTien": "",
+    "lichSuTrangThai": [
+      {
+        "logId": "LOG000100",
+        "fromStatus": null,
+        "toStatus": "MOI",
+        "changedAt": "2026-10-24T14:15:23+07:00",
+        "changedBy": "nhanvien",
+        "note": "Tạo phiếu tiếp nhận mới."
+      }
+    ],
+    "trangThaiKeTiep": [
+      "DA_PHAN_CONG",
+      "DANG_XU_LY"
+    ]
+  },
+  "persistence": {
+    "ticketId": "TCK0031",
+    "customerId": "CUS0022",
+    "deviceId": "DEV0022",
+    "logs": [
+      {
+        "log_id": "LOG000100",
+        "ticket_id": "TCK0031",
+        "from_status": null,
+        "to_status": "MOI",
+        "changed_at": "2026-10-24T07:15:23.611Z",
+        "changed_by": "nhanvien",
+        "note": "Tạo phiếu tiếp nhận mới."
+      }
+    ],
+    "counts": {
+      "customer": 30,
+      "device": 30,
+      "service_center": 6,
+      "issue_category": 6,
+      "ticket": 31,
+      "ticket_status_log": 100
+    }
+  }
+}

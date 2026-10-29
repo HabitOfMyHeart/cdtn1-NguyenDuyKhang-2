@@ -1,0 +1,12 @@
+✔ sample scope, unique keys, references, and schema validation (50.6036ms)
+✔ safe plan blocks divergent parents and their logs without changing existing documents (53.7643ms)
+✔ safe plan detects alternate unique keys and existing open-ticket device conflicts (21.5766ms)
+✔ re-extraction reproduces committed sample when source is available (674.2079ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1401.9638

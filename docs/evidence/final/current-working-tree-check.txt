@@ -1,0 +1,43 @@
+Current-working-tree verification; not a clone or peer review.
+Started: 2026-10-27T16:56:36.980Z
+Target: mongodb://127.0.0.1:27018/mekong_bt2_final_check
+Round 1: node migrations/001_init_collections.js; exit=0
++ Tạo collection customer
++ Tạo collection device
++ Tạo collection service_center
++ Tạo collection issue_category
++ Tạo collection ticket
++ Tạo collection ticket_status_log
+  customer: 0 bản ghi, index đã đồng bộ
+  device: 0 bản ghi, index đã đồng bộ
+  service_center: 0 bản ghi, index đã đồng bộ
+  issue_category: 0 bản ghi, index đã đồng bộ
+  ticket: 0 bản ghi, index đã đồng bộ
+  ticket_status_log: 0 bản ghi, index đã đồng bộ
+Migration 001 hoàn tất.
+Round 1: node seeds/seed_l2_data.js; exit=0
+Đã nạp mẫu vào CSDL được xác định là trống hoặc khớp mẫu; không cập nhật dữ liệu có sẵn.
+Counts after 1: {"customer":34,"device":50,"service_center":6,"issue_category":6,"ticket":50,"ticket_status_log":192}
+Round 2: node migrations/001_init_collections.js; exit=0
+= Collection customer đã tồn tại
+= Collection device đã tồn tại
+= Collection service_center đã tồn tại
+= Collection issue_category đã tồn tại
+= Collection ticket đã tồn tại
+= Collection ticket_status_log đã tồn tại
+  customer: 34 bản ghi, index đã đồng bộ
+  device: 50 bản ghi, index đã đồng bộ
+  service_center: 6 bản ghi, index đã đồng bộ
+  issue_category: 6 bản ghi, index đã đồng bộ
+  ticket: 50 bản ghi, index đã đồng bộ
+  ticket_status_log: 192 bản ghi, index đã đồng bộ
+Migration 001 hoàn tất.
+Round 2: node seeds/seed_l2_data.js; exit=0
+Đã nạp mẫu vào CSDL được xác định là trống hoặc khớp mẫu; không cập nhật dữ liệu có sẵn.
+Counts after 2: {"customer":34,"device":50,"service_center":6,"issue_category":6,"ticket":50,"ticket_status_log":192}
+Duplicate customer.phone: 0
+Duplicate device.serial_no: 0
+Duplicate ticket.ticket_code: 0
+Duplicate ticket_status_log.log_id: 0
+UI input selected from an existing closed case-study ticket; no synthetic customer/device.
+Cleanup: removed only mekong_bt2_final_check and mekong_bt2_empty_check on isolated port 27018. Main database was not accessed.

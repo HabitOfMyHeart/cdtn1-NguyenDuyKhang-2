@@ -2,10 +2,10 @@
 
 **Luồng:** L2 – Tiếp nhận và phân loại yêu cầu bảo hành  
 **Track:** SE  
-**Phiên bản:** 0.2 (Bài tập 2 – Buổi 8–10)  
+**Phiên bản:** 0.2 (Bài tập 2 – cập nhật 28/10/2026)
 **Căn cứ:** SRS rút gọn, case study QT-01…QT-15 và mã nguồn trong `src/`.
 
-Tài liệu này mô tả hợp đồng API **đang được triển khai**. Các ví dụ ID dạng số trong Phụ lục B của SRS là dữ liệu minh họa của Bài tập 1; prototype dùng khóa nghiệp vụ dạng chuỗi (`CUS0001`, `DEV0001`, `TCK0001`, `LOG000001`) để ổn định khi seed và dễ đọc khi tra cứu.
+Tài liệu này mô tả API hiện tại. L2 kết thúc khi tạo phiếu `MOI`; trạng thái và lịch sử có sẵn chỉ để đọc, không có endpoint chuyển trạng thái và không hỗ trợ vai trò quản lý. Các ví dụ dưới đây chỉ minh họa hình dạng response, ID và giá trị không bảo đảm khớp mẫu hiện tại; xem nguồn và cách ánh xạ ID tại `data/sample/README.md`.
 
 ---
 
@@ -20,21 +20,27 @@ Tài liệu này mô tả hợp đồng API **đang được triển khai**. Cá
 | Tên trường đầu vào | `snake_case` |
 | Tên trường của hợp đồng phiếu | `camelCase` đúng 14 khóa của `toTicketView()` |
 | Thời gian | ISO 8601. `hanCamKet` và `ngayTiepNhan` luôn có múi giờ `+07:00` |
-| Khóa nghiệp vụ | Chuỗi: `CUSxxxx`, `DEVxxxx`, `TCKxxxx`, `LOGxxxxxx`; trung tâm/nhóm sự cố dùng `"1"`…`"6"` |
+| Khóa nghiệp vụ | Chuỗi; mẫu giữ một số ID cũ như `CUSxxxx`, `DEVxxxx`, `TCKxxxx`, `LOGxxxxxx`, các ID nguồn khác dùng tiền tố `SRC-`; trung tâm/nhóm sự cố dùng `"1"`…`"6"` |
 | Xóa | Xóa mềm bằng `is_deleted = true`, không xóa vật lý (QT-13) |
 | Bao response | Mọi response thành công của `/api/*` đều có `data`; danh sách có thêm `total` |
+
+Body phải là object JSON; các trường văn bản không nhận object/mảng/số. Ngày phải tồn tại trong lịch (ví dụ `2026-02-30` bị từ chối). Ngày mua có thể là `YYYY-MM-DD` hoặc null; ngày giờ tiếp nhận dùng ISO 8601 kèm `Z` hoặc offset, ví dụ `2026-10-28T09:00:00+07:00`. Lỗi trả 422 với tên trường; không tự ép object thành mô tả hay tự đổi ngày sai sang tháng sau.
 
 ### 1.1. Vai trò và phạm vi dữ liệu
 
 | Vai trò | Quyền trong prototype |
 |---|---|
-| `NHAN_VIEN` | Tra cứu khách hàng/thiết bị, tạo phiếu, xem và cập nhật phiếu thuộc trung tâm của mình (QT-14) |
-| `QUAN_LY` | Xem và thao tác phiếu ở mọi trung tâm; được dùng bộ lọc `center_id` khi liệt kê |
+| `NHAN_VIEN` | Tra cứu khách hàng/thiết bị, tạo phiếu và xem phiếu cùng trung tâm; chỉ sửa/xóa mềm phiếu `MOI` cùng trung tâm |
+
+Giới hạn hiện tại: khách hàng/thiết bị là hồ sơ dùng chung, các API CRUD hỗ trợ chưa kiểm tra trung tâm sở hữu; không tuyên bố đáp ứng toàn bộ QT-14. SĐT trong view phiếu và kết quả hiển thị hồ sơ trên UI được che; API hồ sơ vẫn trả số đầy đủ để phục vụ tiếp nhận.
+
+Đây là giới hạn prototype BT2, không phải chính sách dùng chung đã được giảng viên phê duyệt. `requireAuth` xác thực người dùng nhưng không giới hạn hồ sơ khách/thiết bị theo trung tâm; nhân viên đã đăng nhập có thể tra cứu và dùng CRUD hỗ trợ với hồ sơ dùng chung. Chưa sử dụng API này cho vận hành dữ liệu thật đa trung tâm; mở rộng QT-14 cần chốt mô hình sở hữu và quyền hồ sơ trước.
 
 Tài khoản demo lấy từ `.env`:
 
 - `nhanvien / nhanvien123` – trung tâm `1`.
-- `quanly / quanly123` – quản lý, trung tâm `1`.
+
+Chỉ hỗ trợ vai trò `NHAN_VIEN` theo phiếu phạm vi L2. Token của vai trò khác hoặc thiếu trung tâm bị từ chối với HTTP 401; bộ lọc `center_id` không cho phép vượt trung tâm được gán.
 
 ---
 
@@ -60,12 +66,10 @@ Tài khoản demo lấy từ `.env`:
 | 16 | POST | `/api/tickets/preview` | Xem trước hạn cam kết, không lưu phiếu (QT-04) | `200` | `401`, `422` |
 | 17 | GET | `/api/tickets` | Danh sách phiếu 14 khóa, lọc và sắp theo hạn cam kết | `200` | `401` |
 | 18 | POST | `/api/tickets` | Tạo phiếu `MOI`, sinh mã, tính SLA, ghi log (QT-04, QT-06) | `201` | `401`, `403`, `404`, `409`, `422` |
-| 19 | GET | `/api/tickets/:id` | Chi tiết phiếu, lịch sử và bước kế tiếp | `200` | `401`, `403`, `404` |
-| 20 | PUT | `/api/tickets/:id` | Cập nhật mô tả, phụ kiện, ngoại quan, ưu tiên | `200` | `401`, `403`, `404`, `422` |
-| 21 | PATCH | `/api/tickets/:id/status` | Chuyển trạng thái theo QT-06 | `200` | `401`, `403`, `404`, `409`, `422` |
-| 22 | PUT | `/api/tickets/:id/status` | Alias của PATCH để tương thích báo cáo | `200` | `401`, `403`, `404`, `409`, `422` |
-| 23 | GET | `/api/tickets/:id/history` | Chỉ lấy lịch sử trạng thái | `200` | `401`, `403`, `404` |
-| 24 | DELETE | `/api/tickets/:id` | Xóa mềm phiếu (QT-13) | `200` | `401`, `403`, `404` |
+| 19 | GET | `/api/tickets/:id` | Chi tiết phiếu và lịch sử | `200` | `401`, `403`, `404` |
+| 20 | PUT | `/api/tickets/:id` | Cập nhật thông tin tiếp nhận của phiếu `MOI` | `200` | `401`, `403`, `404`, `409`, `422` |
+| 21 | GET | `/api/tickets/:id/history` | Chỉ lấy lịch sử trạng thái | `200` | `401`, `403`, `404` |
+| 22 | DELETE | `/api/tickets/:id` | Xóa mềm phiếu `MOI` (QT-13) | `200` | `401`, `403`, `404`, `409` |
 
 ---
 
@@ -215,6 +219,8 @@ Query:
 - `false` – hết bảo hành.
 - `null` – **chưa xác minh** vì thiếu `purchase_date` (QT-05); không được hiểu là hết bảo hành.
 
+**QT-05 — tiếp nhận không phải phê duyệt:** thiếu ngày mua vẫn được gọi `POST /api/tickets` để tạo `MOI` nếu các điều kiện khác hợp lệ; phiếu lưu `is_warranty = null` và view trả `conBaoHanh = null`, “Chưa xác minh bảo hành”. Không suy diễn thành còn/hết bảo hành, không xác nhận miễn phí hoặc quản lý đã duyệt. Không có vai trò/endpoint/trạng thái phê duyệt trong bản L2; yêu cầu quản lý phê duyệt của case study/BT1/SRS còn chưa hiện thực. Cờ bảo hành phiếu lịch sử giữ theo nguồn, không phải kết quả phê duyệt của API hiện tại. Đây là đáp ứng một phần QT-05, không phải miễn yêu cầu gốc.
+
 `ngayHetHan` là `Date` do Express chuyển thành ISO UTC. Chỉ hợp đồng phiếu mới bắt buộc chuỗi `+07:00`.
 
 ### 5.2. Các endpoint thiết bị còn lại
@@ -326,7 +332,7 @@ Query tùy chọn:
 | `category_id` | Mã nhóm sự cố `1`…`6` |
 | `priority` | `CAO`, `TRUNG_BINH`, `THAP` |
 | `q` | Mã phiếu, mã TCK, họ tên/SĐT/mã khách hàng |
-| `center_id` | Chỉ quản lý dùng để lọc; nhân viên luôn bị giới hạn theo trung tâm trong token (QT-14) |
+| `center_id` | Không cho phép vượt trung tâm của nhân viên trong token (QT-14) |
 
 **Response 200**
 
@@ -421,12 +427,12 @@ Danh sách sắp xếp tăng dần theo `due_date`, sau đó theo `ticket_code`.
         "note": "Tạo phiếu tiếp nhận mới."
       }
     ],
-    "trangThaiKeTiep": ["DA_PHAN_CONG", "DANG_XU_LY"]
+    "trangThaiKeTiep": []
   }
 }
 ```
 
-Mã phiếu trong ví dụ là mã kế tiếp sau khi seed lần đầu; khi đã có thêm phiếu, số thứ tự tăng tiếp.
+Mã phiếu trong ví dụ chỉ có tính minh họa, không dự đoán mã kế tiếp của mẫu hiện tại.
 
 **Lỗi nghiệp vụ chính**
 
@@ -474,14 +480,16 @@ Trả envelope chi tiết. `data.ticket` vẫn đúng 14 khóa; các trường m
         "note": "Tạo phiếu tiếp nhận mới."
       }
     ],
-    "trangThaiKeTiep": ["DA_PHAN_CONG", "DANG_XU_LY"]
+    "trangThaiKeTiep": []
   }
 }
 ```
 
-`trangThaiKeTiep` là danh sách bước hợp lệ kế tiếp theo QT-06; `DA_DONG` trả mảng rỗng.
+`trangThaiKeTiep` hiện luôn là mảng rỗng: L2 không cung cấp thao tác chuyển trạng thái.
 
 ### 7.5. PUT `/api/tickets/:id`
+
+Chỉ phiếu `MOI` cùng trung tâm mới được cập nhật. Phiếu sau tiếp nhận trả `409 PHIEU_CHI_DOC`; điều kiện `MOI` được kiểm tra lại tại thời điểm ghi CSDL. Không cho sửa trạng thái qua endpoint này.
 
 Chỉ nhận các trường được phép:
 
@@ -497,24 +505,7 @@ Chỉ nhận các trường được phép:
 
 Khi đổi `priority`, hạn cam kết được tính lại từ `received_at` theo QT-04. Nếu `priority` khác gợi ý của nhóm mà thiếu `priority_reason`, trả `422`.
 
-### 7.6. PATCH `/api/tickets/:id/status`
-
-**Request**
-
-```json
-{
-  "to_status": "DA_PHAN_CONG",
-  "note": "Đã phân công kỹ thuật viên."
-}
-```
-
-`to_status` (hoặc alias `status`) phải là trạng thái hợp lệ kế tiếp. `changed_at` tùy chọn; mặc định hiện tại. Mỗi lần chuyển ghi một bản ghi `ticket_status_log` với `from_status`, `to_status`, người thực hiện và ghi chú.
-
-**Response 200:** envelope chi tiết sau chuyển, `data.ticket.trangThai` là trạng thái mới.
-
-**Lỗi:** `409 CHUYEN_TRANG_THAI_KHONG_HOP_LE` kèm `fields.to_status` nếu nhảy cóc hoặc quay lại trạng thái không được phép; `422` nếu mã trạng thái không tồn tại.
-
-### 7.7. GET `/api/tickets/:id/history`
+### 7.6. GET `/api/tickets/:id/history`
 
 ```json
 {
@@ -532,9 +523,9 @@ Khi đổi `priority`, hạn cam kết được tính lại từ `received_at` t
 }
 ```
 
-### 7.8. DELETE `/api/tickets/:id`
+### 7.7. DELETE `/api/tickets/:id`
 
-Xóa mềm; trả:
+Chỉ xóa mềm phiếu `MOI` cùng trung tâm, giữ log khởi tạo. Các trạng thái khác trả `409 PHIEU_CHI_DOC`, không thể xóa để tiếp nhận lại thiết bị đang xử lý. Trả:
 
 ```json
 {
@@ -578,21 +569,9 @@ Xóa mềm; trả:
 
 ---
 
-## 9. Vòng đời trạng thái QT-06
+## 9. Trạng thái lịch sử
 
-| Trạng thái hiện tại | Trạng thái kế tiếp được phép |
-|---|---|
-| `MOI` | `DA_PHAN_CONG`, `DANG_XU_LY` |
-| `DA_PHAN_CONG` | `DANG_XU_LY` |
-| `DANG_XU_LY` | `CHO_LINH_KIEN`, `HOAN_TAT` |
-| `CHO_LINH_KIEN` | `DANG_XU_LY`, `HOAN_TAT` |
-| `HOAN_TAT` | `DA_DONG` |
-| `DA_DONG` | Không còn bước nào |
-
-- Không được nhảy cóc hoặc tự quay về trạng thái trước, trừ cạnh nghiệp vụ `CHO_LINH_KIEN → DANG_XU_LY` khi đã có linh kiện.
-- Chuyển sang `DA_DONG` ghi `closed_at`.
-- Mỗi lần chuyển đều ghi log; log khởi tạo có `from_status = null`, `to_status = MOI`.
-- Phiếu `DA_DONG` không còn được coi là phiếu mở, nên thiết bị có thể được tiếp nhận phiếu mới (QT-03).
+Phiếu mới được tạo ở `MOI` với log khởi tạo `null → MOI`. Các trạng thái và log nguồn khác được hiển thị để tra cứu lịch sử, không phải các bước có thể thực hiện trong L2. Phiếu `DA_DONG` không được coi là phiếu mở theo QT-03.
 
 ---
 
@@ -617,9 +596,10 @@ Mọi lỗi trả đúng ba trường, không lồng thêm `error.code`:
 | `403` | `KHONG_DU_QUYEN` | Nhân viên thao tác ngoài trung tâm của mình (QT-14) |
 | `404` | `KHONG_TIM_THAY` | Không thấy khách hàng, thiết bị, phiếu, trung tâm, nhóm sự cố hoặc API |
 | `409` | `PHIEU_DANG_MO` | Thiết bị đang có phiếu chưa đóng (QT-03) |
+| `409` | `PHIEU_CHI_DOC` | Phiếu không còn `MOI`, hoặc thay đổi giữa đọc và ghi; không được sửa/xóa |
 | `409` | `TRUNG_DU_LIEU` | Trùng SĐT, serial hoặc mã phiếu |
-| `409` | `CHUYEN_TRANG_THAI_KHONG_HOP_LE` | Chuyển trạng thái sai QT-06 |
 | `422` | `DU_LIEU_KHONG_HOP_LE` | Validator hoặc nghiệp vụ từ chối dữ liệu; `fields` chỉ rõ trường |
+| `503` | `DICH_VU_KHONG_SAN_SANG` | CSDL/dịch vụ dữ liệu tạm không sẵn sàng |
 | `500` | `LOI_HE_THONG` | Lỗi không lường trước; trả `fields.maTraCuu`, không lộ stack/CSDL |
 
 **Ví dụ 409 phiếu đang mở**
@@ -656,7 +636,7 @@ Mọi lỗi trả đúng ba trường, không lồng thêm `error.code`:
 | QT-03 – serial duy nhất, một phiếu mở/thiết bị | `GET/POST /api/devices`, `POST /api/tickets`, partial unique index |
 | QT-04 – SLA 24/72/120 giờ làm việc, bỏ Chủ Nhật | `POST /api/tickets/preview`, `POST/PUT /api/tickets`, `slaCalculator.service.js` |
 | QT-05 – bảo hành theo ngày, `null` khi chưa xác minh | `GET /api/devices/lookup`, `checkWarranty()` |
-| QT-06 – vòng đời một chiều, ghi log | `PATCH/PUT /api/tickets/:id/status`, `GET /api/tickets/:id/history` |
+| QT-06 – trạng thái | Tạo `MOI` và log khởi tạo; `GET /api/tickets/:id/history` đọc lịch sử, không chuyển trạng thái |
 | QT-13 – xóa mềm | `DELETE` của customer/device/ticket |
 | QT-14 – phạm vi trung tâm | `requireAuth`, `assertCenterAccess()`, lọc `center_id` |
 | QT-15 – che SĐT | `maskPhone()`, `toTicketView()` |

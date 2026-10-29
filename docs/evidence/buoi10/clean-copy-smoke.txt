@@ -1,0 +1,13 @@
+{
+    "health":  "ok",
+    "database":  "connected",
+    "user":  "nhanvien",
+    "centers":  6,
+    "categories":  6,
+    "tickets":  5,
+    "firstTicket":  "TCK0023",
+    "contractKeys":  14,
+    "maskedPhone":  "0372***442",
+    "status":  "DA_DONG",
+    "history":  5
+}

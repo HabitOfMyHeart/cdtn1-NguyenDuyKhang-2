@@ -7,7 +7,7 @@
         <mxCell id="title" value="KIẾN TRÚC THỰC TẾ – SMART CRM MEKONG MOBILE (LUỒNG L2)" style="text;html=1;align=center;verticalAlign=middle;fontSize=16;fontStyle=1;fontColor=#0F172A;" vertex="1" parent="1">
           <mxGeometry x="40" y="10" width="1080" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="client" value="CLIENT&#10;Trình duyệt&#10;React 18 UMD + htm&#10;index.html · app.js&#10;apiClient.js" style="rounded=0;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=12;fillColor=#EFF6FF;strokeColor=#1D4ED8;strokeWidth=2;" vertex="1" parent="1">
+        <mxCell id="client" value="CLIENT – Trình duyệt&#10;React 18 UMD + htm · app.js&#10;public/apiClient.js (facade)&#10;api/ticket.api.js (nghiệp vụ)&#10;api/client.js (HTTP + JWT)&#10;Module phục vụ qua /assets/api" style="rounded=0;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=12;fillColor=#EFF6FF;strokeColor=#1D4ED8;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="40" y="120" width="270" height="160" as="geometry" />
         </mxCell>
         <mxCell id="app" value="EXPRESS APP – src/app.js" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingLeft=12;spacingTop=10;fontSize=13;fontStyle=1;fillColor=#F8FAFC;strokeColor=#475569;strokeWidth=2;" vertex="1" parent="1">

@@ -1,0 +1,71 @@
+Kiểm chứng migration + seed trên CSDL tạm sạch
+Ngày chạy: 27/10/2026
+MongoDB: 127.0.0.1:27018, database=mekong_warranty_bt2_check
+
+### Lần 1: npm run db:migrate
+started=2026-10-27T12:01:12.301Z exit=0
++ Tạo collection customer
++ Tạo collection device
++ Tạo collection service_center
++ Tạo collection issue_category
++ Tạo collection ticket
++ Tạo collection ticket_status_log
+  customer: 0 bản ghi, index đã đồng bộ
+  device: 0 bản ghi, index đã đồng bộ
+  service_center: 0 bản ghi, index đã đồng bộ
+  issue_category: 0 bản ghi, index đã đồng bộ
+  ticket: 0 bản ghi, index đã đồng bộ
+  ticket_status_log: 0 bản ghi, index đã đồng bộ
+Migration 001 hoàn tất.
+
+### Lần 1: npm run db:seed
+started=2026-10-27T12:01:13.428Z exit=0
+Đã nạp mẫu vào CSDL được xác định là trống hoặc khớp mẫu; không cập nhật dữ liệu có sẵn.
+
+### Đếm sau lần 1
+{
+  "customer": 34,
+  "device": 50,
+  "service_center": 6,
+  "issue_category": 6,
+  "ticket": 50,
+  "ticket_status_log": 192
+}
+
+### Lần 2: npm run db:migrate
+started=2026-10-27T12:01:14.404Z exit=0
+= Collection customer đã tồn tại
+= Collection device đã tồn tại
+= Collection service_center đã tồn tại
+= Collection issue_category đã tồn tại
+= Collection ticket đã tồn tại
+= Collection ticket_status_log đã tồn tại
+  customer: 34 bản ghi, index đã đồng bộ
+  device: 50 bản ghi, index đã đồng bộ
+  service_center: 6 bản ghi, index đã đồng bộ
+  issue_category: 6 bản ghi, index đã đồng bộ
+  ticket: 50 bản ghi, index đã đồng bộ
+  ticket_status_log: 192 bản ghi, index đã đồng bộ
+Migration 001 hoàn tất.
+
+### Lần 2: npm run db:seed
+started=2026-10-27T12:01:15.152Z exit=0
+Đã nạp mẫu vào CSDL được xác định là trống hoặc khớp mẫu; không cập nhật dữ liệu có sẵn.
+
+### Đếm sau lần 2
+{
+  "customer": 34,
+  "device": 50,
+  "service_center": 6,
+  "issue_category": 6,
+  "ticket": 50,
+  "ticket_status_log": 192
+}
+
+### Kết luận
+counts_equal_after_second_run=true
+duplicate_phones=0
+duplicate_serials=0
+duplicate_ticket_codes=0
+duplicate_log_ids=0
+no_duplicates=true

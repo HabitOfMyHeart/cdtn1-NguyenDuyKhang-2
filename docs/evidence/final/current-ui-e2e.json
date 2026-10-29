@@ -1,0 +1,26 @@
+{
+  "checkedAt": "2026-10-27T17:02:08.243Z",
+  "source": "current working tree, not clone or peer review",
+  "database": "mongodb://127.0.0.1:27018/mekong_bt2_final_check",
+  "customerPhoneMasked": true,
+  "createdTicketId": "TCK0031",
+  "createdTicketCode": "BH-007325/2026",
+  "status": "MOI",
+  "dueDate": "2026-10-30T17:02:07.594Z",
+  "warranty": null,
+  "initialLogCount": 1,
+  "afterReloadVisible": true,
+  "counts": {
+    "tickets": 51,
+    "logs": 193
+  },
+  "loading": "real request under Chrome network latency 1800ms",
+  "emptyFilter": "real unmatched filter",
+  "nfr1": "Not measured for a new human staff member; automated run is not usability evidence.",
+  "connectionError": "Real failed request with isolated Express process stopped; no simulated UI state.",
+  "retry": "After restarting isolated Express, the real Retry button fetched and showed 10 center-1 tickets.",
+  "emptyDatabase": "mekong_bt2_empty_check: only six original centers and six categories, zero tickets.",
+  "emptyNoData": "Real API data=[] on an isolated database with no tickets; no UI override.",
+  "temporaryDatabasesRemoved": true,
+  "mainDatabaseAccessed": false
+}
