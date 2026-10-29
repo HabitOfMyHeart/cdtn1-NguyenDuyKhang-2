@@ -11,7 +11,7 @@
     "db:seed": "node seeds/seed_l2_data.js",
     "migrate": "npm run db:migrate",
     "seed": "npm run db:seed",
-    "test": "node --test tests/ticket.contract.test.js tests/ticket.service.test.js tests/static-assets.test.js"
+    "test": "node --test tests/*.test.js"
   },
   "engines": {
     "node": ">=20"
