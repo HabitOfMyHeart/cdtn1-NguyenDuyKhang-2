@@ -57,6 +57,9 @@ function makeCustomerRepository(seedCustomers) {
     async findByPhone(phone) {
       return clone(rows.find((row) => row.phone === phone && !row.is_deleted) || null);
     },
+    async findByPhoneIncludingDeleted(phone) {
+      return clone(rows.find((row) => row.phone === phone) || null);
+    },
     async update(customerId, patch) {
       const row = rows.find((item) => item.customer_id === customerId && !item.is_deleted);
       if (!row) return null;
@@ -116,6 +119,12 @@ function makeDeviceRepository(seedDevices) {
     },
     async findBySerial(serialNo) {
       return clone(rows.find((row) => row.serial_no === serialNo && !row.is_deleted) || null);
+    },
+    async findBySerialIncludingDeleted(serialNo) {
+      return clone(rows.find((row) => row.serial_no === serialNo) || null);
+    },
+    async findByCustomerIncludingDeleted(customerId) {
+      return clone(rows.find((row) => row.customer_id === customerId) || null);
     },
     async update(deviceId, patch) {
       const row = rows.find((item) => item.device_id === deviceId && !item.is_deleted);
@@ -220,6 +229,12 @@ function makeTicketRepository(seedTickets, seedLogs) {
     },
     async findById(ticketId) {
       return clone(tickets.find((ticket) => ticket.ticket_id === ticketId && !ticket.is_deleted) || null);
+    },
+    async findByCustomer(customerId) {
+      return clone(tickets.find((ticket) => ticket.customer_id === customerId && !ticket.is_deleted) || null);
+    },
+    async findByDevice(deviceId) {
+      return clone(tickets.find((ticket) => ticket.device_id === deviceId && !ticket.is_deleted) || null);
     },
     async findOpenByDevice(deviceId) {
       return clone(
@@ -478,10 +493,11 @@ function buildFixture(options = {}) {
     now
   });
 
-  const customerService = createCustomerService({ customerRepository, now });
+  const customerService = createCustomerService({ customerRepository, deviceRepository, ticketRepository, now });
   const warrantyService = createWarrantyCheckService({
     deviceRepository,
     customerRepository,
+    ticketRepository,
     now
   });
 

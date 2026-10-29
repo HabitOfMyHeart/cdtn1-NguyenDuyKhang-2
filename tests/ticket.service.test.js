@@ -74,7 +74,7 @@ test('happy path: tạo phiếu MOI, sinh mã, tính hạn 24h và ghi log khở
   assert.deepEqual(detail.phuKien, ['SAC']);
   assert.equal(detail.ngoaiQuan, 'Trầy nhẹ góc phải.');
   assert.equal(detail.lyDoUuTien, '');
-  assert.deepEqual(detail.trangThaiKeTiep, ['DA_PHAN_CONG', 'DANG_XU_LY']);
+  assert.deepEqual(detail.trangThaiKeTiep, []);
 
   assert.equal(detail.lichSuTrangThai.length, 1);
   assert.equal(detail.lichSuTrangThai[0].fromStatus, null);
@@ -106,11 +106,11 @@ test('danh sách lọc theo từ khóa SĐT, mã phiếu và phạm vi trung tâ
   );
   assert.deepEqual(otherCenter, []);
 
-  const manager = await fixture.ticketService.listTickets(
-    {},
-    { username: 'quanly', role: 'QUAN_LY', center_id: '1' }
+  const overriddenCenter = await fixture.ticketService.listTickets(
+    { center_id: '1' },
+    { username: 'nhanvien2', role: 'NHAN_VIEN', center_id: '2' }
   );
-  assert.equal(manager.length, 1);
+  assert.deepEqual(overriddenCenter, []);
 });
 
 test('QT-04: CAO 24h, TRUNG_BINH 72h, THAP 120h và bỏ trọn Chủ Nhật', () => {
@@ -146,7 +146,7 @@ test('QT-04: đổi ưu tiên phải có lý do và tính lại hạn cam kết'
         STAFF
       ),
     (error) => {
-      assert.equal(error.statusCode, 422);
+      assert.equal(error.kind, 'validation');
       assert.equal(error.code, 'DU_LIEU_KHONG_HOP_LE');
       assert.ok(error.fields.priority_reason);
       return true;
@@ -219,7 +219,7 @@ test('dữ liệu sai tại ranh giới trả 422 kèm fields', async () => {
   await assert.rejects(
     () => fixture.ticketService.createTicket(ticketPayload(fixture, { issue_desc: 'ngắn' }), STAFF),
     (error) => {
-      assert.equal(error.statusCode, 422);
+      assert.equal(error.kind, 'validation');
       assert.equal(error.code, 'DU_LIEU_KHONG_HOP_LE');
       assert.ok(error.fields.issue_desc);
       return true;
@@ -229,7 +229,7 @@ test('dữ liệu sai tại ranh giới trả 422 kèm fields', async () => {
   await assert.rejects(
     () => fixture.ticketService.createTicket(ticketPayload(fixture, { priority: 'GAP' }), STAFF),
     (error) => {
-      assert.equal(error.statusCode, 422);
+      assert.equal(error.kind, 'validation');
       assert.ok(error.fields.priority);
       return true;
     }
@@ -242,7 +242,7 @@ test('dữ liệu sai tại ranh giới trả 422 kèm fields', async () => {
         STAFF
       ),
     (error) => {
-      assert.equal(error.statusCode, 422);
+      assert.equal(error.kind, 'validation');
       assert.ok(error.fields.device_id);
       return true;
     }
@@ -259,7 +259,7 @@ test('QT-03: chặn mở phiếu thứ hai trên thiết bị đang có phiếu 
         STAFF
       ),
     (error) => {
-      assert.equal(error.statusCode, 409);
+      assert.equal(error.kind, 'conflict');
       assert.equal(error.code, 'PHIEU_DANG_MO');
       assert.match(error.message, /BH-000009\/2026/);
       return true;
@@ -267,39 +267,12 @@ test('QT-03: chặn mở phiếu thứ hai trên thiết bị đang có phiếu 
   );
 });
 
-test('QT-06: chặn chuyển trạng thái sai và cho phép đúng vòng đời một chiều', async () => {
+test('L2: phiếu mới không có lệnh chuyển sang xử lý sau tiếp nhận', async () => {
   const fixture = buildFixture();
   const created = await fixture.ticketService.createTicket(ticketPayload(fixture), STAFF);
-
-  await assert.rejects(
-    () => fixture.ticketService.changeStatus(created.ticket.ticketId, { to_status: 'HOAN_TAT' }, STAFF),
-    (error) => {
-      assert.equal(error.statusCode, 409);
-      assert.equal(error.code, 'CHUYEN_TRANG_THAI_KHONG_HOP_LE');
-      assert.ok(error.fields.to_status);
-      return true;
-    }
-  );
-
-  const steps = ['DA_PHAN_CONG', 'DANG_XU_LY', 'CHO_LINH_KIEN', 'DANG_XU_LY', 'HOAN_TAT', 'DA_DONG'];
-  let current = created;
-  for (const status of steps) {
-    current = await fixture.ticketService.changeStatus(
-      created.ticket.ticketId,
-      { to_status: status, note: `Chuyển sang ${status}` },
-      STAFF
-    );
-    assert.equal(current.ticket.trangThai, status);
-  }
-
-  assert.equal(current.ticket.trangThai, 'DA_DONG');
-  assert.deepEqual(current.trangThaiKeTiep, []);
-  assert.ok(current.lichSuTrangThai.length === 7);
-
-  await assert.rejects(
-    () => fixture.ticketService.changeStatus(created.ticket.ticketId, { to_status: 'DANG_XU_LY' }, STAFF),
-    (error) => error.statusCode === 409 && error.code === 'CHUYEN_TRANG_THAI_KHONG_HOP_LE'
-  );
+  assert.equal(created.ticket.trangThai, 'MOI');
+  assert.deepEqual(created.trangThaiKeTiep, []);
+  assert.equal(fixture.ticketService.changeStatus, undefined);
 });
 
 test('QT-14: nhân viên không được xem phiếu ngoài trung tâm của mình', async () => {
@@ -314,7 +287,7 @@ test('QT-14: nhân viên không được xem phiếu ngoài trung tâm của mì
         center_id: '2'
       }),
     (error) => {
-      assert.equal(error.statusCode, 403);
+      assert.equal(error.kind, 'forbidden');
       assert.equal(error.code, 'KHONG_DU_QUYEN');
       return true;
     }
@@ -326,7 +299,7 @@ test('không tìm thấy phiếu trả 404 KHONG_TIM_THAY', async () => {
 
   await assert.rejects(
     () => fixture.ticketService.getTicket('TCK9999', STAFF),
-    (error) => error.statusCode === 404 && error.code === 'KHONG_TIM_THAY'
+    (error) => error.kind === 'not_found' && error.code === 'KHONG_TIM_THAY'
   );
 });
 
@@ -338,7 +311,7 @@ test('QT-01/QT-02: chuẩn hóa SĐT và chặn trùng số điện thoại', as
   assert.equal(normalizePhone('0084 90 123 4567'), '0901234567');
   assert.throws(
     () => normalizePhone('12345'),
-    (error) => error.statusCode === 422 && error.code === 'DU_LIEU_KHONG_HOP_LE'
+    (error) => error.kind === 'validation' && error.code === 'DU_LIEU_KHONG_HOP_LE'
   );
 
   await assert.rejects(
@@ -348,7 +321,7 @@ test('QT-01/QT-02: chuẩn hóa SĐT và chặn trùng số điện thoại', as
         phone: '+84 90 123 4567'
       }),
     (error) => {
-      assert.equal(error.statusCode, 409);
+      assert.equal(error.kind, 'conflict');
       assert.equal(error.code, 'TRUNG_DU_LIEU');
       return true;
     }
@@ -369,7 +342,7 @@ test('QT-03: chuẩn hóa serial và chặn trùng serial', async () => {
   assert.equal(normalizeSerial(' sn000000000004 '), 'SN000000000004');
   assert.throws(
     () => normalizeSerial('abc'),
-    (error) => error.statusCode === 422 && error.code === 'DU_LIEU_KHONG_HOP_LE'
+    (error) => error.kind === 'validation' && error.code === 'DU_LIEU_KHONG_HOP_LE'
   );
 
   await assert.rejects(
@@ -382,7 +355,7 @@ test('QT-03: chuẩn hóa serial và chặn trùng serial', async () => {
         warranty_months: 12
       }),
     (error) => {
-      assert.equal(error.statusCode, 409);
+      assert.equal(error.kind, 'conflict');
       assert.equal(error.code, 'TRUNG_DU_LIEU');
       return true;
     }

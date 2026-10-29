@@ -102,7 +102,7 @@ test('toTicketView giữ conBaoHanh = null khi chưa xác minh QT-05', () => {
 test('toTicketView ném 404 KHONG_TIM_THAY khi thiếu phiếu', () => {
   assert.throws(
     () => toTicketView(null),
-    (error) => error.statusCode === 404 && error.code === 'KHONG_TIM_THAY'
+    (error) => error.kind === 'not_found' && error.code === 'KHONG_TIM_THAY'
   );
 });
 
