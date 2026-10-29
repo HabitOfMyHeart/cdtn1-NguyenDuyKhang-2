@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  const { useState, useEffect, useMemo, useCallback } = React;
+  const { useState, useEffect, useMemo, useCallback, useRef } = React;
   const html = htm.bind(React.createElement);
   const api = window.apiClient;
 
@@ -39,11 +39,15 @@
   ];
 
   const ROLE_LABELS = {
-    NHAN_VIEN: 'Nhân viên tiếp nhận',
-    QUAN_LY: 'Quản lý trung tâm'
+    NHAN_VIEN: 'Nhân viên tiếp nhận'
   };
 
   const OPEN_STATUSES = ['MOI', 'DA_PHAN_CONG', 'DANG_XU_LY', 'CHO_LINH_KIEN', 'HOAN_TAT'];
+
+  function maskPhone(value) {
+    const phone = String(value || '').replace(/\D/g, '');
+    return phone.length === 10 ? `${phone.slice(0, 4)}***${phone.slice(-3)}` : '***';
+  }
 
   /**
    * Định dạng ngày giờ theo tiếng Việt.
@@ -153,26 +157,17 @@
   }
 
   /**
-   * Sinh mã tra cứu phía client khi lỗi mạng không có mã từ máy chủ.
-   *
-   * @returns {string} Mã dạng 7F3A-21.
-   */
-  function generateRetrievalCode() {
-    const hex = Math.random().toString(16).slice(2, 6).toUpperCase().padEnd(4, '0');
-    return `${hex}-${Math.floor(10 + Math.random() * 90)}`;
-  }
-
-  /**
    * Chuyển lỗi API thành cấu trúc 3 phần cho DataState.
    *
-   * @param {Error & {status?: number, fields?: object}} error Lỗi.
+   * @param {Error & {status?: number, fields?: object, requestId?: string}} error Lỗi.
    * @param {string} what Chuyện gì.
-   * @returns {{what: string, why: string, next: string, code: string, message: string}} Lỗi giao diện.
+   * @returns {{what: string, why: string, next: string, code: string|null, message: string}} Lỗi giao diện.
    */
   function toUiError(error, what) {
     const status = error && error.status ? error.status : 0;
     let why = 'Mất kết nối tới máy chủ hệ thống.';
     if (status >= 500) why = 'Máy chủ hệ thống gặp lỗi khi xử lý yêu cầu.';
+    else if (error && error.code === 'HET_THOI_GIAN_CHO') why = error.message;
     else if (status === 403) why = 'Tài khoản không đủ quyền xem dữ liệu này.';
     else if (status === 404) why = 'Dữ liệu không còn tồn tại hoặc đã bị xoá.';
     else if (status) why = error.message || 'Yêu cầu không thực hiện được.';
@@ -180,10 +175,22 @@
     return {
       what,
       why,
-      next: status === 0 ? 'Kiểm tra kết nối rồi bấm Thử lại.' : 'Bấm Thử lại. Nếu vẫn lỗi, gửi mã tra cứu cho quản trị viên.',
-      code: (error && error.fields && error.fields.maTraCuu) || generateRetrievalCode(),
+      next: status === 0 ? 'Kiểm tra kết nối rồi bấm Thử lại.' : 'Bấm Thử lại. Nếu vẫn lỗi, báo quản trị viên kèm mã yêu cầu nếu có.',
+      code: (error && error.requestId) || null,
       message: error && error.message ? error.message : ''
     };
+  }
+
+  function mutationErrorText(error) {
+    const message = error.message || 'Chưa thể xác nhận kết quả lưu.';
+    const uncertain = !error.status || error.status >= 500 || error.code === 'PHAN_HOI_KHONG_HOP_LE';
+    return uncertain
+      ? `${message} Kết quả lưu chưa xác định; hãy tra cứu lại trước khi tạo lại để tránh trùng dữ liệu.`
+      : message;
+  }
+
+  function RequestId({ value }) {
+    return value ? html`<div className="retrieval-code">Mã yêu cầu (requestId): <strong>${value}</strong></div>` : null;
   }
 
   /**
@@ -286,6 +293,10 @@
     onRetry,
     onClearFilters,
     onCreate,
+    emptyTitle,
+    emptyText,
+    emptyActionLabel,
+    onEmptyAction,
     children
   }) {
     if (loading) {
@@ -314,7 +325,9 @@
                   <span>${error.next}</span>
                 </div>
               </div>
-              <div className="retrieval-code">Mã tra cứu: <strong>${error.code}</strong></div>
+              <div className="retrieval-code">${error.code
+                ? html`Mã yêu cầu (requestId): <strong>${error.code}</strong>`
+                : 'Chưa có mã yêu cầu từ máy chủ.'}</div>
               <div className="state-actions">
                 <button className="btn primary" type="button" onClick=${onRetry}>Thử lại</button>
               </div>
@@ -325,6 +338,22 @@
     }
 
     if (isEmpty) {
+      if (emptyTitle) {
+        return html`
+          <div className="data-state">
+            <div className="empty-state">
+              <div className="state-icon">⌕</div>
+              <div>
+                <h3 className="state-title">${emptyTitle}</h3>
+                <p className="state-text">${emptyText}</p>
+                <div className="state-actions">
+                  <button className="btn primary" type="button" onClick=${onEmptyAction}>${emptyActionLabel}</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
       if (isFiltered) {
         return html`
           <div className="data-state">
@@ -385,7 +414,7 @@
         const session = await api.login(username.trim(), password);
         onLogin(session);
       } catch (err) {
-        setError(err.message || 'Đăng nhập không thành công.');
+        setError(`${err.message || 'Đăng nhập không thành công.'}${err.requestId ? ` · requestId: ${err.requestId}` : ''}`);
       } finally {
         setLoading(false);
       }
@@ -466,14 +495,6 @@
                 <b>Nhân viên tiếp nhận</b>
                 <span>nhanvien / nhanvien123</span>
               </button>
-              <button
-                className="demo-account"
-                type="button"
-                onClick=${() => useDemo('quanly', 'quanly123')}
-              >
-                <b>Quản lý trung tâm</b>
-                <span>quanly / quanly123</span>
-              </button>
             </div>
 
             <p className="hint">
@@ -499,24 +520,28 @@
       priority: '',
       q: ''
     });
+    const listRequest = useRef(0);
 
     const loadAll = useCallback(async () => {
+      const request = ++listRequest.current;
       setLoading(true);
       setError(null);
       try {
         const payload = await api.listTickets();
+        if (request !== listRequest.current) return;
         const rows = Array.isArray(payload.data) ? payload.data : [];
         setAllTickets(rows);
         setTickets(rows);
       } catch (err) {
-        setError(toUiError(err, 'Chưa tải được danh sách phiếu.'));
+        if (request === listRequest.current) setError(toUiError(err, 'Chưa tải được danh sách phiếu.'));
       } finally {
-        setLoading(false);
+        if (request === listRequest.current) setLoading(false);
       }
     }, []);
 
     useEffect(() => {
       loadAll();
+      return () => { listRequest.current += 1; };
     }, [loadAll, refreshKey]);
 
     useEffect(() => {
@@ -561,26 +586,10 @@
     }, [catalogs, allTickets]);
 
     const filtered = useMemo(() => {
-      const query = filters.q.trim().toLowerCase();
       return tickets.filter((ticket) => {
         if (filters.status && ticket.trangThai !== filters.status) return false;
         if (filters.nhomSuCo && ticket.nhomSuCo !== filters.nhomSuCo) return false;
         if (filters.priority && ticket.mucUuTien !== filters.priority) return false;
-        if (query) {
-          // Từ khóa đã được máy chủ lọc theo mã phiếu hoặc SĐT khách hàng;
-          // vẫn kiểm tra thêm các trường hiển thị để phản hồi tức thời.
-          const haystack = [
-            ticket.ticketCode,
-            ticket.ticketId,
-            ticket.tenKhach,
-            ticket.sdtHienThi,
-            ticket.serialNo,
-            ticket.tenThietBi
-          ]
-            .join(' ')
-            .toLowerCase();
-          if (!haystack.includes(query) && !query.match(/^0\d{9}$/)) return true;
-        }
         return true;
       });
     }, [tickets, filters]);
@@ -597,7 +606,7 @@
         overdue: overdue.length,
         soon: soon.length,
         closed: closed.length,
-        inSlaRate: open.length === 0 ? 100 : Math.round((inSla / open.length) * 100)
+        inSlaRate: open.length === 0 ? null : Math.round((inSla / open.length) * 100)
       };
     }, [allTickets]);
 
@@ -617,7 +626,7 @@
       what: 'Chưa tải được danh sách phiếu.',
       why: 'Mất kết nối tới máy chủ hệ thống.',
       next: 'Kiểm tra kết nối rồi bấm Thử lại.',
-      code: '7F3A-21',
+      code: null,
       message: ''
     };
 
@@ -628,6 +637,8 @@
       (!loading && filtered.length === 0 && allTickets.length > 0 && hasFilters);
     const effectiveEmpty = showNoData || showFilterEmpty;
     const effectiveFiltered = demoState === 'empty-filter' ? true : showFilterEmpty ? true : false;
+    const metricsUnavailable = loading || Boolean(effectiveError);
+    const metricValue = (value) => metricsUnavailable ? '—' : value;
 
     return html`
       <section className="page">
@@ -644,7 +655,10 @@
 
         <div className="sla-banner">
           <div>
-            <strong>Ngữ cảnh so sánh SLA:</strong> ${stats.inSlaRate}% phiếu đang mở còn trong hạn.
+            <strong>Ngữ cảnh so sánh SLA:</strong> ${metricsUnavailable
+              ? 'Chưa có số liệu để tính tỷ lệ.'
+              : stats.inSlaRate === null ? 'Không có phiếu mở để tính tỷ lệ.'
+              : `${stats.inSlaRate}% phiếu đang mở còn trong hạn.`}
             Mục tiêu là 100% phiếu mở không vượt hạn cam kết.
           </div>
           <div className="sla-targets">
@@ -656,24 +670,26 @@
         </div>
 
         <div className="metrics-grid">
-          <${MetricCard} value=${stats.total} label="Tổng phiếu" note="Toàn bộ phiếu của trung tâm" />
-          <${MetricCard} value=${stats.open} label="Đang mở" note="Chưa ở trạng thái Đã đóng" />
+          <${MetricCard} value=${metricValue(stats.total)} label="Tổng phiếu" note="Toàn bộ phiếu của trung tâm" />
+          <${MetricCard} value=${metricValue(stats.open)} label="Đang mở" note="Chưa ở trạng thái Đã đóng" />
           <${MetricCard}
-            value=${stats.overdue}
+            value=${metricValue(stats.overdue)}
             label="Quá hạn"
             note="Cần xử lý ngay"
             tone=${stats.overdue > 0 ? 'alert' : ''}
           />
           <${MetricCard}
-            value=${stats.soon}
+            value=${metricValue(stats.soon)}
             label="Sắp quá hạn"
             note="Còn tối đa 4 giờ"
             tone=${stats.soon > 0 ? 'warn' : ''}
           />
-          <${MetricCard} value=${stats.closed} label="Đã đóng" note="Đã kết thúc vòng đời" />
+          <${MetricCard} value=${metricValue(stats.closed)} label="Đã đóng" note="Đã kết thúc vòng đời" />
         </div>
 
-        <div className="demo-toolbar">
+        <details>
+          <summary>Công cụ kiểm chứng (mô phỏng, không phải lỗi kết nối thật)</summary>
+          <div className="demo-toolbar">
           <span className="label">Kiểm chứng trạng thái giao diện:</span>
           <button className="btn small" type="button" onClick=${showDemoLoading}>Đang tải</button>
           <button className="btn small" type="button" onClick=${() => setDemoState('empty-no-data')}>
@@ -688,7 +704,8 @@
           <button className="btn small ghost" type="button" onClick=${() => setDemoState(null)}>
             Về dữ liệu thật
           </button>
-        </div>
+          </div>
+        </details>
 
         <div className="filters">
           <label className="field">
@@ -696,7 +713,7 @@
             <input
               className="input"
               value=${filters.q}
-              placeholder="Mã phiếu, SĐT, serial, tên khách..."
+              placeholder="Mã phiếu hoặc SĐT khách hàng"
               onChange=${(event) => setFilters({ ...filters, q: event.target.value })}
             />
           </label>
@@ -862,8 +879,14 @@
     const [previewLoading, setPreviewLoading] = useState(false);
     const [saving, setSaving] = useState(false);
     const [saveError, setSaveError] = useState(null);
+    const customerRequest = useRef(0);
+    const deviceRequest = useRef(0);
+    const customerVersion = customerRequest.current;
+    const deviceVersion = deviceRequest.current;
+    const pending = useRef({ customer: false, device: false, saving: false });
+    const mounted = useRef(true);
     const [centerId, setCenterId] = useState(
-      session.user.center_id ||
+      (session.user && session.user.center_id) ||
         (catalogs && catalogs.centers && catalogs.centers[0] ? catalogs.centers[0].center_id : '')
     );
 
@@ -878,11 +901,22 @@
       ticketForm.priority !== selectedCategory.default_priority;
 
     useEffect(() => {
+      mounted.current = true;
+      return () => {
+        mounted.current = false;
+        customerRequest.current += 1;
+        deviceRequest.current += 1;
+      };
+    }, []);
+
+    useEffect(() => {
       if (!ticketForm.priority) {
         setPreview(null);
+        setPreviewLoading(false);
         return undefined;
       }
       let cancelled = false;
+      setPreview(null);
       setPreviewLoading(true);
       const timer = setTimeout(async () => {
         try {
@@ -900,57 +934,131 @@
       };
     }, [ticketForm.priority, receivedAt]);
 
-    if (catalogsLoading && !catalogs) {
-      return html`
-        <section className="page">
-          <h1 className="page-title">Tiếp nhận phiếu bảo hành mới</h1>
-          <div className="data-state"><${LoadingState} text="Đang tải danh mục trung tâm và nhóm sự cố..." /></div>
-        </section>
-      `;
+    const catalogsEmpty =
+      !catalogs ||
+      !Array.isArray(catalogs.centers) || catalogs.centers.length === 0 ||
+      !Array.isArray(catalogs.categories) || catalogs.categories.length === 0;
+
+    if (!session.user || session.user.role !== 'NHAN_VIEN') {
+      return html`<section className="page"><div className="inline-alert error">Chỉ nhân viên tiếp nhận được tạo phiếu.</div><button className="btn" type="button" onClick=${onCancel}>Về danh sách phiếu</button></section>`;
     }
 
-    if (catalogsError && !catalogs) {
+    if (catalogsLoading || catalogsError || catalogsEmpty) {
       return html`
         <section className="page">
+          <button className="back-link" type="button" onClick=${onCancel}>← Danh sách phiếu</button>
           <h1 className="page-title">Tiếp nhận phiếu bảo hành mới</h1>
           <${DataState}
-            error=${toUiError(catalogsError, 'Chưa tải được danh mục hệ thống.')}
+            loading=${catalogsLoading}
+            loadingText="Đang tải danh mục trung tâm và nhóm sự cố..."
+            error=${catalogsError ? toUiError(catalogsError, 'Chưa tải được danh mục hệ thống.') : null}
+            isEmpty=${catalogsEmpty}
             onRetry=${onReloadCatalogs}
+            emptyTitle="Chưa có danh mục tiếp nhận"
+            emptyText="Cần có trung tâm và nhóm sự cố để tạo phiếu. Hãy nạp danh mục bằng npm run db:seed rồi tải lại."
+            emptyActionLabel="Tải lại danh mục"
+            onEmptyAction=${onReloadCatalogs}
           />
         </section>
       `;
     }
 
+    function resetDeviceSelection(clearSerial) {
+      deviceRequest.current += 1;
+      pending.current.device = false;
+      setDeviceResult(null);
+      setDeviceLoading(false);
+      setDeviceMessage(null);
+      setShowDeviceForm(false);
+      if (clearSerial) setSerial('');
+      setSaveError(null);
+    }
+
+    function resetCustomerSelection() {
+      customerRequest.current += 1;
+      pending.current.customer = false;
+      setCustomer(null);
+      setCustomerLoading(false);
+      setCustomerMessage(null);
+      resetDeviceSelection(true);
+    }
+
+    function changePhone(value) {
+      if (pending.current.saving) return;
+      setPhone(value);
+      resetCustomerSelection();
+      setShowCustomerForm(false);
+    }
+
+    function changeCustomerForm(name, value) {
+      if (pending.current.saving) return;
+      resetCustomerSelection();
+      setCustomerForm((current) => ({ ...current, [name]: value }));
+      if (name === 'phone') setPhone(value);
+    }
+
+    function changeSerial(value) {
+      if (pending.current.saving) return;
+      setSerial(value);
+      resetDeviceSelection(false);
+    }
+
+    function changeDeviceForm(name, value) {
+      if (pending.current.saving) return;
+      deviceRequest.current += 1;
+      pending.current.device = false;
+      setDeviceResult(null);
+      setDeviceLoading(false);
+      setDeviceMessage(null);
+      setSaveError(null);
+      setDeviceForm((current) => ({ ...current, [name]: value }));
+      if (name === 'serial_no') setSerial(value);
+    }
+
     async function lookupCustomerByPhone() {
+      if (pending.current.customer || pending.current.saving) return;
+      resetCustomerSelection();
+      setShowCustomerForm(false);
+      const request = customerRequest.current;
       if (!phone.trim()) {
         setCustomerMessage({ type: 'error', text: 'Nhập số điện thoại khách hàng trước khi tra cứu.' });
         return;
       }
       setCustomerLoading(true);
+      pending.current.customer = true;
       setCustomerMessage(null);
       try {
         const found = await api.lookupCustomer(phone);
+        if (request !== customerRequest.current) return;
         setCustomer(found);
         setShowCustomerForm(false);
         setCustomerMessage({ type: 'ok', text: 'Đã tìm thấy hồ sơ khách hàng có sẵn.' });
       } catch (err) {
+        if (request !== customerRequest.current) return;
         if (err.status === 404) {
           setCustomer(null);
           setShowCustomerForm(true);
-          setCustomerForm((current) => ({ ...current, phone }));
+          setCustomerForm({ full_name: '', phone, email: '', address: '' });
           setCustomerMessage({
             type: 'info',
             text: 'Chưa có hồ sơ với số điện thoại này. Điền họ tên để tạo khách hàng mới (QT-01).'
           });
         } else {
-          setCustomerMessage({ type: 'error', text: err.message, fields: err.fields });
+          setCustomerMessage({ type: 'error', text: err.message, fields: err.fields, requestId: err.requestId });
         }
       } finally {
-        setCustomerLoading(false);
+        if (request === customerRequest.current) {
+          pending.current.customer = false;
+          setCustomerLoading(false);
+        }
       }
     }
 
     async function createNewCustomer() {
+      if (pending.current.customer || pending.current.saving) return;
+      resetCustomerSelection();
+      const request = customerRequest.current;
+      pending.current.customer = true;
       setCustomerLoading(true);
       setCustomerMessage(null);
       try {
@@ -960,17 +1068,26 @@
           email: customerForm.email || null,
           address: customerForm.address || ''
         });
+        if (request !== customerRequest.current) return;
         setCustomer(created);
+        setPhone(created.phone);
         setShowCustomerForm(false);
         setCustomerMessage({ type: 'ok', text: 'Đã tạo hồ sơ khách hàng mới.' });
       } catch (err) {
-        setCustomerMessage({ type: 'error', text: err.message, fields: err.fields });
+        if (request !== customerRequest.current) return;
+        setCustomerMessage({ type: 'error', text: mutationErrorText(err), fields: err.fields, requestId: err.requestId });
       } finally {
-        setCustomerLoading(false);
+        if (request === customerRequest.current) {
+          pending.current.customer = false;
+          setCustomerLoading(false);
+        }
       }
     }
 
     async function lookupDeviceBySerial() {
+      if (pending.current.device || pending.current.saving) return;
+      resetDeviceSelection(false);
+      const request = deviceRequest.current;
       if (!customer) {
         setDeviceMessage({ type: 'error', text: 'Chọn hoặc tạo khách hàng trước khi tra cứu thiết bị.' });
         return;
@@ -980,9 +1097,11 @@
         return;
       }
       setDeviceLoading(true);
+      pending.current.device = true;
       setDeviceMessage(null);
       try {
         const result = await api.lookupDevice(serial, receivedAt);
+        if (request !== deviceRequest.current) return;
         setDeviceResult(result);
         if (result.device && result.device.customer_id !== customer.customer_id) {
           setDeviceMessage({
@@ -994,28 +1113,36 @@
           setDeviceMessage({ type: 'ok', text: 'Đã tìm thấy thiết bị và kiểm tra bảo hành tự động (QT-05).' });
         }
       } catch (err) {
+        if (request !== deviceRequest.current) return;
         if (err.status === 404) {
           setDeviceResult(null);
           setShowDeviceForm(true);
-          setDeviceForm((current) => ({ ...current, serial_no: serial }));
+          setDeviceForm({ product_name: '', serial_no: serial, purchase_date: '', warranty_months: 12 });
           setDeviceMessage({
             type: 'info',
             text: 'Chưa có thiết bị với serial này. Điền thông tin để tạo thiết bị mới (QT-03).'
           });
         } else {
-          setDeviceMessage({ type: 'error', text: err.message, fields: err.fields });
+          setDeviceMessage({ type: 'error', text: err.message, fields: err.fields, requestId: err.requestId });
         }
       } finally {
-        setDeviceLoading(false);
+        if (request === deviceRequest.current) {
+          pending.current.device = false;
+          setDeviceLoading(false);
+        }
       }
     }
 
     async function createNewDevice() {
+      if (pending.current.device || pending.current.saving) return;
       if (!customer) {
         setDeviceMessage({ type: 'error', text: 'Chọn khách hàng trước khi tạo thiết bị.' });
         return;
       }
       setDeviceLoading(true);
+      setDeviceResult(null);
+      const request = ++deviceRequest.current;
+      pending.current.device = true;
       setDeviceMessage(null);
       try {
         const result = await api.createDevice({
@@ -1025,13 +1152,19 @@
           purchase_date: deviceForm.purchase_date || null,
           warranty_months: Number(deviceForm.warranty_months)
         });
+        if (request !== deviceRequest.current) return;
         setDeviceResult(result);
+        setSerial(result.device.serial_no);
         setShowDeviceForm(false);
         setDeviceMessage({ type: 'ok', text: 'Đã tạo thiết bị mới và kiểm tra bảo hành (QT-05).' });
       } catch (err) {
-        setDeviceMessage({ type: 'error', text: err.message, fields: err.fields });
+        if (request !== deviceRequest.current) return;
+        setDeviceMessage({ type: 'error', text: mutationErrorText(err), fields: err.fields, requestId: err.requestId });
       } finally {
-        setDeviceLoading(false);
+        if (request === deviceRequest.current) {
+          pending.current.device = false;
+          setDeviceLoading(false);
+        }
       }
     }
 
@@ -1063,7 +1196,20 @@
     }
 
     async function saveTicket() {
+      if (!mounted.current || pending.current.saving) return;
       const fields = {};
+      if (customerVersion !== customerRequest.current || deviceVersion !== deviceRequest.current) {
+        setSaveError({ message: 'Khách hàng hoặc thiết bị đã thay đổi. Hãy tra cứu lại trước khi lưu.', fields });
+        return;
+      }
+      if (pending.current.customer || pending.current.device || customerLoading || deviceLoading) {
+        setSaveError({ message: 'Chờ tra cứu hoặc tạo khách hàng/thiết bị hoàn tất trước khi lưu.', fields });
+        return;
+      }
+      if (!session.user || session.user.role !== 'NHAN_VIEN') {
+        setSaveError({ message: 'Chỉ nhân viên tiếp nhận được tạo phiếu.', fields });
+        return;
+      }
       if (!customer) fields.customer_id = 'Chọn khách hàng.';
       if (!deviceResult || !deviceResult.device) fields.device_id = 'Chọn thiết bị.';
       if (!ticketForm.category_id) fields.category_id = 'Chọn nhóm sự cố.';
@@ -1082,6 +1228,7 @@
       }
 
       setSaving(true);
+      pending.current.saving = true;
       setSaveError(null);
       try {
         const detail = await api.createTicket({
@@ -1096,11 +1243,12 @@
           priority_reason: priorityChanged ? ticketForm.priority_reason.trim() : '',
           received_at: receivedAt
         });
-        onCreated(detail.ticket.ticketId);
+        if (mounted.current) onCreated(detail.ticket.ticketId);
       } catch (err) {
-        setSaveError({ message: err.message, fields: err.fields, code: err.fields && err.fields.maTraCuu });
+        if (mounted.current) setSaveError({ message: mutationErrorText(err), fields: err.fields, code: err.requestId });
       } finally {
-        setSaving(false);
+        pending.current.saving = false;
+        if (mounted.current) setSaving(false);
       }
     }
 
@@ -1126,7 +1274,7 @@
           </div>
         </div>
 
-        <div className="intake-grid">
+        <fieldset className="intake-grid" disabled=${saving} style=${{ border: 0, padding: 0, margin: 0, minWidth: 0 }}>
           <div style=${{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
             <section className="panel">
               <header className="panel-header">
@@ -1141,7 +1289,7 @@
                       className=${inputClass(customerMessage && customerMessage.fields, 'phone')}
                       value=${phone}
                       placeholder="0901234567 hoặc +84 90 123 4567"
-                      onChange=${(event) => setPhone(event.target.value)}
+                      onChange=${(event) => changePhone(event.target.value)}
                       onKeyDown=${(event) => {
                         if (event.key === 'Enter') {
                           event.preventDefault();
@@ -1159,7 +1307,7 @@
                 </div>
 
                 ${customerMessage
-                  ? html`<div className=${`inline-alert ${customerMessage.type === 'error' ? 'error' : ''}`}>${customerMessage.text}</div>`
+                  ? html`<div className=${`inline-alert ${customerMessage.type === 'error' ? 'error' : ''}`}>${customerMessage.text}<${RequestId} value=${customerMessage.requestId} /></div>`
                   : null}
 
                 ${customer
@@ -1167,7 +1315,7 @@
                       <div className="lookup-result">
                         <div>
                           <strong>${customer.full_name}</strong>
-                          <span>${customer.phone} · ${customer.customer_id}</span>
+                          <span>${maskPhone(customer.phone)} · ${customer.customer_id}</span>
                           <div className="cell-sub">${customer.address || 'Chưa có địa chỉ'}</div>
                         </div>
                         <${Pill} tone="green">Đã có hồ sơ<//>
@@ -1183,7 +1331,7 @@
                           <input
                             className=${inputClass(customerMessage && customerMessage.fields, 'full_name')}
                             value=${customerForm.full_name}
-                            onChange=${(event) => setCustomerForm({ ...customerForm, full_name: event.target.value })}
+                            onChange=${(event) => changeCustomerForm('full_name', event.target.value)}
                             placeholder="Nguyễn Văn A"
                           />
                           ${fieldError(customerMessage && customerMessage.fields, 'full_name')
@@ -1195,7 +1343,7 @@
                           <input
                             className=${inputClass(customerMessage && customerMessage.fields, 'phone')}
                             value=${customerForm.phone}
-                            onChange=${(event) => setCustomerForm({ ...customerForm, phone: event.target.value })}
+                            onChange=${(event) => changeCustomerForm('phone', event.target.value)}
                           />
                         </label>
                         <label className="field">
@@ -1203,7 +1351,7 @@
                           <input
                             className=${inputClass(customerMessage && customerMessage.fields, 'email')}
                             value=${customerForm.email}
-                            onChange=${(event) => setCustomerForm({ ...customerForm, email: event.target.value })}
+                            onChange=${(event) => changeCustomerForm('email', event.target.value)}
                             placeholder="khachhang@email.com"
                           />
                         </label>
@@ -1212,12 +1360,12 @@
                           <input
                             className=${inputClass(customerMessage && customerMessage.fields, 'address')}
                             value=${customerForm.address}
-                            onChange=${(event) => setCustomerForm({ ...customerForm, address: event.target.value })}
+                            onChange=${(event) => changeCustomerForm('address', event.target.value)}
                             placeholder="Số nhà, đường, quận/huyện"
                           />
                         </label>
                         <div className="span-2 form-actions">
-                          <button className="btn" type="button" onClick=${() => setShowCustomerForm(false)}>Huỷ</button>
+                          <button className="btn" type="button" onClick=${() => { resetCustomerSelection(); setShowCustomerForm(false); }}>Huỷ</button>
                           <button className="btn primary" type="button" onClick=${createNewCustomer} disabled=${customerLoading}>
                             ${customerLoading ? 'Đang tạo...' : 'Tạo hồ sơ khách hàng'}
                           </button>
@@ -1241,7 +1389,7 @@
                       className=${inputClass(deviceMessage && deviceMessage.fields, 'serial_no')}
                       value=${serial}
                       placeholder="Ví dụ: SN541017338391"
-                      onChange=${(event) => setSerial(event.target.value)}
+                      onChange=${(event) => changeSerial(event.target.value)}
                       onKeyDown=${(event) => {
                         if (event.key === 'Enter') {
                           event.preventDefault();
@@ -1259,7 +1407,7 @@
                 </div>
 
                 ${deviceMessage
-                  ? html`<div className=${`inline-alert ${deviceMessage.type === 'error' || deviceMessage.type === 'warning' ? 'error' : ''}`}>${deviceMessage.text}</div>`
+                  ? html`<div className=${`inline-alert ${deviceMessage.type === 'error' || deviceMessage.type === 'warning' ? 'error' : ''}`}>${deviceMessage.text}<${RequestId} value=${deviceMessage.requestId} /></div>`
                   : null}
 
                 ${deviceResult && deviceResult.device
@@ -1296,7 +1444,7 @@
                           <input
                             className=${inputClass(deviceMessage && deviceMessage.fields, 'product_name')}
                             value=${deviceForm.product_name}
-                            onChange=${(event) => setDeviceForm({ ...deviceForm, product_name: event.target.value })}
+                            onChange=${(event) => changeDeviceForm('product_name', event.target.value)}
                             placeholder="Samsung Galaxy A15"
                           />
                           ${fieldError(deviceMessage && deviceMessage.fields, 'product_name')
@@ -1308,7 +1456,7 @@
                           <input
                             className=${inputClass(deviceMessage && deviceMessage.fields, 'serial_no')}
                             value=${deviceForm.serial_no}
-                            onChange=${(event) => setDeviceForm({ ...deviceForm, serial_no: event.target.value })}
+                            onChange=${(event) => changeDeviceForm('serial_no', event.target.value)}
                           />
                         </label>
                         <label className="field">
@@ -1317,7 +1465,7 @@
                             className=${inputClass(deviceMessage && deviceMessage.fields, 'purchase_date')}
                             type="date"
                             value=${deviceForm.purchase_date}
-                            onChange=${(event) => setDeviceForm({ ...deviceForm, purchase_date: event.target.value })}
+                            onChange=${(event) => changeDeviceForm('purchase_date', event.target.value)}
                           />
                         </label>
                         <label className="field">
@@ -1328,11 +1476,11 @@
                             min="0"
                             max="120"
                             value=${deviceForm.warranty_months}
-                            onChange=${(event) => setDeviceForm({ ...deviceForm, warranty_months: event.target.value })}
+                            onChange=${(event) => changeDeviceForm('warranty_months', event.target.value)}
                           />
                         </label>
                         <div className="span-2 form-actions">
-                          <button className="btn" type="button" onClick=${() => setShowDeviceForm(false)}>Huỷ</button>
+                          <button className="btn" type="button" onClick=${() => resetDeviceSelection(false)}>Huỷ</button>
                           <button className="btn primary" type="button" onClick=${createNewDevice} disabled=${deviceLoading}>
                             ${deviceLoading ? 'Đang tạo...' : 'Tạo thiết bị'}
                           </button>
@@ -1501,15 +1649,7 @@
                   <div className="info-item">
                     <div className="info-label">Trung tâm</div>
                     <div className="info-value">
-                      ${session.user.role === 'QUAN_LY' && catalogs && Array.isArray(catalogs.centers)
-                        ? html`
-                            <select className="select" value=${centerId} onChange=${(event) => setCenterId(event.target.value)}>
-                              ${catalogs.centers.map(
-                                (center) => html`<option key=${center.center_id} value=${center.center_id}>${center.center_name}</option>`
-                              )}
-                            </select>
-                          `
-                        : centerName(centerId, catalogs)}
+                      ${centerName(centerId, catalogs)}
                     </div>
                   </div>
                   <div className="info-item">
@@ -1541,6 +1681,7 @@
                   ? html`
                       <div className="inline-alert error">
                         <strong>${saveError.message}</strong>
+                        <${RequestId} value=${saveError.code} />
                         ${saveError.fields && Object.keys(saveError.fields).length > 0
                           ? html`
                               <ul style=${{ margin: '7px 0 0', paddingLeft: '18px' }}>
@@ -1556,7 +1697,7 @@
 
                 <div className="form-actions">
                   <button className="btn" type="button" onClick=${onCancel}>Huỷ</button>
-                  <button className="btn primary" type="button" onClick=${saveTicket} disabled=${saving}>
+                  <button className="btn primary" type="button" onClick=${saveTicket} disabled=${saving || customerLoading || deviceLoading || !customer || !deviceResult || !deviceResult.device || deviceResult.device.customer_id !== customer.customer_id}>
                     ${saving ? 'Đang lưu...' : 'Lưu phiếu · trạng thái MOI'}
                   </button>
                 </div>
@@ -1578,72 +1719,44 @@
                 <div><strong>QT-03:</strong> Serial duy nhất; một thiết bị chỉ có một phiếu mở.</div>
                 <div><strong>QT-04:</strong> CAO 24h, TRUNG_BINH 72h, THAP 120h; bỏ Chủ Nhật.</div>
                 <div><strong>QT-05:</strong> Thiếu ngày mua → chưa xác minh, không phải hết bảo hành.</div>
-                <div><strong>QT-06:</strong> Vòng đời trạng thái một chiều, mọi bước đều ghi log.</div>
+                <div><strong>QT-06:</strong> Tiếp nhận kết thúc ở MOI; trạng thái và lịch sử cũ chỉ để tra cứu.</div>
               </div>
             </section>
           </aside>
-        </div>
+        </fieldset>
       </section>
     `;
   }
 
-  function TicketDetail({ ticketId, onBack, onChanged, session, catalogs }) {
+  function TicketDetail({ ticketId, onBack }) {
     const [detail, setDetail] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [note, setNote] = useState('');
-    const [changing, setChanging] = useState(false);
-    const [actionError, setActionError] = useState(null);
-    const [deleting, setDeleting] = useState(false);
+    const detailRequest = useRef(0);
 
     const load = useCallback(async () => {
+      const request = ++detailRequest.current;
       setLoading(true);
       setError(null);
+      setDetail(null);
       try {
         const result = await api.getTicket(ticketId);
+        if (request !== detailRequest.current) return;
         setDetail(result);
       } catch (err) {
-        setError(toUiError(err, 'Chưa tải được chi tiết phiếu.'));
+        // Phiếu bị xóa sau khi mở danh sách là trạng thái rỗng có lối quay về.
+        if (request === detailRequest.current && err.status !== 404) setError(toUiError(err, 'Chưa tải được chi tiết phiếu.'));
       } finally {
-        setLoading(false);
+        if (request === detailRequest.current) setLoading(false);
       }
     }, [ticketId]);
 
     useEffect(() => {
       load();
+      return () => { detailRequest.current += 1; };
     }, [load]);
 
-    async function changeStatus(toStatus) {
-      setChanging(true);
-      setActionError(null);
-      try {
-        const result = await api.changeStatus(ticketId, toStatus, note);
-        setDetail(result);
-        setNote('');
-        onChanged();
-      } catch (err) {
-        setActionError(err.message || 'Không thể chuyển trạng thái.');
-      } finally {
-        setChanging(false);
-      }
-    }
-
-    async function removeTicket() {
-      if (!window.confirm('Xóa mềm phiếu này? Dữ liệu lịch sử vẫn được giữ theo QT-13.')) return;
-      setDeleting(true);
-      setActionError(null);
-      try {
-        await api.deleteTicket(ticketId);
-        onChanged();
-        onBack();
-      } catch (err) {
-        setActionError(err.message || 'Không thể xóa phiếu.');
-      } finally {
-        setDeleting(false);
-      }
-    }
-
-    if (loading || error) {
+    if (loading || error || !detail || !detail.ticket) {
       return html`
         <section className="page">
           <button className="back-link" type="button" onClick=${onBack}>← Danh sách phiếu</button>
@@ -1652,12 +1765,15 @@
             error=${error}
             loadingText="Đang tải chi tiết phiếu bảo hành..."
             onRetry=${load}
+            isEmpty=${!detail || !detail.ticket}
+            emptyTitle="Không tìm thấy phiếu"
+            emptyText="Phiếu không tồn tại hoặc đã được xóa. Quay về danh sách để chọn phiếu khác."
+            emptyActionLabel="Về danh sách phiếu"
+            onEmptyAction=${onBack}
           />
         </section>
       `;
     }
-
-    if (!detail) return null;
 
     const ticket = detail.ticket;
     const sla = ticketSla(ticket);
@@ -1822,53 +1938,7 @@
               </div>
             </section>
 
-            <section className="panel">
-              <header className="panel-header">
-                <div className="step-badge">→</div>
-                <h2 className="panel-title">Chuyển trạng thái</h2>
-              </header>
-              <div className="panel-body">
-                ${detail.trangThaiKeTiep.length === 0
-                  ? html`<div className="inline-alert">Phiếu đã ở trạng thái cuối <strong>DA_DONG</strong>.</div>`
-                  : html`
-                      <label className="field">
-                        <span>Ghi chú chuyển trạng thái</span>
-                        <textarea
-                          className="textarea"
-                          value=${note}
-                          onChange=${(event) => setNote(event.target.value)}
-                          placeholder="Ví dụ: Đã gọi khách, hẹn kiểm tra linh kiện..."
-                        />
-                      </label>
-                      <div className="next-status-box">
-                        <h4>Bước tiếp theo hợp lệ</h4>
-                        <p>Vòng đời một chiều QT-06; không thể chuyển ngược.</p>
-                        <div className="btn-group">
-                          ${detail.trangThaiKeTiep.map(
-                            (status) => html`
-                              <button
-                                key=${status}
-                                className="btn primary small"
-                                type="button"
-                                disabled=${changing}
-                                onClick=${() => changeStatus(status)}
-                              >
-                                ${changing ? 'Đang chuyển...' : `Sang ${STATUS_LABELS[status] || status}`}
-                              </button>
-                            `
-                          )}
-                        </div>
-                      </div>
-                    `}
-
-                ${actionError ? html`<div className="inline-alert error">${actionError}</div>` : null}
-
-                <div className="divider"></div>
-                <button className="btn danger" type="button" onClick=${removeTicket} disabled=${deleting}>
-                  ${deleting ? 'Đang xóa...' : 'Xóa mềm phiếu (QT-13)'}
-                </button>
-              </div>
-            </section>
+            <div className="inline-alert">Tiếp nhận kết thúc ở trạng thái MOI. Trạng thái và lịch sử hiện có chỉ để tra cứu.</div>
           </aside>
         </div>
       </section>
@@ -1883,23 +1953,28 @@
     const [catalogsLoading, setCatalogsLoading] = useState(false);
     const [catalogsError, setCatalogsError] = useState(null);
     const [refreshKey, setRefreshKey] = useState(0);
+    const catalogRequest = useRef(0);
 
     const loadCatalogs = useCallback(async () => {
-      if (!api.getSession()) return;
+      const currentSession = api.getSession();
+      if (!currentSession || !currentSession.user || currentSession.user.role !== 'NHAN_VIEN') return;
+      const request = ++catalogRequest.current;
+      const isCurrent = () => request === catalogRequest.current && api.getSession() && api.getSession().token === currentSession.token;
       setCatalogsLoading(true);
       setCatalogsError(null);
       try {
         const data = await api.getCatalogs();
-        setCatalogs(data);
+        if (isCurrent()) setCatalogs(data);
       } catch (err) {
-        setCatalogsError(err);
+        if (isCurrent()) setCatalogsError(err);
       } finally {
-        setCatalogsLoading(false);
+        if (isCurrent()) setCatalogsLoading(false);
       }
     }, []);
 
     useEffect(() => {
       if (session) loadCatalogs();
+      return () => { catalogRequest.current += 1; };
     }, [session, loadCatalogs]);
 
     useEffect(() => {
@@ -1907,6 +1982,9 @@
         setSession(null);
         setSelectedTicketId(null);
         setScreen('list');
+        setCatalogs(null);
+        setCatalogsError(null);
+        setCatalogsLoading(false);
       }
       window.addEventListener('auth:unauthorized', onUnauthorized);
       return () => window.removeEventListener('auth:unauthorized', onUnauthorized);
@@ -1941,6 +2019,10 @@
     }
 
     const user = session.user || {};
+
+    if (user.role !== 'NHAN_VIEN') {
+      return html`<section className="page"><div className="inline-alert error">Giao diện này chỉ dành cho nhân viên tiếp nhận.</div><button className="btn" type="button" onClick=${handleLogout}>Đăng xuất</button></section>`;
+    }
 
     return html`
       <div className="app-shell">
@@ -2019,19 +2101,16 @@
           ? html`
               <${TicketDetail}
                 ticketId=${selectedTicketId}
-                session=${session}
-                catalogs=${catalogs}
                 onBack=${() => {
                   setScreen('list');
                   setSelectedTicketId(null);
                 }}
-                onChanged=${refresh}
               />
             `
           : null}
 
         <footer className="page-footer">
-          Prototype học phần · Smart CRM Mekong Mobile · Dữ liệu mẫu từ dataset mô phỏng ·
+          Prototype học phần · Smart CRM Mekong Mobile · Dữ liệu mẫu từ case study ·
           Nguyễn Duy Khang · 2374802010212
         </footer>
       </div>
