@@ -27,14 +27,31 @@ Các lần chạy tự động nêu trên do OpenCode thực hiện và có log 
 **MSSV:** 2374802010212  
 **Ngày cập nhật:** 28/10/2026
 
-## AI Disclosure — Bài tập 3, phần đóng gói và bàn giao
+## AI Disclosure — Bài tập 3 (toàn bộ giai đoạn 3)
+
+Phiên làm việc được khai báo dưới đây dùng **OpenCode** (model DeepSeek V4.1
+Flash Free). Bảng chỉ ghi những việc agent thực sự làm và những kiểm tra thực sự
+đã chạy; không khai thay phần người nộp tự làm.
 
 | Công cụ | Dùng vào việc gì | Áp dụng ở tệp / hàm nào | Đã kiểm chứng thế nào |
 |---|---|---|---|
-| OpenCode | Soạn Dockerfile/Compose, allowlist build context và bootstrap local không nạp lại mẫu khi restart. | `Dockerfile`, `docker-compose.yml`, `.dockerignore`, `docker/start-demo.js: initializeDemo`. | Viết test trước: 7 test FAIL khi bootstrap chưa có; sau triển khai PASS. Bổ sung test subprocess chẩn đoán cấu hình FAIL trước sửa và PASS sau sửa. Tổng 8 test bootstrap PASS; build và kiểm chứng container được ghi riêng, không lấy unit test thay cho dựng sạch. |
-| OpenCode | Soạn hướng dẫn tiếng Anh, README và checklist bảo mật có giới hạn. | `docs/deployment-guide.md`, `docs/checklist-bao-mat.md`, `README.md`, TD-07/TD-08. | Đối chiếu config, script migration/seed, thực thi `npm audit` (2 High), kiểm `.env` bị ignore và không có trong lịch sử được kiểm, kiểm cú pháp toàn bộ tệp JS. Offline suite mới: 130 tổng, 129 PASS, 0 FAIL, 1 SKIP trên host và trong container; coverage 77,56% dòng, không tuyên bố đạt 80%. |
-| OpenCode | Viết phép kiểm tích hợp opt-in trên CSDL Docker riêng. | `tests/docker-smoke.js`, `docker/smoke-guard.js`. | Guard từ chối chạy ngoài container trước khi gửi request; test tái hiện FAIL trước sửa và PASS sau sửa. Đã chạy trong container: 8/8 kiểm tra PASS, tạo và đọc lại phiếu `TCK0032`; log `docs/evidence/bt3/docker-smoke.txt`. |
+| OpenCode | Đóng gói Docker hai lệnh, bootstrap một lần, chặn chạy smoke ngoài container. | `Dockerfile`, `docker-compose.yml`, `.dockerignore`, `docker/start-demo.js` (`initializeDemo`), `docker/smoke-guard.js`, `tests/docker-startup.test.js`, `tests/docker-smoke.js`. | 8 test bootstrap PASS; live smoke 8/8 PASS trong container, tạo và đọc lại phiếu `TCK0032`; compose exit `0`, app và db `healthy`; log trong `docs/evidence/bt3/`. Người nộp cần tự chạy lại. |
+| OpenCode | Viết Deployment Guide, checklist bảo mật 7 mục và README hai lệnh. | `docs/deployment-guide.md`, `docs/checklist-bao-mat.md`, `README.md`. | Đối chiếu `Dockerfile`, `docker-compose.yml`, `.env.example`, `.gitignore`; chạy `npm audit` thấy 2 cảnh báo High; kiểm container non-root/read-only/`cap_drop: ALL`; ghi rõ mục 3, 4, 7 là **CHƯA LÀM**. Không tuyên bố deploy Render/Atlas. |
+| OpenCode | Đồng bộ Test Plan, Test Report, Bug Log và ánh xạ ảnh minh chứng. | `docs/test-plan.md`, `docs/test-report.md`, `docs/bug-log.md`, `docs/screenshots/buoi14/`, `docs/evidence/bt3/`. | Chạy `npm test`: 130 test, 129 PASS, 0 FAIL, 1 SKIP; đối chiếu 12 test case đủ 8 cột và 12 ảnh TC-01 → TC-12 có sẵn; kiểm 5 bug đủ 7 mục và link commit; coverage 77,56% dòng / 79,08% nhánh / 67,66% hàm. Không tạo ảnh hay bug mới. |
+| OpenCode | Chuyển collection Postman của người nộp vào repo, nhúng 25 response thật, viết README và environment. | `docs/api-docs/Smart-CRM-Mekong-Mobile-API-BT3.postman_collection.json`, `docs/api-docs/bt3-local.postman_environment.json`, `docs/api-docs/README.md`, `docs/api-docs/verification.json`. | Collection gốc và 25 response thật do người nộp cung cấp ngoài repo; agent chỉ tạo bản sao, không sửa file gốc. Kiểm JSON parse, 25 request / 23 endpoint, 25/25 request đủ 7 mục, 25 example nhúng, 0 ký tự tiếng Việt trong mô tả, không có JWT, secret rỗng. Collection chưa chạy end-to-end một lần; README ghi rõ. |
+| OpenCode | Chạy clone sạch từ `main` đã push và ghi minh chứng hai lệnh. | `docs/evidence/bt3/clean-clone/`, `docs/deployment-guide.md`, `docs/checklist-bao-mat.md`. | Clone `origin/main` tại `7d51189`, đúng hai lệnh; compose exit `0`; app và db `healthy`; health HTTP `200`; seed 34/50/50/192/6/6; test trong container 130/129/0/1. Đây không phải clone từ tag `v1.0`. |
+| OpenCode | Rà soát và cập nhật chính bảng khai báo AI cho giai đoạn 3. | `docs/ai-disclosure.md`. | Đối chiếu lại commit, tệp, log và số liệu trong bảng; không khai các mục chưa làm. Người nộp đọc lại và sửa nếu phần tự làm khác. |
 
-**Người nộp cần tự chạy lại và hiểu từng bước trước khi nộp.** Việc agent chạy
-lệnh không thay cho xác nhận của sinh viên. Chưa khai báo đã clone thành công từ
-tag `v1.0`, deploy Render, hoặc sinh viên đã tự kiểm khi chưa có minh chứng.
+### Xác nhận
+
+Các lần chạy tự động trong bảng do OpenCode thực hiện và có log/tệp kèm theo.
+**Người nộp phải tự đọc, hiểu và chạy lại trước khi nộp**; bảng này không thay
+thế xác nhận của người nộp, peer review hay kiểm tra của giảng viên. Các mục
+checklist bảo mật 3, 4, 7 vẫn là **CHƯA LÀM**; không có deploy Render/Atlas hay
+URL công khai.
+
+**Nguyễn Duy Khang**
+
+**MSSV:** 2374802010212
+
+**Ngày cập nhật:** 12/11/2026
