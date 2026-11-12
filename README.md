@@ -15,7 +15,37 @@ Node.js **20+**, Express 5, MongoDB **7+**, Mongoose 8, React 18 UMD + `htm`, `n
 
 ## 2. Cài đặt và chạy
 
-Cần Git, Node.js/npm và **MongoDB Server đang chạy**; Compass không thay thế MongoDB Server. Dùng PowerShell. Tag `v0.2` là mốc nộp dự kiến, chỉ clone được khi chủ repo đã tạo và push tag.
+### BT3 — Docker local, hai lệnh sau khi clone
+
+Cần Git, Docker Engine 24+ và Compose 2.20+, daemon đang chạy. Không cần Node.js
+hay MongoDB trên host. Chỉ chạy lệnh sao chép sau trong **checkout mới**, không
+ghi đè `.env` đang sử dụng:
+
+```powershell
+Copy-Item .env.example .env
+docker compose up -d --build --wait --wait-timeout 180
+```
+
+Linux thay lệnh đầu bằng `cp .env.example .env`. Mở **http://localhost:3001**,
+đăng nhập demo `nhanvien / nhanvien123` (center 1). MongoDB ở mạng/volume Docker
+riêng, không dùng CSDL chính và không publish cổng DB. App bind loopback 3001
+để không đụng ứng dụng chạy trực tiếp trên cổng 3000. Khóa JWT lấy từ `.env` lúc
+chạy; không COPY `.env` vào image, không sửa khóa hiện có.
+
+```powershell
+docker compose ps
+docker compose exec -T app npm test
+```
+
+Hai dịch vụ phải `healthy`. Lần đầu tự migration/seed; marker kỹ thuật trong
+`_bt3_deployment` ngăn nạp lại mẫu trên các lần restart sau khi đã thêm/sửa dữ liệu.
+Đây là gói demo local, không phải production. Xem [Deployment Guide tiếng Anh](docs/deployment-guide.md)
+và [checklist bảo mật](docs/checklist-bao-mat.md); các giới hạn phải được giữ khi nộp.
+Chưa kiểm chứng clone từ tag `v1.0` vì chưa tạo/push tag.
+
+### Cách chạy trực tiếp — giữ để tham khảo BT2
+
+Cần Node.js/npm và **MongoDB Server đang chạy**; Compass không thay thế MongoDB Server. Dùng PowerShell. Tag `v0.2` là mốc BT2.
 
 ```powershell
 git clone --branch v0.2 --depth 1 https://github.com/HabitOfMyHeart/cdtn1-NguyenDuyKhang-2.git
@@ -69,7 +99,7 @@ API phiếu giới hạn theo trung tâm của token. **Khách hàng/thiết b�
 npm test
 ```
 
-Kết quả ngày 28/10/2026: **121 test, 120 PASS, 0 FAIL, 1 SKIP**. Test tự dựng fixture, không cần MongoDB hay CSV ngoài repo. Test tái trích nguồn được SKIP khi thiếu `DATASET_SOURCE`; đây là kiểm tra bổ sung, ba loại test bắt buộc đều chạy. Ba test đại diện trong `tests/ticket.service.test.js`: happy path (dòng 53), biên bảo hành (dòng 169), dữ liệu sai (dòng 216).
+Kết quả ngày 12/11/2026: **130 test, 129 PASS, 0 FAIL, 1 SKIP** trên host; container Docker cho cùng tổng, log tại `docs/evidence/bt3/container-tests.txt`. Test tự dựng fixture, không cần MongoDB hay CSV ngoài repo. Test tái trích nguồn được SKIP khi thiếu `DATASET_SOURCE`; đây là kiểm tra bổ sung, các loại test bắt buộc đều chạy. Ba test đại diện trong `tests/ticket.service.test.js`: happy path (dòng 53), biên bảo hành (dòng 169), dữ liệu sai (dòng 216). Coverage đo ngày 12/11: 77,56% dòng, 79,08% nhánh, 67,66% hàm — chưa đạt 80%.
 
 - [Log test cuối](docs/evidence/final/npm-test.txt).
 - [Migration/seed hai lần trên MongoDB tạm riêng](docs/evidence/final/current-working-tree-check.txt).
@@ -83,6 +113,6 @@ Kết quả ngày 28/10/2026: **121 test, 120 PASS, 0 FAIL, 1 SKIP**. Test tự 
 
 - **Không đồng nhất hai bộ NFR:** PDF BT1 (Mục 1.4, Bảng 5) ghi NFR1–5 về tra cứu P95 ≤2 giây/10.000 bản ghi, lưu ≤3 giây/≥95% số lần, 50 người dùng đồng thời/tỷ lệ lỗi <1%, uptime ≥99% và tính đúng đắn. Chưa có kiểm chứng định lượng đầy đủ các ngưỡng này; test chức năng không thay thế kiểm tải/uptime.
 - **Riêng `docs/srs.md`:** NFR1 là tạo phiếu <3 phút với người mới (chưa đo); NFR2 là ≥100 phiếu/200 log; NFR3 là ≥50 khách và đủ 6 trung tâm/6 nhóm. Mẫu 50/192/34 đủ dải phiếu phạm vi nhưng chưa đủ ngưỡng mẫu SRS, không chứng minh giới hạn năng lực hệ thống. Dùng nhãn `BT1-PDF/NFRx` và `SRS/NFRx` để phân biệt nguồn, không sửa SRS hoặc loại bỏ cam kết BT1. Bảng đối chiếu và mức kiểm chứng: [TD-05/TD-06](docs/thay-doi-thiet-ke.md).
-- JWT demo trong `localStorage`, chưa refresh/thu hồi token, rate limiting hay phân trang. Docker tùy chọn, không thêm cho BT2.
+- JWT demo trong `localStorage`, chưa refresh/thu hồi token, rate limiting hay phân trang. Gói Docker được bổ sung cho BT3, không phải minh chứng đã có ở bản nộp BT2.
 - [Bug log](docs/bug-log.md) · [AI disclosure](docs/ai-disclosure.md) · Sơ đồ/SQL BT1 được giữ để truy vết, không phải migration MongoDB.
 - Kiểm chứng hiện tại chạy trực tiếp working tree, **không phải clone từ tag và không phải peer review**. Chủ repo tự commit/push/tag `v0.2`, điền SHA thật vào bug log, kiểm chứng bản nộp và nhờ sinh viên khác review; không có bằng chứng giả thay thế.

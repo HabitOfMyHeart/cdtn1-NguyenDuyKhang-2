@@ -1,6 +1,6 @@
 # Đối chiếu BT2 trước khi nộp
 
-**Cập nhật:** 28/10/2026. Căn cứ đề BT2, phiếu phạm vi, BT1 và Buổi 10/12 trong `File source`. Đây là kiểm tra working tree; không phải chứng nhận bản đã nộp, clone remote hay peer review.
+**Cập nhật:** 28/10/2026. Căn cứ đề BT2, phiếu phạm vi, BT1 và Buổi 10/12 trong `File source`. Đây là kiểm tra working tree; không phải chứng nhận bản đã nộp, clone remote hay peer review. Số liệu test dưới đây là mốc BT2; bộ test hiện tại có 130 tổng/129 PASS, xem [Test Report](test-report.md).
 
 ## 1. Tiêu chí kỹ thuật
 

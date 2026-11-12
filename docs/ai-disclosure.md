@@ -26,3 +26,15 @@ Các lần chạy tự động nêu trên do OpenCode thực hiện và có log 
 **Nguyễn Duy Khang**  
 **MSSV:** 2374802010212  
 **Ngày cập nhật:** 28/10/2026
+
+## AI Disclosure — Bài tập 3, phần đóng gói và bàn giao
+
+| Công cụ | Dùng vào việc gì | Áp dụng ở tệp / hàm nào | Đã kiểm chứng thế nào |
+|---|---|---|---|
+| OpenCode | Soạn Dockerfile/Compose, allowlist build context và bootstrap local không nạp lại mẫu khi restart. | `Dockerfile`, `docker-compose.yml`, `.dockerignore`, `docker/start-demo.js: initializeDemo`. | Viết test trước: 7 test FAIL khi bootstrap chưa có; sau triển khai PASS. Bổ sung test subprocess chẩn đoán cấu hình FAIL trước sửa và PASS sau sửa. Tổng 8 test bootstrap PASS; build và kiểm chứng container được ghi riêng, không lấy unit test thay cho dựng sạch. |
+| OpenCode | Soạn hướng dẫn tiếng Anh, README và checklist bảo mật có giới hạn. | `docs/deployment-guide.md`, `docs/checklist-bao-mat.md`, `README.md`, TD-07/TD-08. | Đối chiếu config, script migration/seed, thực thi `npm audit` (2 High), kiểm `.env` bị ignore và không có trong lịch sử được kiểm, kiểm cú pháp toàn bộ tệp JS. Offline suite mới: 130 tổng, 129 PASS, 0 FAIL, 1 SKIP trên host và trong container; coverage 77,56% dòng, không tuyên bố đạt 80%. |
+| OpenCode | Viết phép kiểm tích hợp opt-in trên CSDL Docker riêng. | `tests/docker-smoke.js`, `docker/smoke-guard.js`. | Guard từ chối chạy ngoài container trước khi gửi request; test tái hiện FAIL trước sửa và PASS sau sửa. Đã chạy trong container: 8/8 kiểm tra PASS, tạo và đọc lại phiếu `TCK0032`; log `docs/evidence/bt3/docker-smoke.txt`. |
+
+**Người nộp cần tự chạy lại và hiểu từng bước trước khi nộp.** Việc agent chạy
+lệnh không thay cho xác nhận của sinh viên. Chưa khai báo đã clone thành công từ
+tag `v1.0`, deploy Render, hoặc sinh viên đã tự kiểm khi chưa có minh chứng.

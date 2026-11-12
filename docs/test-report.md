@@ -2,32 +2,32 @@
 
 **Dự án:** Smart CRM – Mekong Mobile · Track SE · Luồng L2  
 **Sinh viên:** Nguyễn Duy Khang · MSSV 2374802010212  
-**Ngày kiểm chứng lại:** 05/11/2026  
+**Ngày kiểm chứng lại:** 12/11/2026 (bổ sung kiểm thử đóng gói BT3)
 **Kế hoạch:** [Test Plan](test-plan.md)
 
 ## 1. Môi trường và kết quả tổng hợp
 
+- Mã nguồn được kiểm: HEAD `ba69a76` cùng thay đổi đóng gói BT3 chưa commit; bảng 12 TC và ảnh gốc được lập tại `8d9d537` ngày 05/11/2026.
 - Windows/PowerShell; Node.js `v24.21.0`, npm `11.19.0`.
-- Mã nguồn được kiểm: `8d9d537`; lệnh tại gốc repo: `npm test`.
-- Lần kiểm chứng khi lập báo cáo: exit code **0**; không dùng CSDL chính.
-- [Ảnh tổng kết do người thực hiện cung cấp](screenshots/buoi14/testreport.png) hiển thị cùng số lượng bên dưới. Thời lượng ảnh khác lần kiểm chứng lại; không coi là ảnh chụp của chính lần chạy lại.
+- Lệnh tại gốc repo: `npm test`; exit code **0**; không dùng CSDL chính. Lần chạy trong container Docker riêng có cùng kết quả, log tại [container-tests.txt](evidence/bt3/container-tests.txt).
+- [Ảnh tổng kết do người thực hiện cung cấp](screenshots/buoi14/testreport.png) và 12 ảnh TC được chụp ngày 05/11 với tổng 121. Lần chạy 12/11 có thêm test đóng gói nên tổng hiện tại là 130; không dùng ảnh cũ làm số liệu hiện tại.
 
 | Chỉ tiêu | Kết quả |
 |---|---:|
-| Test runner phát hiện (13 file) | 121 |
-| Test thực thi, không tính SKIP | 120 |
-| PASS | 120 |
+| Test runner phát hiện (14 file) | 130 |
+| Test thực thi, không tính SKIP | 129 |
+| PASS | 129 |
 | FAIL | 0 |
 | SKIP | 1 |
 | Cancelled / Todo | 0 / 0 |
 
-**Không ghi “121 PASS” hoặc “121 đã thực thi”.** Tổng 121 bao gồm một test chưa chạy. Đây là kết quả sau các sửa đổi đã có trong repo, không chứng minh rằng trước sửa không có lỗi.
+**Không ghi “130 PASS” hoặc “130 đã thực thi”.** Tổng 130 bao gồm một test chưa chạy. Đây là kết quả sau các sửa đổi đã có trong repo, không chứng minh rằng trước sửa không có lỗi.
 
 Test bị bỏ qua: `re-extraction reproduces committed sample when source is available` trong [dataset-scope.test.js](../tests/dataset-scope.test.js). Điều kiện `skip: !process.env.DATASET_SOURCE`; chưa kiểm chứng việc tái trích xuất từ file nguồn. Test này khác TC-12 (tái lập kết quả bộ test).
 
 ## 2. Kết quả 12 kịch bản đại diện
 
-Bảng dưới ánh xạ vào assertion **đã chạy trong bộ test tự động**, không tuyên bố đã thao tác thủ công trên Postman/UI hoặc ghi MongoDB thật. PASS chỉ áp dụng trong ranh giới kiểm thử ghi ở mục 3. Mã TC là mã báo cáo, không phải cách đếm 121 test runner.
+Bảng dưới ánh xạ 12 case vào assertion **đã chạy trong bộ test tự động**; đây không phải thao tác tay trên Postman/UI. Gói Docker có live smoke ghi MongoDB demo thật, tách khỏi bảng này và được ghi ở mục 5.
 
 | Mã | Tiền điều kiện | Các bước | Dữ liệu thử | Kết quả mong đợi | Ưu tiên | Kết quả thực tế | PASS/FAIL |
 |---|---|---|---|---|---|---|---|
@@ -42,7 +42,7 @@ Bảng dưới ánh xạ vào assertion **đã chạy trong bộ test tự độ
 | TC-09 | Phiếu thuộc trung tâm khác nhân viên. | Gọi service xem phiếu ngoài trung tâm. | Phiếu center 1; nhân viên center 2 theo fixture. | Lỗi forbidden, mã `KHONG_DU_QUYEN`. | High | Assertion phân quyền service QT-14 thành công; không phải phép đo HTTP 403 riêng cho case này. | PASS |
 | TC-10 | Express loopback thật, JWT test; không kết nối CSDL. | POST `/api/tickets` lần lượt ba body sai; kiểm status và fields. | (a) `issue_desc={}`; (b) `received_at=2026-02-30T09:00:00+07:00`; (c) body `[]`; trường khác theo PAYLOAD test. | Cả ba HTTP 422, `DU_LIEU_KHONG_HOP_LE`, có field lỗi ngoài mã tra cứu. | High | Cả ba response đạt assertion 422/code/fields trong test HTTP thật. | PASS |
 | TC-11 | Fixture phiếu đã qua MOI. | Thử sửa/xóa phiếu; kiểm không thể xóa để tiếp nhận lại. | Các trạng thái sau MOI trong test L2. | Từ chối sửa/xóa bằng conflict `PHIEU_CHI_DOC`; không bỏ qua ràng buộc phiếu mở. | High | Test hồi quy service L2 thành công, không phát sinh thay đổi trái phép trong fixture. | PASS |
-| TC-12 | Dependencies đã có; chạy tại gốc repo. | Chạy lại `npm test`; đối chiếu tổng với ảnh cung cấp. | Bộ `tests/*.test.js`, không có `DATASET_SOURCE`. | Kết quả tổng tái lập: 121 tổng, 120 PASS, 0 FAIL, 1 SKIP; exit 0. | High | Lần chạy lại cho đúng tổng 121/120/0/1, exit 0; không chứng minh tái trích xuất dữ liệu nguồn. | PASS |
+| TC-12 | Dependencies đã có; chạy tại gốc repo và trong container Docker. | Chạy lại `npm test`; đối chiếu tổng giữa hai môi trường. | Bộ `tests/*.test.js`, không có `DATASET_SOURCE`. | Kết quả tổng tái lập: 130 tổng, 129 PASS, 0 FAIL, 1 SKIP; exit 0. | High | Host và container đều cho 130/129/0/1, exit 0; log tại [container-tests.txt](evidence/bt3/container-tests.txt). | PASS |
 
 ## 3. Ánh xạ test và cách chạy lại
 
@@ -88,23 +88,23 @@ npm test
 | Bảo mật/chất lượng dữ liệu | TC-08 che số; TC-09 phạm vi trung tâm. | Có. |
 | Tái lập | TC-12 chạy lại bộ test cho cùng tổng PASS/FAIL/SKIP. | Có; test tái trích xuất file nguồn vẫn SKIP. |
 
-Ảnh hiện có: [docs/screenshots/buoi14/testreport.png](screenshots/buoi14/testreport.png). Ảnh thấy lệnh `npm test`, một phần danh sách test và tổng 121/120/0/1; **không thấy riêng đầy đủ đầu vào/kết quả của mọi TC**.
+Ảnh hiện có: [docs/screenshots/buoi14/](screenshots/buoi14/) gồm `testreport.png` và **12 ảnh riêng TC-01 → TC-12 do người thực hiện cung cấp**, chụp ngày 05/11/2026. Ảnh tổng kết và ảnh TC-12 ghi tổng 121/120 của lần chạy cũ; lần chạy 12/11 có thêm 9 test đóng gói nên tổng hiện tại là 130/129. Không dùng ảnh cũ để thay số liệu hiện tại.
 
-**Chưa đủ ảnh riêng từng case:** cần bổ sung TC-01 → TC-12 (TC-10 có thể chụp nhiều ảnh theo đầu vào). Không sao chép ảnh tổng thành nhiều tên TC để coi là minh chứng riêng. Trạng thái PASS kỹ thuật trong bảng không đồng nghĩa đã đạt đủ điều kiện minh chứng nộp bài.
+**Minh chứng ảnh:** đã có 12 tệp ảnh riêng cho 12 mã TC, nội dung khác nhau. Ảnh không thay thế log máy đọc được; log mới nhất nằm trong [container-tests.txt](evidence/bt3/container-tests.txt) và [host-coverage.txt](evidence/bt3/host-coverage.txt).
 
 ## 5. Kết luận và nội dung điền checklist
 
 - Bộ test hiện có không phát hiện FAIL trong lần chạy lại; một test chưa thực thi do thiếu file nguồn.
-- Có nội dung đủ năm loại trong kiểm thử tự động; chưa hoàn tất minh chứng ảnh từng case.
-- Chưa chạy tích hợp MongoDB thật, E2E trình duyệt thật, đo coverage hoặc CI. Không suy luận hệ thống không còn bug từ số test PASS.
-- Bug lịch sử và tình trạng commit theo [Bug Log](bug-log.md); báo cáo này không xác nhận đã có ba commit sửa bug riêng.
+- Có nội dung đủ năm loại trong kiểm thử tự động; đã có 12 ảnh riêng TC-01 → TC-12.
+- Đã chạy tích hợp MongoDB thật trong gói Docker demo riêng và live smoke 8 kiểm tra; chưa chạy E2E trình duyệt đầy đủ, đo tải hay CI. Coverage đã đo: 77,56% dòng, 79,08% nhánh, 67,66% hàm — **chưa đạt 80%**, không tuyên bố đạt.
+- Bug lịch sử và tình trạng commit theo [Bug Log](bug-log.md); đề BT3 không yêu cầu mỗi bug một commit riêng, nhưng link commit phải mở được và trỏ đúng thay đổi.
 
-Sau khi commit/push hai tài liệu, có thể dùng:
+Sau khi commit/push tài liệu, có thể dùng:
 
 **3. Test Plan:** https://github.com/HabitOfMyHeart/cdtn1-NguyenDuyKhang-2/blob/main/docs/test-plan.md
 
 **4. Test Report:** https://github.com/HabitOfMyHeart/cdtn1-NguyenDuyKhang-2/blob/main/docs/test-report.md
 
-- Số test tự động được phát hiện: **121** / thực thi: **120** / PASS: **120** / FAIL: **0** / SKIP: **1**.
-- Đủ 5 loại: **Có về nội dung test tự động**; chưa đủ ảnh riêng từng TC, test tái trích xuất nguồn chưa chạy.
+- Số test tự động được phát hiện: **130** / thực thi: **129** / PASS: **129** / FAIL: **0** / SKIP: **1**.
+- Đủ 5 loại: **Có về nội dung test tự động**; đã có 12 ảnh riêng TC-01 → TC-12, test tái trích xuất nguồn chưa chạy.
 - Ảnh chụp kết quả: https://github.com/HabitOfMyHeart/cdtn1-NguyenDuyKhang-2/blob/main/docs/screenshots/buoi14/testreport.png

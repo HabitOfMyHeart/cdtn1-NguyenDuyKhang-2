@@ -91,3 +91,18 @@ Các mục TD-01…TD-04 ở trên là ghi nhận lịch sử phản hồi; ph�
 ### Dọn mã không còn dùng (28/10/2026)
 
 Bỏ `findOrCreateByPhone`, `describeSla`, `getCenter` và hàm `updateCustomer` trong facade UI vì không có nơi gọi; API CRUD khách hàng vẫn giữ. Giữ `products.json` vì test còn sử dụng, giữ hồ sơ Buổi 10 và sơ đồ/DDL BT1 để truy vết. Giữ `trangThaiKeTiep: []` để tương thích hợp đồng chi tiết, không mở chức năng chuyển trạng thái.
+
+## BT3 — Đóng gói và bàn giao (12/11/2026)
+
+### TD-07 — Gói Docker local và kiểm chứng dựng sạch
+
+- **Phản hồi BT2 của GV:** chưa chạy phép thử clone sạch từ tag `v0.2`; lịch sử commit ít và dồn cục. Thầy đánh giá đạt các mục kiểm chứng BT2; không diễn giải nhận xét thành yêu cầu viết lại CRUD/nghiệp vụ.
+- **Quyết định:** bổ sung Dockerfile, Compose, khởi tạo tự động và Deployment Guide tiếng Anh cho BT3. Không đổi tag BT2 hoặc tạo lại lịch sử commit. Chưa được phép tự commit/push/tag thay người nộp.
+- **Lý do:** người khác cần dựng bằng hai lệnh sau clone, không cài Node/Mongo trên host và không hỏi thêm bước seed. Chạy clone theo tag cuối vẫn là kiểm chứng riêng phải thực hiện sau khi có `v1.0`.
+- **Ảnh hưởng:** app Docker dùng loopback `3001` vì ứng dụng host đang chiếm `3000`; MongoDB riêng `mekong_bt3_demo`, volume project riêng, không publish cổng DB. `docker/start-demo.js` chỉ cho URI Docker cố định; marker `_bt3_deployment` ngăn seed lại sau khi người dùng đã thêm/sửa dữ liệu. Không sửa `.env`, JWT secret, SRS hoặc mã nghiệp vụ. Đã kiểm chứng trên local clone cộng các tệp chưa commit: hai lệnh dựng thành công, cả hai dịch vụ healthy, test 130/129/0/1, live smoke 8/8 PASS, restart giữ dữ liệu. Đây không phải phép thử tag `v1.0` đã đạt; tag và phép thử clone sạch từ tag còn phải thực hiện sau khi người nộp cho phép.
+
+### TD-08 — Tự đánh giá bảo mật đúng phạm vi
+
+- **Thay đổi gì:** thêm `docs/checklist-bao-mat.md` và lệnh smoke Docker chạy riêng; ghi nhận tài khoản demo dạng rõ, hồ sơ khách/thiết bị chưa có quyền sở hữu theo trung tâm, và 2 cảnh báo dependency High từ `npm audit`.
+- **Vì sao:** đóng gói chạy được không đồng nghĩa đạt toàn bộ S1–S4 hoặc production-ready. Checklist cho phép ghi CHƯA LÀM; không tự nâng mức kiểm chứng, không biến cảnh báo audit chưa tái lập thành bug đã sửa.
+- **Ảnh hưởng:** giữ giới hạn ở checklist/README/Guide; chưa thêm account collection, password hashing, public deployment hay thay đổi thư viện. Checklist ghi rõ S3 mật khẩu băm, S4 quyền sở hữu hồ sơ và S7 dependency High vẫn **CHƯA LÀM**. Các thay đổi tương lai sẽ được chia commit theo phần hoàn chỉnh sau khi người nộp cho phép; không tạo commit hình thức để tăng số lượng.
