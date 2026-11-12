@@ -1,0 +1,40 @@
+{
+  "missingRequiredFiles": [],
+  "api": {
+    "requests": 25,
+    "documentedEndpoints": 23,
+    "sourceEndpoints": 23,
+    "missingEndpoints": [],
+    "extraEndpoints": [],
+    "requestsWithSevenSections": 25,
+    "embeddedResponses": 25,
+    "vietnameseCharactersInDescriptions": 0,
+    "staleUncapturedEvidenceStatements": 0
+  },
+  "testReport": {
+    "cases": 12,
+    "allEightColumns": true
+  },
+  "bugLog": {
+    "bugs": 5,
+    "allSevenFields": true,
+    "majorBugs": 2
+  },
+  "secrets": {
+    "trackedForbiddenFiles": [],
+    "envHistoryCommits": 0,
+    "candidateCredentialOrJwtFiles": [],
+    "knownSyntheticTestFixtures": [
+      "tests/docker-startup.test.js",
+      "tests/infrastructure-logger.test.js"
+    ],
+    "scope": "Pattern scan and environment-file history check; not an exhaustive secret audit"
+  },
+  "brokenLocalMarkdownLinks": [],
+  "v1LocalExists": false,
+  "limitations": [
+    "S3 password hashing not implemented",
+    "Tag and public release-page/source-download verification pending",
+    "Hosted development configuration and data-publication risks remain"
+  ]
+}

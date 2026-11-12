@@ -41,7 +41,7 @@ Hai dịch vụ phải `healthy`. Lần đầu tự migration/seed; marker kỹ 
 `_bt3_deployment` ngăn nạp lại mẫu trên các lần restart sau khi đã thêm/sửa dữ liệu.
 Đây là gói demo local, không phải production. Xem [Deployment Guide tiếng Anh](docs/deployment-guide.md)
 và [checklist bảo mật](docs/checklist-bao-mat.md); các giới hạn phải được giữ khi nộp.
-Chưa kiểm chứng clone từ tag `v1.0` vì chưa tạo/push tag.
+Bộ kiểm thử chưa được chạy lại từ source của tag `v1.0`; minh chứng bên dưới là từ `main`.
 
 ### Cách chạy trực tiếp — giữ để tham khảo BT2
 
@@ -93,6 +93,16 @@ API phiếu giới hạn theo trung tâm của token. **Khách hàng/thiết b�
 
 Đây là giới hạn được chốt để mô tả bản BT2, không phải chính sách dùng chung đã được giảng viên phê duyệt. Xác thực đăng nhập không thay thế phân quyền hồ sơ; chưa dùng prototype để vận hành dữ liệu thật đa trung tâm. Nếu phải mở rộng, cần thống nhất mô hình sở hữu/quyền truy cập trước, không tự gán trung tâm từ một phiếu lịch sử.
 
+### Bản deploy thử BT3 — Render + MongoDB Atlas
+
+- **Web:** https://cdtn1-nguyenduykhang-2.onrender.com/
+- **Readiness:** https://cdtn1-nguyenduykhang-2.onrender.com/health — đã kiểm HTTP `200`, `status=ok`, `database=connected` ngày 12/11/2026.
+- Render dùng Docker từ repo này, nhánh `main`, commit đã deploy `c055f81`; Docker Command giữ `node src/server.js`, không chạy bootstrap/seed Docker local trên Atlas.
+- Đã chuyển sáu collection nghiệp vụ từ Docker `mekong_bt3_demo` (MongoDB 8.0.17) sang Atlas `mekong_bt3_render` (8.0.37): **338 document, 30 index khớp**, 0 lỗi tham chiếu. Không chuyển marker `_bt3_deployment`, không sửa CSDL Windows hoặc dữ liệu Docker nguồn.
+- Sáu kiểm tra hosted chỉ đọc PASS: health, đăng nhập, danh mục, đúng 9 phiếu của center 1, chi tiết phiếu, lịch sử 5 dòng của phiếu được chọn. Đây không phải toàn bộ Postman collection hoặc kiểm thử tạo/sửa/xóa trên Render.
+- Các bước deploy và biến môi trường: [Deployment Guide, mục 6](docs/deployment-guide.md#6-optional-hosted-demo--render-and-mongodb-atlas). Minh chứng đã lược bí mật: [render/](docs/evidence/bt3/render/).
+- **Chỉ là demo, chưa production-ready:** `NODE_ENV=development`; JWT/mật khẩu demo chưa đạt validation production; 2 cảnh báo High vẫn còn. Dữ liệu case study chưa được chứng minh đã ẩn danh hoặc có quyền công khai; xem [checklist](docs/checklist-bao-mat.md). Render Free có thể ngủ, cần kiểm lại URL trước buổi chấm.
+
 ## 4. Kiểm thử và minh chứng
 
 ```powershell
@@ -116,4 +126,5 @@ Kết quả ngày 12/11/2026: **130 test, 129 PASS, 0 FAIL, 1 SKIP** trên host;
 - **Riêng `docs/srs.md`:** NFR1 là tạo phiếu <3 phút với người mới (chưa đo); NFR2 là ≥100 phiếu/200 log; NFR3 là ≥50 khách và đủ 6 trung tâm/6 nhóm. Mẫu 50/192/34 đủ dải phiếu phạm vi nhưng chưa đủ ngưỡng mẫu SRS, không chứng minh giới hạn năng lực hệ thống. Dùng nhãn `BT1-PDF/NFRx` và `SRS/NFRx` để phân biệt nguồn, không sửa SRS hoặc loại bỏ cam kết BT1. Bảng đối chiếu và mức kiểm chứng: [TD-05/TD-06](docs/thay-doi-thiet-ke.md).
 - JWT demo trong `localStorage`, chưa refresh/thu hồi token, rate limiting hay phân trang. Gói Docker được bổ sung cho BT3, không phải minh chứng đã có ở bản nộp BT2.
 - [Bug log](docs/bug-log.md) · [AI disclosure](docs/ai-disclosure.md) · Sơ đồ/SQL BT1 được giữ để truy vết, không phải migration MongoDB.
-- Kiểm chứng BT3 đã chạy trên clone sạch từ `main` `7d51189` bằng đúng hai lệnh; **chưa phải clone từ tag `v1.0`** và chưa có peer review.
+- Kiểm chứng BT3 đã chạy trên clone sạch `main` `7d51189`, sau đó kiểm lại `c055f81` trong project/volume mới (cổng 3002 để không đụng bản nguồn): healthy, health 200, 130/129/0/1, migration/seed chạy lại không đổi số đếm. **Chưa phải clone từ tag `v1.0`**, chưa có peer review.
+- Điều kiện chốt tag BT3: gói chạy được và tài liệu đã đồng bộ; chưa chạy lại bộ kiểm thử từ source của tag `v1.0`.

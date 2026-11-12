@@ -1,0 +1,82 @@
+{
+  "sourceDatabase": "mekong_bt3_demo",
+  "destinationDatabase": "mekong_bt3_render",
+  "toolVersion": "100.20.1",
+  "excludedTechnicalCollection": "_bt3_deployment",
+  "restoreAttempted": true,
+  "status": "SUCCESS",
+  "destinationInitiallyEmpty": true,
+  "destinationExistingCollections": [],
+  "atlasVersion": "8.0.37",
+  "restore": {
+    "exitCode": 0,
+    "summary": "338 document(s) restored successfully. 0 document(s) failed to restore."
+  },
+  "collectionNamesMatch": true,
+  "collections": [
+    {
+      "name": "customer",
+      "sourceCount": 34,
+      "atlasCount": 34,
+      "documentsMatch": true,
+      "indexesMatch": true,
+      "optionsMatch": true,
+      "indexCount": 4
+    },
+    {
+      "name": "device",
+      "sourceCount": 50,
+      "atlasCount": 50,
+      "documentsMatch": true,
+      "indexesMatch": true,
+      "optionsMatch": true,
+      "indexCount": 5
+    },
+    {
+      "name": "issue_category",
+      "sourceCount": 6,
+      "atlasCount": 6,
+      "documentsMatch": true,
+      "indexesMatch": true,
+      "optionsMatch": true,
+      "indexCount": 3
+    },
+    {
+      "name": "service_center",
+      "sourceCount": 6,
+      "atlasCount": 6,
+      "documentsMatch": true,
+      "indexesMatch": true,
+      "optionsMatch": true,
+      "indexCount": 4
+    },
+    {
+      "name": "ticket",
+      "sourceCount": 50,
+      "atlasCount": 50,
+      "documentsMatch": true,
+      "indexesMatch": true,
+      "optionsMatch": true,
+      "indexCount": 11
+    },
+    {
+      "name": "ticket_status_log",
+      "sourceCount": 192,
+      "atlasCount": 192,
+      "documentsMatch": true,
+      "indexesMatch": true,
+      "optionsMatch": true,
+      "indexCount": 3
+    }
+  ],
+  "relationships": {
+    "deviceCustomerOrphans": 0,
+    "ticketCustomerOrphans": 0,
+    "ticketDeviceOrphans": 0,
+    "ticketCenterOrphans": 0,
+    "ticketCategoryOrphans": 0,
+    "historyTicketOrphans": 0,
+    "ticketDeviceCustomerMismatch": 0
+  },
+  "finishedAt": "2026-11-12T14:39:50.470Z"
+}

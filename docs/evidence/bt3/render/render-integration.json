@@ -1,0 +1,49 @@
+{
+  "status": "SUCCESS",
+  "service": "cdtn1-NguyenDuyKhang-2",
+  "serviceId": "srv-dbqr4tl6e07s7381mfb0",
+  "deployId": "dep-dbqt2he7bikc73ak2kv0",
+  "deployStatus": "Deploy succeeded",
+  "commit": "c055f81",
+  "changedSetting": "MONGODB_URI database path and explicit authSource=admin",
+  "atlasHost": "mekongmobile.ug9qacm.mongodb.net",
+  "database": "mekong_bt3_render",
+  "savedConfigurationReadBack": true,
+  "credentialsUnchanged": true,
+  "dockerCommandUnchanged": "node src/server.js",
+  "preDeployCommand": "",
+  "startupEvidence": "database.connected",
+  "health": {
+    "httpStatus": 200,
+    "status": "ok",
+    "database": "connected"
+  },
+  "readOnlyBusinessChecks": {
+    "passed": 6,
+    "failed": 0,
+    "centerTicketCount": 9,
+    "sampleHistoryCount": 5
+  },
+  "databaseWritesDuringBusinessChecks": false,
+  "localTests": {
+    "total": 130,
+    "pass": 129,
+    "fail": 0,
+    "skip": 1,
+    "exitCode": 0
+  },
+  "buildTypecheckLint": "No separate scripts defined in package.json",
+  "repositoryChanges": 0,
+  "localEnvModified": false,
+  "composeModified": false,
+  "productionHardeningPending": {
+    "NODE_ENV": "development, unchanged",
+    "JWT_SECRET": "Current value fails application's production validation; unchanged",
+    "DEMO_STAFF_PASSWORD": "Current value fails application's production validation; unchanged",
+    "npmAuditHigh": [
+      "body-parser",
+      "mongoose"
+    ]
+  },
+  "productionReady": false
+}

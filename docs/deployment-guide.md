@@ -4,11 +4,13 @@
 
 **Repository:** https://github.com/HabitOfMyHeart/cdtn1-NguyenDuyKhang-2
 
-**Status:** Verified on a fresh clone of published `main` at commit
-`7d51189`, with no working-tree overlay. Both services became healthy, the
+**Status:** Verified on fresh clones of published `main` at commits
+`7d51189` and, most recently, `c055f81`, with no working-tree overlay. Both services became healthy, the
 initial sample data matched, and the offline suite passed inside the app
-container. Tag `v1.0` has not been published or cloned, so a tag-based clean test
-is still pending. This is a local demo, not a production deployment.
+container. Tag `v1.0` has not been cloned or re-tested, so a tag-based clean run
+is still pending. Sections 1–5 describe the reproducible local Docker demo.
+Section 6 records the separately verified public Render/Atlas demo; neither is
+claimed to be production-ready.
 
 ## 1. Prerequisites
 
@@ -73,7 +75,8 @@ URI other than `mongodb://db:27017/mekong_bt3_demo`. Subsequent starts skip
 initialization and preserve application edits. This is a single-app-instance demo.
 
 Open **http://localhost:3001**. Local demo login: **`nhanvien / nhanvien123`**,
-center `1`. Do not expose these credentials or the case-study dataset publicly.
+center `1`. These are public sample credentials, not production credentials.
+The case-study data must not be assumed to be anonymized or cleared for public use.
 
 ## 3. Environment Variables
 
@@ -104,7 +107,8 @@ identity are explicitly fixed in `docker-compose.yml`. Editing the host
 
 `DATASET_SOURCE` is an optional offline source-re-extraction test input, not a
 deployment prerequisite. The source dataset and its private paths are not copied
-into the image. No public Render deployment is covered by these commands.
+into the image. These two local commands do not provision Render or Atlas;
+the hosted deployment is described separately in section 6.
 
 ## 4. Sample Data
 
@@ -222,9 +226,8 @@ For a fresh test, use a separate checkout/Compose project with new volumes.
 
 ### Validation status
 
-Two runs are recorded. The first used a local clone with the packaging files
-before they were committed. The second used a fresh clone of published `main`
-with no overlay.
+Multiple runs are recorded: an earlier pre-commit packaging candidate, a fresh
+published-main clone at `7d51189`, and a new isolated clone at `c055f81`.
 
 **Fresh clone of published main, 12/11/2026:**
 
@@ -239,6 +242,18 @@ with no overlay.
 | Initial sample data | 34 customer / 50 device / 50 ticket / 192 log / 6 center / 6 category |
 | Offline suite inside the app container | 130 detected, 129 PASS, 0 FAIL, 1 SKIP |
 
+**Additional fresh-main check, `c055f81`, 12/11/2026:** a new checkout and Compose
+project/volume used the same setup commands. `BT3_HTTP_PORT=3002` was set in the
+verification process because port 3001 was occupied by the preserved source
+stack; this override does not change the default two-command setup. Compose
+returned 0, both services were healthy, readiness was HTTP 200, migration and
+seed repeated with identical counts, and the container suite was 130/129/0/1.
+The first log wrapper misclassified Docker stderr progress as a PowerShell
+error; rerunning the same Compose command with native exit-code checking passed,
+without an application change. The verification stack was stopped without
+deleting its volume. See `evidence/bt3/render/fresh-main/`; UTF-8 log captures were
+made after restarting that same isolated stack, then it was stopped again.
+
 **Earlier candidate run, same file content before commit:**
 
 | Check | Observed result |
@@ -249,8 +264,92 @@ with no overlay.
 | Runtime hardening | non-root, read-only root, `cap_drop: ALL`, `no-new-privileges`, loopback-only HTTP |
 | Frontend assets | `/`, app bundle and vendor assets returned HTTP 200 |
 
-This is **not** a clone of a published `v1.0` tag. The live smoke wrote
+This is **not** a clone of the `v1.0` tag. The live smoke wrote
 fixtures, so the earlier candidate counts differ from the clean-clone counts
 above; the fresh clone stayed at the initial sample counts. See the
 [security checklist](checklist-bao-mat.md) for known limitations; this prototype
 must not be represented as production-ready.
+
+## 6. Optional hosted demo — Render and MongoDB Atlas
+
+- **Live URL:** https://cdtn1-nguyenduykhang-2.onrender.com/
+- **Health:** https://cdtn1-nguyenduykhang-2.onrender.com/health
+- **Verified:** 12 November 2026. Render service `cdtn1-NguyenDuyKhang-2`, Docker,
+  Free, Singapore, GitHub repository above, branch `main`, deployed commit `c055f81`.
+  This records the actual optional deployment for assignment section 3.3, not a
+  guarantee of bonus marks or continuous availability.
+
+### Steps actually performed
+
+1. Provision the Atlas Free cluster `MekongMobile`; configure database access and
+   narrowly scoped Network Access entries. Add the migration computer's current
+   public IP, not `127.0.0.1` or `0.0.0.0/0`. On Render, use **Connect → Outbound**
+   to obtain the service's CIDR ranges and allow them in Atlas. Existing matching
+   Render ranges were retained; a successful deployed database connection was observed.
+2. Pause the source Docker app briefly, run official `mongodump` against
+   `mekong_bt3_demo`, copy the gzip archive outside Git, compare source snapshots,
+   then unpause the app. The source database and the Windows database were not
+   changed. Source MongoDB was `8.0.17`; Atlas was `8.0.37`.
+3. Authenticate with a locally entered database password kept in memory. Verify
+   `mekong_bt3_render` contains no collections. Restore only the six application
+   namespaces with official `mongorestore 100.20.1`, `--gzip`,
+   `--nsFrom="mekong_bt3_demo.*"`, `--nsTo="mekong_bt3_render.*"` and
+   `--stopOnError`. Do not use `--drop`, restore users/roles, or seed Atlas.
+   The local-only `_bt3_deployment` marker was deliberately excluded.
+4. Use the existing Render Docker service linked to this repository. Keep
+   **Docker Command = `node src/server.js`**, with an empty Pre-Deploy Command.
+   The image's default local-demo bootstrap is intentionally bypassed: it refuses
+   Atlas URIs and is not a production migration tool.
+5. In Render **Environment**, set `MONGODB_URI` to the authenticated Atlas SRV URI
+   with **database path `/mekong_bt3_render`** and `authSource=admin`; SRV uses TLS.
+   The previous URI had no database path. Credentials were preserved and were
+   never copied into this guide, Git, `.env.example` or Docker images.
+6. Select **Save and deploy**, reusing the existing image. Deploy
+   `dep-dbqt2he7bikc73ak2kv0` succeeded; its logs recorded `database.connected`.
+   Read back the saved database path and verify health plus read-only business calls.
+
+### Render settings: observed values and limits
+
+| Setting | Observed configuration |
+|---|---|
+| Runtime / region / plan | Docker / Singapore / Free |
+| Docker Command | `node src/server.js` |
+| Pre-Deploy Command | Empty; no seed or migration over restored data |
+| `MONGODB_URI` | Atlas URI stored only in Render; database `mekong_bt3_render`, `authSource=admin`, TLS |
+| `NODE_ENV` | `development`, retained for this prototype; **not production mode** |
+| `PORT` | `3000`; the server listens on the platform-facing interface |
+| `JWT_SECRET`, `JWT_EXPIRES_IN` | Existing runtime values retained; no values disclosed; JWT key fails the application's production validation |
+| `DEMO_STAFF_USERNAME`, `DEMO_STAFF_PASSWORD`, `DEMO_STAFF_NAME`, `DEMO_STAFF_CENTER` | Existing demo identity retained, center `1`; password fails production validation |
+| Database timeouts | App defaults: selection/connect `3000` ms, socket `10000` ms; not separately tuned on Render |
+| Health-check configuration | Manual HTTPS `/health` verified; Render's custom Health Check Path was empty when inspected |
+
+### Observed acceptance results
+
+Restore exited `0`: **338 restored, 0 failed**. Counts were customer `34`, device
+`50`, ticket `50`, ticket_status_log `192`, service_center `6`, issue_category `6`.
+Canonical Extended JSON document digests, all **30 indexes**, collection options
+and collection names matched the source; all seven relationship checks found zero
+orphans/mismatches. Physical collection UUIDs are not preserved or required.
+
+The hosted checks returned HTTP `200`: readiness (`ok`/`connected`), demo login,
+catalog read, center-scoped list (9 matching ticket IDs), detail, and history
+(5 matching rows for the chosen ticket). Tokens, login passwords and customer
+records were not saved in the evidence. No create/update/delete calls were run
+against Atlas during acceptance.
+
+Evidence: [`evidence/bt3/render/`](evidence/bt3/render/),
+[`render-login.png`](screenshots/bt3/render-login.png),
+[`render-health.png`](screenshots/bt3/render-health.png).
+
+### Limits and recheck before marking
+
+Render Free can sleep and delay the first request. Open the live URL and confirm
+HTTP `200` plus `status=ok` and `database=connected` immediately before assessment.
+A login page alone does not prove database readiness. If unavailable, inspect
+Render logs and Atlas Network Access; do not reset databases or rerun seeds.
+
+This public demo does not establish production security: development mode,
+sample authentication, client-side token storage, incomplete customer/device
+ownership, and two High dependency advisories remain. Case-study provenance does
+not establish consent, anonymization or public-use rights; deployment does not
+resolve that privacy risk. Address these before any real/public customer use.

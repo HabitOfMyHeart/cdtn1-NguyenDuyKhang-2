@@ -11,7 +11,7 @@
 | Mục | Nội dung |
 |---|---|
 | 1. Mã và mức độ | BUG-001 · Minor — dữ liệu chỉnh sửa không còn đủ lý do đổi ưu tiên. |
-| 2. Phát hiện bởi | Đối chiếu quy tắc đổi ưu tiên trong `updateTicket`. |
+| 2. Phát hiện bởi | Đối chiếu quy tắc đổi ưu tiên trong `updateTicket`; test tái lập/hồi quy `tests/priority-regression.test.js:5` (phần đổi ưu tiên thuộc nhóm QT-04/TC-04, không phải riêng phép tính SLA). |
 | 3. Triệu chứng | Phiếu có mức ưu tiên khác mức gợi ý vẫn cho phép cập nhật `priority_reason` thành rỗng. |
 | 4. Cách tái lập | `node --test tests/priority-regression.test.js` với bản code trước sửa: phiếu THAP, nhóm gợi ý CAO, cập nhật riêng lý do thành chuỗi rỗng. |
 | 5. Nguyên nhân | Nhánh cập nhật riêng `priority_reason` không kiểm tra mức ưu tiên hiện tại so với nhóm sự cố. |
@@ -23,7 +23,7 @@
 | Mục | Nội dung |
 |---|---|
 | 1. Mã và mức độ | BUG-002 · Major — API vượt phạm vi L2 và có thể bỏ qua kiểm tra phiếu mở. |
-| 2. Phát hiện bởi | Rà soát phạm vi và chạy fixture bằng OpenCode, 28/10/2026. |
+| 2. Phát hiện bởi | Rà soát phạm vi và chạy fixture bằng OpenCode, 28/10/2026; test tái lập/hồi quy `tests/intake-boundary.test.js:10`, ánh xạ TC-11. |
 | 3. Triệu chứng | Sửa/xóa mềm được phiếu DANG_XU_LY; sau khi xóa có thể tiếp nhận lại thiết bị đó. |
 | 4. Cách tái lập | Test đầu trong `tests/intake-boundary.test.js`: fixture có phiếu sau MOI, gọi update/delete; trước sửa FAIL với `Missing expected rejection`. |
 | 5. Nguyên nhân | Service chỉ kiểm tra trung tâm, repository ghi theo ID mà không kiểm tra trạng thái. |
@@ -35,7 +35,7 @@
 | Mục | Nội dung |
 |---|---|
 | 1. Mã và mức độ | BUG-003 · Minor — hiển thị không nhất quán QT-15. |
-| 2. Phát hiện bởi | Đối chiếu UI với case study, 28/10/2026. |
+| 2. Phát hiện bởi | Đối chiếu UI với case study, 28/10/2026; test tái lập/hồi quy `tests/static-assets.test.js:333`, cùng quy tắc QT-15 với TC-08 (TC-08 chỉ kiểm helper, không thay test render). |
 | 3. Triệu chứng | Kết quả hồ sơ trên màn tiếp nhận hiện số đầy đủ dù view phiếu đã che. |
 | 4. Cách tái lập | Test `QT-15: kết quả tra cứu hồ sơ che SĐT` trong `tests/static-assets.test.js`; trước sửa FAIL vì không có chuỗi đã che. |
 | 5. Nguyên nhân | Component render trực tiếp `customer.phone`. |
@@ -47,7 +47,7 @@
 | Mục | Nội dung |
 |---|---|
 | 1. Mã và mức độ | BUG-004 · Major — dữ liệu đầu vào không được kiểm tra đúng. |
-| 2. Phát hiện bởi | Kiểm tra validation tại route và service, 28/10/2026. |
+| 2. Phát hiện bởi | Kiểm tra validation tại route và service, 28/10/2026; các test tái lập/hồi quy `tests/intake-boundary.test.js:62,76,99`, ánh xạ TC-10. |
 | 3. Triệu chứng | Ngày 2026-02-30 được coi là hợp lệ; object được ép thành mô tả đủ độ dài. |
 | 4. Cách tái lập | Các test validation/service trong `tests/intake-boundary.test.js` FAIL trước sửa vì kết quả valid=true hoặc thiếu rejection. |
 | 5. Nguyên nhân | Chỉ kiểm tra `new Date` và độ dài `String(value)`, chưa kiểm tra kiểu và ngày lịch thực tế. |
@@ -59,7 +59,7 @@
 | Mục | Nội dung |
 |---|---|
 | 1. Mã và mức độ | BUG-005 · Minor — số liệu UI gây hiểu nhầm. |
-| 2. Phát hiện bởi | Chụp màn hình lỗi kết nối thật trên CSDL tạm, 28/10/2026. |
+| 2. Phát hiện bởi | Chụp màn hình lỗi kết nối thật trên CSDL tạm, 28/10/2026; test hồi quy `tests/static-assets.test.js:309` cho UI rỗng/lỗi, kiểm tra bổ sung ngoài 12 TC nghiệp vụ. |
 | 3. Triệu chứng | Không tải được phiếu hoặc không có phiếu mở nhưng banner vẫn hiện đạt SLA 100%. |
 | 4. Cách tái lập | Mở danh sách trên CSDL chưa có phiếu hoặc dừng Express rồi tải lại danh sách từ UI đang mở. |
 | 5. Nguyên nhân | Công thức gán 100 khi mẫu số bằng 0, vẫn hiển thị chỉ số trong lúc tải/lỗi. |

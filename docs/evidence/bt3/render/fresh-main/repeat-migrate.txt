@@ -1,0 +1,28 @@
+
+> mekong-mobile-warranty-crm@0.2.0 db:migrate
+> node migrations/001_init_collections.js
+
+= Collection customer ─æ├ú tß╗ôn tß║íi
+= Collection device ─æ├ú tß╗ôn tß║íi
+= Collection service_center ─æ├ú tß╗ôn tß║íi
+= Collection issue_category ─æ├ú tß╗ôn tß║íi
+= Collection ticket ─æ├ú tß╗ôn tß║íi
+= Collection ticket_status_log ─æ├ú tß╗ôn tß║íi
+  customer: 34 bß║ún ghi, index ─æ├ú ─æß╗ông bß╗Ö
+  device: 50 bß║ún ghi, index ─æ├ú ─æß╗ông bß╗Ö
+  service_center: 6 bß║ún ghi, index ─æ├ú ─æß╗ông bß╗Ö
+  issue_category: 6 bß║ún ghi, index ─æ├ú ─æß╗ông bß╗Ö
+  ticket: 50 bß║ún ghi, index ─æ├ú ─æß╗ông bß╗Ö
+  ticket_status_log: 192 bß║ún ghi, index ─æ├ú ─æß╗ông bß╗Ö
+Migration 001 ho├án tß║Ñt.
+docker : npm notice
+At line:13 char:1
++ docker compose exec -T app npm run db:migrate *> (Join-Path $evidence ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (npm notice:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+npm notice New major version of npm available! 11.19.0 -> 12.2.2
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.2
+npm notice To update run: npm install -g npm@12.2.2
+npm notice

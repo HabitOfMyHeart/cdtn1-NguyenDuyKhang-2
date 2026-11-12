@@ -1,0 +1,59 @@
+{
+  "source": "public origin/main",
+  "commit": "c055f818e30056d2dcd394d00e4ff12259786e79",
+  "tagBased": false,
+  "date": "2026-11-12",
+  "hostPort": 3002,
+  "portReason": "3001 already used by the preserved Docker source; BT3_HTTP_PORT set in the verification process only",
+  "project": "bt3-pretag-20261112-2158",
+  "initialSetup": [
+    "Copy-Item .env.example .env",
+    "docker compose up -d --build --wait --wait-timeout 180"
+  ],
+  "captureNote": "First log-capture wrapper treated Docker progress on stderr as a PowerShell NativeCommandError although both containers started healthy. Re-running the same Compose command with native exit-code checking returned 0; no application fix was made.",
+  "composeExitCode": 0,
+  "bothServicesHealthy": true,
+  "healthHttpStatus": 200,
+  "seedCounts": [
+    {
+      "name": "issue_category",
+      "count": 6
+    },
+    {
+      "name": "customer",
+      "count": 34
+    },
+    {
+      "name": "service_center",
+      "count": 6
+    },
+    {
+      "name": "ticket",
+      "count": 50
+    },
+    {
+      "name": "device",
+      "count": 50
+    },
+    {
+      "name": "ticket_status_log",
+      "count": 192
+    },
+    {
+      "name": "_bt3_deployment",
+      "count": 1
+    }
+  ],
+  "repeatMigrationExitCode": 0,
+  "repeatSeedExitCode": 0,
+  "countsUnchanged": true,
+  "tests": {
+    "total": 130,
+    "pass": 129,
+    "fail": 0,
+    "skip": 1,
+    "exitCode": 0
+  },
+  "verificationStackStoppedWithoutDeletingVolumes": true,
+  "originalStacksUntouched": true
+}

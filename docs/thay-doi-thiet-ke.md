@@ -106,3 +106,12 @@ Bỏ `findOrCreateByPhone`, `describeSla`, `getCenter` và hàm `updateCustomer`
 - **Thay đổi gì:** thêm `docs/checklist-bao-mat.md` và lệnh smoke Docker chạy riêng; ghi nhận tài khoản demo dạng rõ, hồ sơ khách/thiết bị chưa có quyền sở hữu theo trung tâm, và 2 cảnh báo dependency High từ `npm audit`.
 - **Vì sao:** đóng gói chạy được không đồng nghĩa đạt toàn bộ S1–S4 hoặc production-ready. Checklist cho phép ghi CHƯA LÀM; không tự nâng mức kiểm chứng, không biến cảnh báo audit chưa tái lập thành bug đã sửa.
 - **Ảnh hưởng:** giữ giới hạn ở checklist/README/Guide; chưa thêm account collection, password hashing, public deployment hay thay đổi thư viện. Checklist ghi rõ S3 mật khẩu băm, S4 quyền sở hữu hồ sơ và S7 dependency High vẫn **CHƯA LÀM**. Các thay đổi tương lai sẽ được chia commit theo phần hoàn chỉnh sau khi người nộp cho phép; không tạo commit hình thức để tăng số lượng.
+
+### TD-09 — Deploy thử Render + Atlas và đồng bộ minh chứng BT3
+
+- **Yêu cầu của người nộp:** đưa database Docker đồ án lên Atlas để web Render từ chính repo này có dữ liệu; cập nhật báo cáo để xét điểm cộng mục 3.3.
+- **Quyết định:** chuyển `mekong_bt3_demo` (MongoDB 8.0.17) sang database Atlas trống `mekong_bt3_render` (8.0.37) bằng binary dump/restore. Không chuyển database Windows 9.0, không chạy seed trên Atlas, không chuyển marker Docker.
+- **Lý do:** giữ đúng dữ liệu ứng dụng Docker và tương thích major version; Render URI cũ thiếu database path, cần chọn đúng database vừa nhập. Giữ `node src/server.js` để không chạy bootstrap local trên cloud.
+- **Ảnh hưởng:** 338 document, 30 index, options và digest dữ liệu khớp; 0 lỗi quan hệ. Render deploy `dep-dbqt2he7bikc73ak2kv0` từ `c055f81` thành công; 6 kiểm tra chỉ đọc hosted PASS, center 1 có 9 phiếu đúng mẫu. Không sửa mã nguồn, SRS, `.env`, Compose hay dữ liệu nguồn. `NODE_ENV=development`, mẫu JWT/password, quyền Atlas rộng, quyền truy cập hồ sơ và 2 cảnh báo High vẫn là giới hạn. Trạng thái “chưa public deployment” trong TD-08 là lịch sử trước TD-09; không suy từ deploy thành production-ready hoặc đã giải quyết quyền công khai dữ liệu.
+
+**Làm rõ mã tiêu chí:** bảng checklist có 7 mục riêng. Theo rubric SE BT3, **S2** là test quyền truy cập, **S3** là mật khẩu băm, **S4** là lỗi không lộ nội bộ; không gọi quyền sở hữu hồ sơ là S4. Checklist #3/#4/#7 vẫn CHƯA LÀM theo phạm vi của từng dòng; test phiếu theo trung tâm PASS không chứng minh quyền sở hữu hồ sơ toàn hệ thống.

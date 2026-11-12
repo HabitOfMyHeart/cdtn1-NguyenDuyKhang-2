@@ -1,6 +1,6 @@
 # Checklist bảo mật — BT3
 
-**Phạm vi:** Smart CRM – Mekong Mobile, track SE, luồng L2; bản Docker chạy local.
+**Phạm vi:** Smart CRM – Mekong Mobile, track SE, luồng L2; Docker local và bản deploy thử Render/Atlas.
 **Ngày rà soát:** 12/11/2026. Đây là tự đánh giá, không phải chứng nhận an toàn hoặc pentest.
 
 | # | Mục theo đề | Kết quả | Minh chứng và giới hạn |
@@ -25,8 +25,10 @@
   trình duyệt vẫn nằm trong localStorage; chưa refresh/thu hồi token hay rate limit.
 - **Dữ liệu nguồn:** mẫu case study có thông tin hồ sơ; xem
   [ghi chú dữ liệu](../data/sample/README.md). Không khẳng định dữ liệu là giả hoặc
-  đã được phép công khai. Không deploy bộ mẫu này lên Render trước khi xử lý quyền
-  sử dụng/ẩn danh dữ liệu và các giới hạn bảo mật.
+   đã được phép công khai. Ngày 12/11 đã đưa bản Docker lên Atlas theo yêu cầu của
+   người nộp; thao tác thành công **không phải** bằng chứng đã có quyền công khai
+   hay đã ẩn danh. Rủi ro quyền sử dụng/PII vẫn chưa được giải quyết; không dùng
+   demo để vận hành hồ sơ khách hàng thật.
 - **Log MongoDB:** log vận hành có thể chứa namespace CSDL; đây không phải API
   response. Không công khai nguyên log hoặc ảnh chứa PII/secret.
 - **Audit:** phân loại cảnh báo dựa trên công cụ, chưa đánh giá khả năng khai thác
@@ -81,7 +83,19 @@ chạy ngoài container trước khi gửi request; log tại
 | Runtime | non-root, read-only root, `cap_drop: ALL`, loopback-only | `docs/evidence/bt3/app-runtime-inspect.txt` |
 | Guard trên host | từ chối trước khi gửi request, exit `1` | `docs/evidence/bt3/host-smoke-refusal.txt` |
 | `npm audit` | 2 High, chưa xử lý | `docs/evidence/bt3/dependency-audit.json` |
+| Render/Atlas | 338 document, 30 index khớp; 0 lỗi quan hệ; health HTTPS 200; 6 kiểm tra hosted chỉ đọc PASS | `docs/evidence/bt3/render/` |
 
-Các mục 3, 4 và 7 vẫn **CHƯA LÀM**. Chưa xác nhận bản nộp từ tag `v1.0` vì tag
-chưa được tạo/push; phép thử clone sạch từ tag phải chạy riêng sau khi người nộp
-cho phép.
+### Giới hạn bảo mật của bản hosted
+
+- URI Atlas chỉ ở Render Environment, không ghi vào repo hay ảnh; tên đích đã
+  đọc lại là `mekong_bt3_render`. Atlas dùng TLS và Network Access; chỉ thêm IP
+  máy chuyển dữ liệu, giữ các CIDR hiện có, không mở `0.0.0.0/0`.
+- Render vẫn `NODE_ENV=development`; JWT secret và mật khẩu demo hiện có không
+  đạt validation production của `src/config/index.js`, được giữ nguyên chứ không
+  tự xoay khóa/đổi tài khoản. HTTPS không làm các mục 3/4/7 trở thành ĐÃ LÀM.
+- Tài khoản Atlas được kiểm tra có quyền `atlasAdmin@admin`: quá rộng cho runtime.
+  Cần tài khoản ứng dụng chỉ `readWrite` trên database đích khi harden; chưa đổi
+  quyền hoặc tài khoản trong lần chuyển dữ liệu này.
+
+Các mục 3, 4 và 7 vẫn **CHƯA LÀM**. Phép thử clone sạch từ source của tag `v1.0`
+chưa chạy; mọi minh chứng ở trên dùng clone `main`.

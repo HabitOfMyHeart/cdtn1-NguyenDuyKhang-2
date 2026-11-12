@@ -7,7 +7,7 @@
 
 ## 1. Môi trường và kết quả tổng hợp
 
-- Mã nguồn được kiểm: `main` tại `7d51189` (đã gồm đóng gói BT3); bảng 12 TC và ảnh gốc được lập tại `8d9d537` ngày 05/11/2026.
+- Mã nguồn được kiểm: `main` tại `7d51189`, kiểm lại trên clone sạch `c055f81` (đã gồm đóng gói BT3); bảng 12 TC và ảnh gốc được lập tại `8d9d537` ngày 05/11/2026.
 - Windows/PowerShell; Node.js `v24.21.0`, npm `11.19.0`.
 - Lệnh tại gốc repo: `npm test`; exit code **0**; không dùng CSDL chính. Lần chạy trong container Docker riêng có cùng kết quả, log tại [container-tests.txt](evidence/bt3/container-tests.txt).
 - [Ảnh tổng kết do người thực hiện cung cấp](screenshots/buoi14/testreport.png) và 12 ảnh TC được chụp ngày 05/11 với tổng 121. Lần chạy 12/11 có thêm test đóng gói nên tổng hiện tại là 130; không dùng ảnh cũ làm số liệu hiện tại.
@@ -98,6 +98,8 @@ npm test
 - Có nội dung đủ năm loại trong kiểm thử tự động; đã có 12 ảnh riêng TC-01 → TC-12.
 - Đã chạy tích hợp MongoDB thật trong gói Docker demo riêng và live smoke 8 kiểm tra; chưa chạy E2E trình duyệt đầy đủ, đo tải hay CI. Coverage đã đo: 77,56% dòng, 79,08% nhánh, 67,66% hàm — **chưa đạt 80%**, không tuyên bố đạt.
 - Bug lịch sử và tình trạng commit theo [Bug Log](bug-log.md); đề BT3 không yêu cầu mỗi bug một commit riêng, nhưng link commit phải mở được và trỏ đúng thay đổi.
+- Kiểm lại clone `main` `c055f81` trong container riêng: 130/129/0/1, exit 0; log UTF-8 và số đếm tại [render/fresh-main/](evidence/bt3/render/fresh-main/). Ảnh `fresh-main-tests.png`/`fresh-main-services.png` chụp trình duyệt đang hiển thị nguyên log thật, không giả làm terminal đang chạy hay clone từ tag.
+- Bản Render/Atlas có 6/6 kiểm tra hosted chỉ đọc PASS; không thay cho 12 TC và không chứng minh CRUD trên cloud đã được chạy toàn bộ: [render-readonly-verification.json](evidence/bt3/render/render-readonly-verification.json).
 
 Sau khi commit/push tài liệu, có thể dùng:
 

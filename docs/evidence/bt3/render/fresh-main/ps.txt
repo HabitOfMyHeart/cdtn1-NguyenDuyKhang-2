@@ -1,0 +1,3 @@
+NAME                             IMAGE                                                                                  COMMAND                  SERVICE   CREATED         STATUS                   PORTS
+bt3-pretag-20261112-2158-app-1   sha256:17d94027f73b6aea6608fa9cde219a48647a9907d6652e8540d47f71d114775b                "docker-entrypoint.sΓÇª"   app       2 minutes ago   Up 2 minutes (healthy)   127.0.0.1:3002->3000/tcp
+bt3-pretag-20261112-2158-db-1    mongo:8.0.17@sha256:9814652e33f0cf8b9fddea8b46dfc9d8e19b130dcfdd7b510ca58bb0d40c8b71   "docker-entrypoint.sΓÇª"   db        2 minutes ago   Up 2 minutes (healthy)   27017/tcp

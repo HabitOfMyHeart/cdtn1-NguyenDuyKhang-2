@@ -55,6 +55,21 @@ npm test
 
 Lệnh tương ứng: `node --test tests/*.test.js`, hiện gồm 14 file test. Xem ánh xạ từng TC và lệnh chạy chọn lọc tại [Test Report](test-report.md).
 
+Số lượng kiểm lại theo từng nhóm file ngày 12/11/2026 (không đếm trùng):
+
+| Nhóm / ranh giới | Phát hiện | PASS / SKIP |
+|---|---:|---|
+| Unit/service/contract/dataset: business-integrity, dataset-scope, auth, config, logger, priority-regression, ticket.contract, ticket.service | 47 | 46 / 1 |
+| Transport client và static-assets/UI harness (dependency mô phỏng) | 52 | 52 / 0 |
+| Hạ tầng/HTTP hỗn hợp: infrastructure-error, infrastructure-server, intake-boundary | 22 | 22 / 0 |
+| Bootstrap Docker và smoke guard: docker-startup | 9 | 9 / 0 |
+| **Tổng** | **130** | **129 / 1** |
+
+Nhóm HTTP hỗn hợp có cả assertion helper/service, không gọi cả 22 là API test.
+Trong `npm test` có **0 integration test đọc/ghi MongoDB thật**; live smoke Docker
+8 kiểm tra và 6 kiểm tra Render chỉ đọc là các lần chạy riêng. Số chi tiết 14
+file: `docs/evidence/bt3/render/test-file-counts.json`.
+
 Test tái trích xuất dữ liệu cần biến `DATASET_SOURCE` trỏ đến file nguồn phù hợp và Python. Nếu thiếu biến này, ghi **SKIP**, không tính PASS. Không đưa đường dẫn nguồn cá nhân hay thông tin bí mật vào minh chứng.
 
 ## 4. Tiêu chí đánh giá, minh chứng và bàn giao

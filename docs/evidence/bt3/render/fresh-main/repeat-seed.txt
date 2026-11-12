@@ -1,0 +1,16 @@
+
+> mekong-mobile-warranty-crm@0.2.0 db:seed
+> node seeds/seed_l2_data.js
+
+─É├ú nß║íp mß║½u v├áo CSDL ─æ╞░ß╗úc x├íc ─æß╗ïnh l├á trß╗æng hoß║╖c khß╗¢p mß║½u; kh├┤ng cß║¡p nhß║¡t dß╗» liß╗çu c├│ sß║╡n.
+docker : npm notice
+At line:15 char:1
++ docker compose exec -T app npm run db:seed *> (Join-Path $evidence 'r ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (npm notice:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+npm notice New major version of npm available! 11.19.0 -> 12.2.2
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.2
+npm notice To update run: npm install -g npm@12.2.2
+npm notice

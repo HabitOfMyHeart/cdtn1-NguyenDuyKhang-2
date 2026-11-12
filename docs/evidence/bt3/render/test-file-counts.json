@@ -1,0 +1,114 @@
+[
+  {
+    "file": "api-client.test.js",
+    "tests": 26,
+    "pass": 26,
+    "fail": 0,
+    "skip": 0,
+    "exitCode": 0
+  },
+  {
+    "file": "business-integrity.test.js",
+    "tests": 5,
+    "pass": 5,
+    "fail": 0,
+    "skip": 0,
+    "exitCode": 0
+  },
+  {
+    "file": "dataset-scope.test.js",
+    "tests": 4,
+    "pass": 3,
+    "fail": 0,
+    "skip": 1,
+    "exitCode": 0
+  },
+  {
+    "file": "docker-startup.test.js",
+    "tests": 9,
+    "pass": 9,
+    "fail": 0,
+    "skip": 0,
+    "exitCode": 0
+  },
+  {
+    "file": "infrastructure-auth.test.js",
+    "tests": 4,
+    "pass": 4,
+    "fail": 0,
+    "skip": 0,
+    "exitCode": 0
+  },
+  {
+    "file": "infrastructure-config.test.js",
+    "tests": 6,
+    "pass": 6,
+    "fail": 0,
+    "skip": 0,
+    "exitCode": 0
+  },
+  {
+    "file": "infrastructure-error.test.js",
+    "tests": 6,
+    "pass": 6,
+    "fail": 0,
+    "skip": 0,
+    "exitCode": 0
+  },
+  {
+    "file": "infrastructure-logger.test.js",
+    "tests": 2,
+    "pass": 2,
+    "fail": 0,
+    "skip": 0,
+    "exitCode": 0
+  },
+  {
+    "file": "infrastructure-server.test.js",
+    "tests": 8,
+    "pass": 8,
+    "fail": 0,
+    "skip": 0,
+    "exitCode": 0
+  },
+  {
+    "file": "intake-boundary.test.js",
+    "tests": 8,
+    "pass": 8,
+    "fail": 0,
+    "skip": 0,
+    "exitCode": 0
+  },
+  {
+    "file": "priority-regression.test.js",
+    "tests": 1,
+    "pass": 1,
+    "fail": 0,
+    "skip": 0,
+    "exitCode": 0
+  },
+  {
+    "file": "static-assets.test.js",
+    "tests": 26,
+    "pass": 26,
+    "fail": 0,
+    "skip": 0,
+    "exitCode": 0
+  },
+  {
+    "file": "ticket.contract.test.js",
+    "tests": 8,
+    "pass": 8,
+    "fail": 0,
+    "skip": 0,
+    "exitCode": 0
+  },
+  {
+    "file": "ticket.service.test.js",
+    "tests": 17,
+    "pass": 17,
+    "fail": 0,
+    "skip": 0,
+    "exitCode": 0
+  }
+]

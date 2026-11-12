@@ -1,0 +1,18 @@
+docker :  Container bt3-pretag-20261112-2158-app-1 Stopping 
+At line:24 char:1
++ docker compose down *> (Join-Path $evidence 'stop.txt')
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ( Container bt3-...app-1 Stopping :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ Container bt3-pretag-20261112-2158-app-1 Stopped 
+ Container bt3-pretag-20261112-2158-app-1 Removing 
+ Container bt3-pretag-20261112-2158-app-1 Removed 
+ Container bt3-pretag-20261112-2158-db-1 Stopping 
+ Container bt3-pretag-20261112-2158-db-1 Stopped 
+ Container bt3-pretag-20261112-2158-db-1 Removing 
+ Container bt3-pretag-20261112-2158-db-1 Removed 
+ Network bt3-pretag-20261112-2158_web Removing 
+ Network bt3-pretag-20261112-2158_demo Removing 
+ Network bt3-pretag-20261112-2158_demo Removed 
+ Network bt3-pretag-20261112-2158_web Removed 

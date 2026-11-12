@@ -1,0 +1,42 @@
+{
+  "checkedAt": "2026-11-12T14:48:37.375Z",
+  "target": "https://cdtn1-nguyenduykhang-2.onrender.com",
+  "checks": [
+    {
+      "check": "health readiness",
+      "http": 200,
+      "pass": true
+    },
+    {
+      "check": "configured local demo login against Render (one attempt)",
+      "http": 200,
+      "pass": true
+    },
+    {
+      "check": "catalog read",
+      "http": 200,
+      "pass": true
+    },
+    {
+      "check": "center-scoped ticket IDs match imported dataset",
+      "http": 200,
+      "expected": 9,
+      "actual": 9,
+      "pass": true
+    },
+    {
+      "check": "ticket detail read",
+      "http": 200,
+      "pass": true
+    },
+    {
+      "check": "ticket history read matches imported dataset",
+      "http": 200,
+      "expected": 5,
+      "actual": 5,
+      "pass": true
+    }
+  ],
+  "allPassed": true,
+  "databaseWritesPerformed": false
+}

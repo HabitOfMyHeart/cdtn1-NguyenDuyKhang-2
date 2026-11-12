@@ -46,6 +46,10 @@ The counts are reproducible from `verification.json`.
     listens on `http://localhost:3001`.
   - Direct Node.js run: `npm start`; the API listens on
     `http://localhost:3000`.
+- Optional hosted target: `https://cdtn1-nguyenduykhang-2.onrender.com`.
+  Set `baseUrl` in a private duplicate environment; no hosted secret is committed.
+  Only read-only hosted acceptance checks were executed; do not run the whole
+  write/cleanup collection against the shared Atlas demo without approval.
 - The demonstration employee credentials configured for the local demo. The
   username is `nhanvien`; the password is intentionally **not** stored in this
   repository. Read it from your local `.env`/seed configuration and type it
@@ -165,9 +169,10 @@ descriptions explain the contract rather than restating one response.
 - `PUT /api/tickets/{ticketId}` changes intake fields; the collection does not
   document an unrestricted status-transition endpoint because the submitted
   frontend does not expose one.
-- This is a local demonstration API over HTTP. HTTPS, rate limiting, a
-  production reverse proxy and a cloud deployment are out of scope; see
+- The local demonstration uses HTTP; the optional Render demo uses HTTPS with
+  platform-managed TLS. Rate limiting and production hardening remain incomplete; see
   [`../checklist-bao-mat.md`](../checklist-bao-mat.md) for the three security
   items that remain explicitly not done.
-- There is no public deployment URL. The collection is not claimed to work
-  against a hosted environment.
+- Public URL: `https://cdtn1-nguyenduykhang-2.onrender.com`. Six hosted read-only
+  acceptance checks passed on 12/11/2026, not a complete hosted collection run.
+  The 25 saved examples remain the original local captures, not Render captures.
