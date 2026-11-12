@@ -42,7 +42,7 @@ TC-11 bảo vệ hồi quy sửa/xóa phiếu sau MOI. Đủ năm loại về **
 ## 3. Môi trường, dữ liệu và cách thực hiện
 
 - Windows, PowerShell; môi trường kiểm chứng ngày 05/11/2026: Node.js `v24.21.0`, npm `11.19.0`; dự án yêu cầu Node.js >= 20. Lần chạy lại 12/11 dùng cùng phiên bản.
-- Phiên bản mã Buổi 14: `8d9d537`; lần chạy lại 12/11: HEAD `ba69a76` cùng các thay đổi đóng gói BT3 chưa commit.
+- Phiên bản mã Buổi 14: `8d9d537`; lần chạy lại 12/11: `main` tại `7d51189` (đã gồm đóng gói BT3).
 - Dependencies theo `package.json`/lockfile; nếu máy mới đã có lockfile, cài bằng `npm ci`.
 - Fixture nghiệp vụ: `tests/helpers/inMemoryRepositories.js`; dữ liệu mẫu tĩnh: `data/sample/`.
 - Không chạy migrate/seed trên CSDL chính; không sửa `.env` hoặc JWT secret của ứng dụng. Test HTTP tự cấu hình danh tính/secret chỉ trong tiến trình test.

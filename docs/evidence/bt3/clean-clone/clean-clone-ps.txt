@@ -1,0 +1,2 @@
+app	Up 16 seconds (healthy)	127.0.0.1:3001->3000/tcp
+db	Up 23 seconds (healthy)	27017/tcp

@@ -7,7 +7,7 @@
 
 ## 1. Môi trường và kết quả tổng hợp
 
-- Mã nguồn được kiểm: HEAD `ba69a76` cùng thay đổi đóng gói BT3 chưa commit; bảng 12 TC và ảnh gốc được lập tại `8d9d537` ngày 05/11/2026.
+- Mã nguồn được kiểm: `main` tại `7d51189` (đã gồm đóng gói BT3); bảng 12 TC và ảnh gốc được lập tại `8d9d537` ngày 05/11/2026.
 - Windows/PowerShell; Node.js `v24.21.0`, npm `11.19.0`.
 - Lệnh tại gốc repo: `npm test`; exit code **0**; không dùng CSDL chính. Lần chạy trong container Docker riêng có cùng kết quả, log tại [container-tests.txt](evidence/bt3/container-tests.txt).
 - [Ảnh tổng kết do người thực hiện cung cấp](screenshots/buoi14/testreport.png) và 12 ảnh TC được chụp ngày 05/11 với tổng 121. Lần chạy 12/11 có thêm test đóng gói nên tổng hiện tại là 130; không dùng ảnh cũ làm số liệu hiện tại.

@@ -72,6 +72,7 @@ chạy ngoài container trước khi gửi request; log tại
 
 | Hạng mục | Kết quả thật | Tệp |
 |---|---|---|
+| Clone sạch từ `main` `7d51189` | hai lệnh, exit `0`; app và db `healthy`; seed 34/50/50/192 | `docs/evidence/bt3/clean-clone/` |
 | Dựng bằng hai lệnh | exit `0`; app và db `healthy` | `docs/evidence/bt3/final-build.txt`, `compose-ps.txt` |
 | Health qua cổng 3001 | HTTP `200`, `status=ok`, `database=connected` | `docs/evidence/bt3/host-health.json` |
 | Test trong container | 130 tổng, 129 PASS, 0 FAIL, 1 SKIP | `docs/evidence/bt3/container-tests.txt` |

@@ -1,6 +1,7 @@
 {
+  "commit": "7d51189e47b486e5b2660f9b7c6cfb1536cc82eb",
   "baseline_commit": "ba69a763d3216b11ecd98d8b6801b1027d7668b8",
-  "scope": "working-tree Docker candidate over a local clone; NOT a published v1.0 tag",
+  "scope": "published main at 7d51189; NOT a v1.0 tag",
   "sha256": {
     "Dockerfile": "b7cfc89b4f5636d397cbd4fb227fc8ebea9cc517ed3ef5e6f5d729cb214dadec",
     "docker-compose.yml": "dd50a147570e96d9754a3e5f089ac795a96f466c4b0d6e181c80bca156db4288",

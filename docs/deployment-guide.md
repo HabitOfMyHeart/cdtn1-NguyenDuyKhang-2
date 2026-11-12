@@ -4,10 +4,11 @@
 
 **Repository:** https://github.com/HabitOfMyHeart/cdtn1-NguyenDuyKhang-2
 
-**Status:** Verified on a fresh local clone with the packaging changes overlaid.
-Both services became healthy, the offline suite passed, and the live smoke test
-passed. Tag `v1.0` has not been published or cloned, so a tag-based clean test is
-still pending. This is a local demo, not a production deployment.
+**Status:** Verified on a fresh clone of published `main` at commit
+`7d51189`, with no working-tree overlay. Both services became healthy, the
+initial sample data matched, and the offline suite passed inside the app
+container. Tag `v1.0` has not been published or cloned, so a tag-based clean test
+is still pending. This is a local demo, not a production deployment.
 
 ## 1. Prerequisites
 
@@ -39,9 +40,9 @@ cd cdtn1-NguyenDuyKhang-2
 
 There are **two setup commands after cloning**. In a fresh checkout only:
 
-> The commands below were executed successfully on the candidate checkout described
-> in the Validation status section. A clone of the published `v1.0` tag has not yet
-> been tested because the tag does not exist yet.
+> The commands below were executed successfully on a fresh clone of published
+> `main` at commit `7d51189`, with no working-tree overlay. A clone of the
+> published `v1.0` tag has not yet been tested because the tag does not exist yet.
 
 **1. Create configuration — choose one command for your OS.**
 
@@ -222,24 +223,36 @@ For a fresh test, use a separate checkout/Compose project with new volumes.
 
 ### Validation status
 
-The checks were executed on 12/11/2026 against a fresh local clone in the approved
-temporary directory, with the uncommitted packaging/test files overlaid. Results:
+Two runs are recorded. The first used a local clone with the packaging files
+before they were committed. The second used a fresh clone of published `main`
+with no overlay.
+
+**Fresh clone of published main, 12/11/2026:**
 
 | Check | Observed result |
 |---|---|
+| Source | `origin/main` at `7d51189`, cloned with `git clone --depth 1` |
 | Two setup commands | `.env` copied, then `docker compose up -d --build --wait --wait-timeout 180` |
+| Compose exit code | `0` |
 | Service health | `app` and `db` both `healthy` |
+| Published ports | `127.0.0.1:3001->3000/tcp` only; database has no host port |
 | Host readiness | HTTP `200`, `status=ok`, `database=connected` |
 | Initial sample data | 34 customer / 50 device / 50 ticket / 192 log / 6 center / 6 category |
+| Offline suite inside the app container | 130 detected, 129 PASS, 0 FAIL, 1 SKIP |
+
+**Earlier candidate run, same file content before commit:**
+
+| Check | Observed result |
+|---|---|
 | Repeat migration and seed | exit `0`; all six counts unchanged |
-| Offline suite | 130 detected, 129 PASS, 0 FAIL, 1 SKIP |
 | Live smoke | PASS, 8/8 checks, ticket `TCK0032` created and reloaded |
 | Restart persistence | New ticket survived container restart and Docker Desktop restart |
 | Runtime hardening | non-root, read-only root, `cap_drop: ALL`, `no-new-privileges`, loopback-only HTTP |
 | Frontend assets | `/`, app bundle and vendor assets returned HTTP 200 |
 
 This is **not** a clone of a published `v1.0` tag. The final tag must be tested
-separately after approval, commit and publication. The smoke test wrote fixtures, so
-the current demo counts differ from the initial counts above. See the
+separately after section 2.6 and the PDF are finished. The live smoke wrote
+fixtures, so the earlier candidate counts differ from the clean-clone counts
+above; the fresh clone stayed at the initial sample counts. See the
 [security checklist](checklist-bao-mat.md) for known limitations; this prototype
 must not be represented as production-ready.

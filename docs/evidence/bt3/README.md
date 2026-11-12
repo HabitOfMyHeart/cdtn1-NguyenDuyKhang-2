@@ -8,9 +8,11 @@ Postman examples and must not be used as proof that API documentation is complet
 - Host: Windows/PowerShell with Docker Desktop running Linux containers.
 - Docker Engine observed: `29.9.3`; Compose observed: `v5.7.0`.
 - Node.js `24.21.0`, npm `11.19.0`, MongoDB container `8.0.17`.
-- Candidate folder: a fresh local clone under the approved temporary directory,
-  with the explicitly listed uncommitted packaging/test files overlaid.
-- The candidate receives `.env` only by copying its committed `.env.example`.
+- Final check: a fresh clone of published `main` at
+  `7d51189e47b486e5b2660f9b7c6cfb1536cc82eb`, with no overlay. The earlier
+  candidate runs used a local clone plus the packaging files before they were
+  committed.
+- The clone receives `.env` only by copying its committed `.env.example`.
   The main checkout's `.env`, `node_modules`, and database are not copied.
 - Compose project used for the final run: `bt3-final-20261112`; host HTTP port
   `127.0.0.1:3001`.
@@ -22,7 +24,24 @@ Postman examples and must not be used as proof that API documentation is complet
 
 ## Final results
 
-### Fresh local build and startup
+### Clean clone from published main
+
+- Source: `origin/main` at `7d51189e47b486e5b2660f9b7c6cfb1536cc82eb`, cloned
+  with `git clone --depth 1` into a new empty directory.
+- Only two setup commands were run: `Copy-Item .env.example .env`, then
+  `docker compose up -d --build --wait --wait-timeout 180`.
+- Compose exited `0`; `app` and `db` became `healthy`; only `127.0.0.1:3001`
+  was published; the database published no host port.
+- Readiness returned HTTP `200` with `status=ok` and `database=connected`.
+- Initial data: 34 customer / 50 device / 50 ticket / 192 log / 6 center /
+  6 category.
+- The offline suite inside the app container reported 130 detected, 129 PASS,
+  0 FAIL, 1 SKIP.
+- Logs: `clean-clone/README.md`, `clean-clone-run.log`, `clean-clone-ps.txt`,
+  `clean-clone-health.json`, `clean-clone-seed-counts.txt`,
+  `clean-clone-tests.txt`.
+
+### Earlier candidate build and startup
 
 - `Copy-Item .env.example .env`: completed.
 - `docker compose up -d --build --wait --wait-timeout 180`: exit `0`.
@@ -97,12 +116,13 @@ Postman examples and must not be used as proof that API documentation is complet
 | `frontend-assets.txt` | HTTP 200 checks for the UI, bundle and vendor assets |
 | `restart-persistence.txt` | Ticket survives app and Docker Desktop restart |
 | `dependency-audit.json` | Raw `npm audit` result (2 High) |
-| `candidate-manifest.json` | SHA-256 of the candidate packaging files |
+| `candidate-manifest.json` | SHA-256 of the packaging files |
+| `clean-clone/` | Fresh clone of published `main`, two commands, two-command results |
 | `docker-login.png` | Real screenshot of the Docker build login page |
 
 ## Attachments not yet available
 
-- A clone of the published `v1.0` tag and a repeat of the two setup commands from
-  that tag. This must be run after approval, commit, push and tag creation.
+- A clone of tag `v1.0` and a repeat of the two setup commands from that tag.
+  The tag must be created after section 2.6 and the PDF are finished.
 - A public Render URL and any cloud-database deployment. These are optional and
   are not claimed here.
