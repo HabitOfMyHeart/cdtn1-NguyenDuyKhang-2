@@ -41,8 +41,7 @@ cd cdtn1-NguyenDuyKhang-2
 There are **two setup commands after cloning**. In a fresh checkout only:
 
 > The commands below were executed successfully on a fresh clone of published
-> `main` at commit `7d51189`, with no working-tree overlay. A clone of the
-> published `v1.0` tag has not yet been tested because the tag does not exist yet.
+> `main` at commit `7d51189`, with no working-tree overlay.
 
 **1. Create configuration — choose one command for your OS.**
 
@@ -250,8 +249,7 @@ with no overlay.
 | Runtime hardening | non-root, read-only root, `cap_drop: ALL`, `no-new-privileges`, loopback-only HTTP |
 | Frontend assets | `/`, app bundle and vendor assets returned HTTP 200 |
 
-This is **not** a clone of a published `v1.0` tag. The final tag must be tested
-separately once the repository owner orders the tag. The live smoke wrote
+This is **not** a clone of a published `v1.0` tag. The live smoke wrote
 fixtures, so the earlier candidate counts differ from the clean-clone counts
 above; the fresh clone stayed at the initial sample counts. See the
 [security checklist](checklist-bao-mat.md) for known limitations; this prototype

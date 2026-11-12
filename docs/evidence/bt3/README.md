@@ -124,6 +124,5 @@ the API documentation for section 2.6 live in
 ## Attachments not yet available
 
 - A clone of tag `v1.0` and a repeat of the two setup commands from that tag.
-  The tag is created only when the repository owner orders it.
 - A public Render URL and any cloud-database deployment. These are optional and
   are not claimed here.

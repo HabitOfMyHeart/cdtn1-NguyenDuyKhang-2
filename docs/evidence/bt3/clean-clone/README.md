@@ -33,7 +33,7 @@ The one SKIP is the optional source re-extraction test, which requires
 ## Limits
 
 - A clone of tag `v1.0` and a repeat of these commands from that tag are still
-  pending. The tag is created only when the repository owner orders it.
+  pending.
 - This is a local demo, not a production deployment. See
   [the security checklist](../../../checklist-bao-mat.md) for the three items that
   remain explicitly not done.
