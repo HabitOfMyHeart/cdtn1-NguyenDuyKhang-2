@@ -1,7 +1,8 @@
 # BT3 packaging verification evidence
 
-This directory records real checks for sections 2.4 and 2.5. It is not a set of
-Postman examples and must not be used as proof that API documentation is complete.
+This directory records real checks for sections 2.4 and 2.5. Postman examples and
+the API documentation for section 2.6 live in
+[`../../api-docs/`](../../api-docs/README.md).
 
 ## Verification boundary
 
