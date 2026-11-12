@@ -1,0 +1,52 @@
+services:
+  db:
+    image: mongo:8.0.17@sha256:9814652e33f0cf8b9fddea8b46dfc9d8e19b130dcfdd7b510ca58bb0d40c8b71
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - demo
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "quit(db.adminCommand({ping:1}).ok ? 0 : 1)"]
+      interval: 5s
+      timeout: 5s
+      start_period: 20s
+      retries: 12
+
+  app:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      # These explicit local-demo values never inherit the host's main DB URI.
+      NODE_ENV: development
+      PORT: "3000"
+      MONGODB_URI: mongodb://db:27017/mekong_bt3_demo
+      JWT_SECRET: ${JWT_SECRET:?Copy .env.example to .env in a fresh checkout first}
+      JWT_EXPIRES_IN: 8h
+      DEMO_STAFF_USERNAME: nhanvien
+      DEMO_STAFF_PASSWORD: nhanvien123
+      DEMO_STAFF_NAME: Local demo employee
+      DEMO_STAFF_CENTER: "1"
+      LOG_LEVEL: info
+    ports:
+      - "127.0.0.1:${BT3_HTTP_PORT:-3001}:3000"
+    networks:
+      - demo
+      - web
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=64m,mode=1777
+    stop_grace_period: 15s
+
+volumes:
+  mongo_data:
+
+networks:
+  demo:
+    internal: true
+  web:

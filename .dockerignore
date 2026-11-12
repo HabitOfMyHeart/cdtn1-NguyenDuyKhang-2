@@ -1,0 +1,21 @@
+# Build-context allowlist; .env and private/large files never enter the context.
+**
+!package.json
+!package-lock.json
+!.env.example
+!src/
+!src/**
+!migrations/
+!migrations/**
+!seeds/
+!seeds/**
+!data/
+!data/sample/
+!data/sample/**
+!scripts/
+!scripts/**
+!tests/
+!tests/**
+!docker/
+!docker/**
+!Dockerfile
