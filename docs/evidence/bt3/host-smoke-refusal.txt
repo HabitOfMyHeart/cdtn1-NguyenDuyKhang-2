@@ -1,0 +1,8 @@
+﻿node : Smoke verification must run inside the isolated Docker app container. No requests were sent and no credentials 
+are printed.
+At line:2 char:11
++ $output = node tests/docker-smoke.js 2>&1
++           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Smoke verificat...ls are printed.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 

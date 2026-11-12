@@ -1,0 +1,2 @@
+﻿node --check on 51 JavaScript files (excluding node_modules and docs)
+Failures: 0

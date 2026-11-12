@@ -1,0 +1,1 @@
+﻿Before restart: {"customer":35,"device":51,"ticket":51,"ticket_status_log":193,"service_center":6,"issue_category":6} After restart: {"customer":35,"device":51,"ticket":51,"ticket_status_log":193,"service_center":6,"issue_category":6} PASS: healthy after restart, counts unchanged, created MOI ticket preserved.

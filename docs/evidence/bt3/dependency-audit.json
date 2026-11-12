@@ -1,0 +1,129 @@
+﻿{
+  "auditReportVersion": 2,
+  "vulnerabilities": {
+    "body-parser": {
+      "name": "body-parser",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1243074,
+          "name": "body-parser",
+          "dependency": "body-parser",
+          "title": "body-parser vulnerable to Denial of Service via trailing bytes after a compressed request body",
+          "url": "https://github.com/advisories/GHSA-27r3-jxmh-p828",
+          "severity": "high",
+          "cwe": [
+            "CWE-248"
+          ],
+          "cvss": {
+            "score": 7.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": ">=2.0.0 <2.4.0"
+        }
+      ],
+      "effects": [],
+      "range": "2.0.0 - 2.3.0",
+      "nodes": [
+        "node_modules/body-parser"
+      ],
+      "fixAvailable": true
+    },
+    "mongoose": {
+      "name": "mongoose",
+      "severity": "high",
+      "isDirect": true,
+      "via": [
+        {
+          "source": 1245994,
+          "name": "mongoose",
+          "dependency": "mongoose",
+          "title": "Mongoose: Connection-level sanitizeFilter not applied",
+          "url": "https://github.com/advisories/GHSA-gg4r-jv3p-qx3c",
+          "severity": "high",
+          "cwe": [
+            "CWE-943"
+          ],
+          "cvss": {
+            "score": 7.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N"
+          },
+          "range": ">=8.0.0 <8.24.7"
+        },
+        {
+          "source": 1246014,
+          "name": "mongoose",
+          "dependency": "mongoose",
+          "title": "Mongoose: Discriminator key values matching inherited properties (e.g. __t: 'constructor') bypass schema casting and can poison collections",
+          "url": "https://github.com/advisories/GHSA-wr5m-5jph-8m96",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-843"
+          ],
+          "cvss": {
+            "score": 4.8,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:L"
+          },
+          "range": ">=8.0.0 <8.24.7"
+        },
+        {
+          "source": 1246018,
+          "name": "mongoose",
+          "dependency": "mongoose",
+          "title": "Mongoose walks into inherited properties when hydrating, setting, and merging, allowing overwrites of built-in functions (denial of service) and shared schema state",
+          "url": "https://github.com/advisories/GHSA-8332-j7wj-wjw4",
+          "severity": "high",
+          "cwe": [
+            "CWE-1321"
+          ],
+          "cvss": {
+            "score": 8.2,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:H"
+          },
+          "range": ">=8.0.0 <8.24.7"
+        },
+        {
+          "source": 1246024,
+          "name": "mongoose",
+          "dependency": "mongoose",
+          "title": "Mongoose: Prototype pollution via Schema.prototype.virtual()",
+          "url": "https://github.com/advisories/GHSA-6972-9mcm-vhwj",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-1321"
+          ],
+          "cvss": {
+            "score": 6.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:L"
+          },
+          "range": ">=8.0.0 <8.24.7"
+        }
+      ],
+      "effects": [],
+      "range": "8.0.0 - 8.24.6",
+      "nodes": [
+        "node_modules/mongoose"
+      ],
+      "fixAvailable": true
+    }
+  },
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 2,
+      "critical": 0,
+      "total": 2
+    },
+    "dependencies": {
+      "prod": 104,
+      "dev": 0,
+      "optional": 0,
+      "peer": 0,
+      "peerOptional": 0,
+      "total": 103
+    }
+  }
+}

@@ -1,0 +1,83 @@
+#1 [internal] load local bake definitions
+#1 reading from stdin 597B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 860B 0.0s done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/node:24.21.0-bookworm-slim@sha256:d6aa754f16b3197301076f047b5def2f02ea1dbbc2ca920407d46d7ec7f87b20
+#3 DONE 0.0s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 342B done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 10.12kB 0.1s done
+#5 DONE 0.1s
+
+#6 [ 1/12] FROM docker.io/library/node:24.21.0-bookworm-slim@sha256:d6aa754f16b3197301076f047b5def2f02ea1dbbc2ca920407d46d7ec7f87b20
+#6 resolve docker.io/library/node:24.21.0-bookworm-slim@sha256:d6aa754f16b3197301076f047b5def2f02ea1dbbc2ca920407d46d7ec7f87b20 0.0s done
+#6 DONE 0.0s
+
+#7 [ 2/12] WORKDIR /app
+#7 CACHED
+
+#8 [ 3/12] COPY package.json package-lock.json ./
+#8 CACHED
+
+#9 [ 4/12] RUN npm ci --omit=dev --ignore-scripts --no-audit --no-fund && npm cache clean --force
+#9 CACHED
+
+#10 [ 5/12] COPY src ./src
+#10 CACHED
+
+#11 [ 8/12] COPY data/sample ./data/sample
+#11 CACHED
+
+#12 [ 6/12] COPY migrations ./migrations
+#12 CACHED
+
+#13 [ 7/12] COPY seeds ./seeds
+#13 CACHED
+
+#14 [ 9/12] COPY scripts ./scripts
+#14 CACHED
+
+#15 [10/12] COPY tests ./tests
+#15 DONE 0.0s
+
+#16 [11/12] COPY docker ./docker
+#16 DONE 0.0s
+
+#17 [12/12] COPY .env.example ./
+#17 DONE 0.0s
+
+#18 exporting to image
+#18 exporting layers
+#18 exporting layers 0.1s done
+#18 exporting manifest sha256:d6f041a8f7a57ca2137e357076133246cf9c146cc32f2c0947827f735d80fa2a 0.0s done
+#18 exporting config sha256:e948468652eb8e25e44151546cb0829b717504c8611ddbb3a2be64f88af4b794 0.0s done
+#18 exporting attestation manifest sha256:9ff6ba2881107b55dc0a35f9c42ef1864b4860ae5d7e152387ca3c1a8bd2070e 0.0s done
+#18 exporting manifest list sha256:a19ad16457bd9f520b3ba8fb0d19ba1a7794ddc8d6b7a15e952e8a663aafb455 0.0s done
+#18 naming to docker.io/library/bt3-final-20261112-app:latest
+#18 naming to docker.io/library/bt3-final-20261112-app:latest done
+#18 unpacking to docker.io/library/bt3-final-20261112-app:latest 0.1s done
+#18 DONE 0.4s
+
+#19 resolving provenance for metadata file
+#19 DONE 0.0s
+ Image bt3-final-20261112-app Building 
+ Image bt3-final-20261112-app Built 
+ Container bt3-final-20261112-db-1 Running 
+ Container bt3-final-20261112-app-1 Recreate 
+ Container bt3-final-20261112-app-1 Recreated 
+ Container bt3-final-20261112-db-1 Waiting 
+ Container bt3-final-20261112-db-1 Healthy 
+ Container bt3-final-20261112-app-1 Starting 
+ Container bt3-final-20261112-app-1 Started 
+ Container bt3-final-20261112-app-1 Waiting 
+ Container bt3-final-20261112-db-1 Waiting 
+ Container bt3-final-20261112-db-1 Healthy 
+ Container bt3-final-20261112-app-1 Healthy 

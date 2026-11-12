@@ -1,0 +1,16 @@
+{
+  "baseline_commit": "ba69a763d3216b11ecd98d8b6801b1027d7668b8",
+  "scope": "working-tree Docker candidate over a local clone; NOT a published v1.0 tag",
+  "sha256": {
+    "Dockerfile": "b7cfc89b4f5636d397cbd4fb227fc8ebea9cc517ed3ef5e6f5d729cb214dadec",
+    "docker-compose.yml": "dd50a147570e96d9754a3e5f089ac795a96f466c4b0d6e181c80bca156db4288",
+    ".dockerignore": "bf5c25a9038e4ad5b1fb0030aee3241161ebf4e2317ba8fb697a21596c0d707b",
+    ".env.example": "1fe8eb16e3b35d30df29d183bb83d8353d139d1c69aa30c5ae4b8d215681132a",
+    "docker/start-demo.js": "0a99e6c2cacbea48658a1eb4524a968e170c18e12259fb7f1a3ae86a6b1d2a6d",
+    "docker/smoke-guard.js": "34e84ecc3acc77b00373fc33f0c5e43d64ea65e91c71f8b05577a22bcf1863b4",
+    "tests/docker-startup.test.js": "e04314ee9890f62eb73b8c57d3ffc730b80320f6de04c55d6b1b2141b9002d71",
+    "tests/docker-smoke.js": "7394d50a29fce730371f37e8175881156805432708673698aa8748eddb152b84",
+    "package.json": "2fa251d8890d70cf3ef9f3dfa71eaf866e2d2e8f310e10f8d5f2b9591d6ef836",
+    "package-lock.json": "655b2961935b741fd7ed4d8d375e0d74425a640162b91329f012f26fb65bbe1d"
+  }
+}

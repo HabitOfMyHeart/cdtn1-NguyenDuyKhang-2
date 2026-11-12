@@ -1,0 +1,6 @@
+﻿/ -> HTTP 200
+/app.js -> HTTP 200
+/vendor/react.production.min.js -> HTTP 200
+/vendor/react-dom.production.min.js -> HTTP 200
+/assets/api/client.js -> HTTP 200
+/assets/api/ticket.api.js -> HTTP 200

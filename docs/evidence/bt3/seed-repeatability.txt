@@ -1,0 +1,1 @@
+﻿Initial: {"customer":34,"device":50,"ticket":50,"ticket_status_log":192,"service_center":6,"issue_category":6} System.Object[] System.Object[] After second migration/seed: {"customer":34,"device":50,"ticket":50,"ticket_status_log":192,"service_center":6,"issue_category":6} PASS: second migration/seed exit 0; all six business counts unchanged.

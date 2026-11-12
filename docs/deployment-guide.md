@@ -1,0 +1,245 @@
+# Deployment Guide — Smart CRM, Mekong Mobile
+
+**Student:** Nguyen Duy Khang — 2374802010212 · **Track:** SE · **Flow:** L2
+
+**Repository:** https://github.com/HabitOfMyHeart/cdtn1-NguyenDuyKhang-2
+
+**Status:** Verified on a fresh local clone with the packaging changes overlaid.
+Both services became healthy, the offline suite passed, and the live smoke test
+passed. Tag `v1.0` has not been published or cloned, so a tag-based clean test is
+still pending. This is a local demo, not a production deployment.
+
+## 1. Prerequisites
+
+| Requirement | Version / condition |
+|---|---|
+| OS | Windows with Docker Desktop/WSL 2, or Linux with Docker Engine; Linux containers |
+| Git | Required to clone the repository |
+| Docker | Engine 24+ and Compose 2.20+; daemon must be running |
+| Host port | TCP `3001` available; HTTP is bound to `127.0.0.1` only |
+| Disk / network | Reserve approximately 3 GB, an estimate; internet needed for initial downloads |
+| Runtime images | Node `24.21.0-bookworm-slim`, MongoDB `8.0.17`, both pinned by digest |
+
+Node.js, npm, Python and MongoDB need not be installed on the host. MongoDB has
+no published host port; the application uses an internal Docker network and a
+project-scoped volume for database access, plus a web network to publish HTTP.
+Do not connect this deployment to the main database.
+
+## 2. Setup Instructions
+
+After `v1.0` is published, obtain the source and enter its directory:
+
+```bash
+git clone --branch v1.0 https://github.com/HabitOfMyHeart/cdtn1-NguyenDuyKhang-2.git
+```
+
+```bash
+cd cdtn1-NguyenDuyKhang-2
+```
+
+There are **two setup commands after cloning**. In a fresh checkout only:
+
+> The commands below were executed successfully on the candidate checkout described
+> in the Validation status section. A clone of the published `v1.0` tag has not yet
+> been tested because the tag does not exist yet.
+
+**1. Create configuration — choose one command for your OS.**
+
+PowerShell:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+Linux:
+
+```bash
+cp .env.example .env
+```
+
+Do not overwrite an existing `.env`. The committed sample works for this local
+demo without manual secret editing; its key/password are not production secrets.
+
+**2. Build and start:**
+
+```bash
+docker compose up -d --build --wait --wait-timeout 180
+```
+
+Dependency installation uses `npm ci`. MongoDB must become healthy first.
+`docker/start-demo.js` runs migration and seed on first initialization, records
+completion in `_bt3_deployment`, then starts the server. It refuses any database
+URI other than `mongodb://db:27017/mekong_bt3_demo`. Subsequent starts skip
+initialization and preserve application edits. This is a single-app-instance demo.
+
+Open **http://localhost:3001**. Local demo login: **`nhanvien / nhanvien123`**,
+center `1`. Do not expose these credentials or the case-study dataset publicly.
+
+## 3. Environment Variables
+
+Compose does not load the host's whole `.env` into the container. Only the signing
+key and optional Docker host port are interpolated; the database URI and demo
+identity are explicitly fixed in `docker-compose.yml`. Editing the host
+`MONGODB_URI` cannot redirect Docker initialization to the main database.
+
+| Variable | Meaning | Docker value/default | Source / required |
+|---|---|---|---|
+| `BT3_HTTP_PORT` | Published loopback HTTP port | `3001` | Optional `.env` override; not the container port |
+| `PORT` | Container HTTP port | `3000` | Fixed by Compose |
+| `NODE_ENV` | Runtime mode | `development` | Fixed local-demo mode |
+| `MONGODB_URI` | Isolated database | `mongodb://db:27017/mekong_bt3_demo` | Fixed by Compose |
+| `JWT_SECRET` | Access-token signing key | Development placeholder from `.env.example` | Required in `.env`; never commit a private key |
+| `JWT_EXPIRES_IN` | Token lifetime | `8h` | Fixed by Compose |
+| `DEMO_STAFF_USERNAME` | Demo login name | `nhanvien` | Fixed by Compose |
+| `DEMO_STAFF_PASSWORD` | Public demo password | `nhanvien123` | Fixed by Compose; not production-safe |
+| `DEMO_STAFF_NAME` | Demo display name | `Local demo employee` | Fixed by Compose |
+| `DEMO_STAFF_CENTER` | Employee's center | `1` | Fixed by Compose |
+| `LOG_LEVEL` | Application log verbosity | `info` | Fixed by Compose |
+| `DB_SERVER_SELECTION_TIMEOUT_MS` | Database selection timeout | `3000` ms | Application default |
+| `DB_CONNECT_TIMEOUT_MS` | Database connection timeout | `3000` ms | Application default |
+| `DB_SOCKET_TIMEOUT_MS` | Database socket timeout | `10000` ms | Application default |
+| `HTTP_REQUEST_TIMEOUT_MS` | Request timeout | `30000` ms | Application default |
+| `HTTP_HEADERS_TIMEOUT_MS` | Header timeout | `10000` ms | Application default |
+| `SHUTDOWN_TIMEOUT_MS` | Shutdown timeout | `10000` ms | Application default |
+
+`DATASET_SOURCE` is an optional offline source-re-extraction test input, not a
+deployment prerequisite. The source dataset and its private paths are not copied
+into the image. No public Render deployment is covered by these commands.
+
+## 4. Sample Data
+
+Initialization automatically uses the committed files in `data/sample/`:
+
+| Collection | Initial documents |
+|---|---:|
+| `customer` | 34 |
+| `device` | 50 |
+| `ticket` | 50 |
+| `ticket_status_log` | 192 |
+| `service_center` | 6 |
+| `issue_category` | 6 |
+
+`_bt3_deployment` additionally contains one technical initialization marker,
+not a customer/account or business sample record. Counts above are before any
+manual or integration-test writes. The center-1 UI does not display all 50 tickets.
+
+**Before editing data**, verify migration and seed repeatability:
+
+```bash
+docker compose exec -T app npm run db:migrate
+```
+
+```bash
+docker compose exec -T app npm run db:seed
+```
+
+Both must exit `0` with unchanged business counts. These are verification commands,
+not extra setup steps. Seed refuses other/modified records rather than overwriting
+them. Do not rerun it as a reset after adding demo data. Migration synchronizes
+indexes, so run it only on the authorized demo database. Initialization is not a
+concurrent migration system or a cross-collection transaction.
+
+## 5. Verification and Troubleshooting
+
+**Service readiness:**
+
+```bash
+docker compose ps
+```
+
+Both `app` and `db` must report `healthy`, not merely `running`.
+
+PowerShell:
+
+```powershell
+Invoke-RestMethod http://localhost:3001/health
+```
+
+Linux:
+
+```bash
+curl -fsS http://localhost:3001/health
+```
+
+Expected HTTP `200`, `status=ok`, `database=connected`; service and timestamp
+fields are also returned. HTTP `503`/`degraded` is not a passing readiness result.
+
+**All business collection counts (run before write checks):**
+
+```bash
+docker compose exec -T db mongosh mekong_bt3_demo --quiet --eval "for (const n of ['customer','device','ticket','ticket_status_log','service_center','issue_category']) print(n + ': ' + db.getCollection(n).countDocuments({}))"
+```
+
+**Offline automated suite, one command:**
+
+```bash
+docker compose exec -T app npm test
+```
+
+Expected exit `0`, no FAIL. Report PASS and SKIP separately. The optional original
+source-re-extraction test remains SKIP without `DATASET_SOURCE`/Python. The image
+includes the test files and dependencies; it does not fabricate the missing source.
+
+**Live application/database check, optional and writes demo fixtures:**
+
+```bash
+docker compose exec -T app node tests/docker-smoke.js
+```
+
+Expected `status=PASS`. This checks login, create/reload of a customer/device/MOI
+ticket, duplicate-ticket refusal, HTTP validation and cross-center access refusal.
+It changes demo counts and stores an operational test-ticket reference in the
+metadata collection. Its cross-center token is a test-only trusted identity, not
+a second account provided by the login endpoint. No token or source PII is printed.
+
+For a manual check, log in, open the list, and create a new test customer/device
+and intake ticket. Reload the ticket to verify persistence; never assume a seeded
+device is free of open tickets. Warranty `null` means unverified, not expired.
+
+**Logs:**
+
+```bash
+docker compose logs --tail=50 app db
+```
+
+| Symptom | Action |
+|---|---|
+| Docker daemon unavailable | Start Docker Desktop/Engine and retry |
+| Port `3001` occupied | Use a free `BT3_HTTP_PORT` in this checkout's `.env`; update verification URLs accordingly |
+| Missing `JWT_SECRET` | Create `.env` from the public sample in a fresh checkout; do not reveal a private key |
+| Initialization/seed conflict | Preserve data; inspect the dedicated database and step logs; do not force-reset |
+| App unhealthy | Check database health and startup logs; a visible login page alone is insufficient |
+
+Stop without deleting database data:
+
+```bash
+docker compose down
+```
+
+`down -v` deletes the project's data. Do not run it without deliberately choosing
+to discard this demo volume, and never use system-wide pruning for this test.
+For a fresh test, use a separate checkout/Compose project with new volumes.
+
+### Validation status
+
+The checks were executed on 12/11/2026 against a fresh local clone in the approved
+temporary directory, with the uncommitted packaging/test files overlaid. Results:
+
+| Check | Observed result |
+|---|---|
+| Two setup commands | `.env` copied, then `docker compose up -d --build --wait --wait-timeout 180` |
+| Service health | `app` and `db` both `healthy` |
+| Host readiness | HTTP `200`, `status=ok`, `database=connected` |
+| Initial sample data | 34 customer / 50 device / 50 ticket / 192 log / 6 center / 6 category |
+| Repeat migration and seed | exit `0`; all six counts unchanged |
+| Offline suite | 130 detected, 129 PASS, 0 FAIL, 1 SKIP |
+| Live smoke | PASS, 8/8 checks, ticket `TCK0032` created and reloaded |
+| Restart persistence | New ticket survived container restart and Docker Desktop restart |
+| Runtime hardening | non-root, read-only root, `cap_drop: ALL`, `no-new-privileges`, loopback-only HTTP |
+| Frontend assets | `/`, app bundle and vendor assets returned HTTP 200 |
+
+This is **not** a clone of a published `v1.0` tag. The final tag must be tested
+separately after approval, commit and publication. The smoke test wrote fixtures, so
+the current demo counts differ from the initial counts above. See the
+[security checklist](checklist-bao-mat.md) for known limitations; this prototype
+must not be represented as production-ready.

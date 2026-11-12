@@ -1,0 +1,1 @@
+﻿User=node ReadonlyRootfs=true SecurityOpt=["no-new-privileges:true"] CapDrop=["ALL"] Ports={"3000/tcp":[{"HostIp":"127.0.0.1","HostPort":"3001"}]}

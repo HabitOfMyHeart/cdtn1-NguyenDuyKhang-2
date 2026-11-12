@@ -1,0 +1,15 @@
+﻿git : warning: in the working copy of '.env.example', LF will be replaced by CRLF the next time Git touches it
+At line:1 char:1
++ git diff --check 2>&1 | Out-File -LiteralPath docs/evidence/bt3/git-d ...
++ ~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (warning: in the... Git touches it:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+warning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/ai-disclosure.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/bug-log.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/kiem-tra-bt2.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/test-plan.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/test-report.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/thay-doi-thiet-ke.md', LF will be replaced by CRLF the next time Git touches it
+exit=0

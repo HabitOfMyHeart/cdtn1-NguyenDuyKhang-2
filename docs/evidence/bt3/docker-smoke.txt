@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "checks": [
+    "health_200_connected",
+    "missing_token_401",
+    "login_and_me_200",
+    "invalid_body_422_with_field",
+    "customer_device_ticket_created_and_reloaded",
+    "second_open_ticket_409",
+    "cross_center_read_403",
+    "error_bodies_do_not_expose_internal_details"
+  ],
+  "ticket_id": "TCK0032"
+}
