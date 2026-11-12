@@ -251,7 +251,7 @@ with no overlay.
 | Frontend assets | `/`, app bundle and vendor assets returned HTTP 200 |
 
 This is **not** a clone of a published `v1.0` tag. The final tag must be tested
-separately after section 2.6 and the PDF are finished. The live smoke wrote
+separately once the repository owner orders the tag. The live smoke wrote
 fixtures, so the earlier candidate counts differ from the clean-clone counts
 above; the fresh clone stayed at the initial sample counts. See the
 [security checklist](checklist-bao-mat.md) for known limitations; this prototype

@@ -106,6 +106,7 @@ Kết quả ngày 12/11/2026: **130 test, 129 PASS, 0 FAIL, 1 SKIP** trên host;
 - [Luồng UI thật, lưu và tải lại, lỗi kết nối và thử lại](docs/evidence/final/current-ui-e2e.json).
 - [Ảnh minh chứng và cách tạo](docs/screenshots/final/README.md).
 - [Bảng đối chiếu C1–C7/S1–S4 và việc còn lại](docs/kiem-tra-bt2.md).
+- [Tài liệu API: 25 request, 23 endpoint, 25 example](docs/api-docs/README.md).
 
 Ảnh UI cuối dùng request/dữ liệu thật, không dùng thanh mô phỏng. Công cụ mô phỏng vẫn được giữ trong mục thu gọn, có nhãn rõ ràng; nó không thay cho kiểm chứng mất kết nối thật. Hồ sơ `docs/kiem-chung-buoi10.md` và `docs/evidence/buoi10/` chỉ là lịch sử bản cũ.
 
@@ -115,4 +116,4 @@ Kết quả ngày 12/11/2026: **130 test, 129 PASS, 0 FAIL, 1 SKIP** trên host;
 - **Riêng `docs/srs.md`:** NFR1 là tạo phiếu <3 phút với người mới (chưa đo); NFR2 là ≥100 phiếu/200 log; NFR3 là ≥50 khách và đủ 6 trung tâm/6 nhóm. Mẫu 50/192/34 đủ dải phiếu phạm vi nhưng chưa đủ ngưỡng mẫu SRS, không chứng minh giới hạn năng lực hệ thống. Dùng nhãn `BT1-PDF/NFRx` và `SRS/NFRx` để phân biệt nguồn, không sửa SRS hoặc loại bỏ cam kết BT1. Bảng đối chiếu và mức kiểm chứng: [TD-05/TD-06](docs/thay-doi-thiet-ke.md).
 - JWT demo trong `localStorage`, chưa refresh/thu hồi token, rate limiting hay phân trang. Gói Docker được bổ sung cho BT3, không phải minh chứng đã có ở bản nộp BT2.
 - [Bug log](docs/bug-log.md) · [AI disclosure](docs/ai-disclosure.md) · Sơ đồ/SQL BT1 được giữ để truy vết, không phải migration MongoDB.
-- Kiểm chứng BT3 đã chạy trên clone sạch từ `main` `7d51189` bằng đúng hai lệnh; **chưa phải clone từ tag `v1.0`** và chưa có peer review. Tag `v1.0` chỉ được tạo sau khi hoàn tất 2.6 và PDF.
+- Kiểm chứng BT3 đã chạy trên clone sạch từ `main` `7d51189` bằng đúng hai lệnh; **chưa phải clone từ tag `v1.0`** và chưa có peer review. Tag `v1.0` chỉ được tạo khi chủ repo ra lệnh.

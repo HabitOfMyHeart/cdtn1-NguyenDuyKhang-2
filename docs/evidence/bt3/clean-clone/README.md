@@ -33,8 +33,7 @@ The one SKIP is the optional source re-extraction test, which requires
 ## Limits
 
 - A clone of tag `v1.0` and a repeat of these commands from that tag are still
-  pending. Tag creation is a separate, later step after sections 2.6 and the PDF
-  are finished.
+  pending. The tag is created only when the repository owner orders it.
 - This is a local demo, not a production deployment. See
   [the security checklist](../../../checklist-bao-mat.md) for the three items that
   remain explicitly not done.

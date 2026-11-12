@@ -123,6 +123,6 @@ Postman examples and must not be used as proof that API documentation is complet
 ## Attachments not yet available
 
 - A clone of tag `v1.0` and a repeat of the two setup commands from that tag.
-  The tag must be created after section 2.6 and the PDF are finished.
+  The tag is created only when the repository owner orders it.
 - A public Render URL and any cloud-database deployment. These are optional and
   are not claimed here.
