@@ -60,7 +60,10 @@ cp .env.example .env
 ```
 
 Do not overwrite an existing `.env`. The committed sample works for this local
-demo without manual secret editing; its key/password are not production secrets.
+demo without manual secret editing; its key and bcrypt hash are not production
+secrets. The sample hash corresponds to the public password `nhanvien123`.
+Because Docker Compose interpolates `$`, `docker-compose.yml` escapes each `$` in
+the hash as `$$`; keep that escaping when editing the value.
 
 **2. Build and start:**
 
@@ -94,7 +97,7 @@ identity are explicitly fixed in `docker-compose.yml`. Editing the host
 | `JWT_SECRET` | Access-token signing key | Development placeholder from `.env.example` | Required in `.env`; never commit a private key |
 | `JWT_EXPIRES_IN` | Token lifetime | `8h` | Fixed by Compose |
 | `DEMO_STAFF_USERNAME` | Demo login name | `nhanvien` | Fixed by Compose |
-| `DEMO_STAFF_PASSWORD` | Public demo password | `nhanvien123` | Fixed by Compose; not production-safe |
+| `DEMO_STAFF_PASSWORD_HASH` | Bcrypt hash of the public demo password | hash of `nhanvien123` (cost 10) | Required; plaintext `DEMO_STAFF_PASSWORD` is rejected/ignored |
 | `DEMO_STAFF_NAME` | Demo display name | `Local demo employee` | Fixed by Compose |
 | `DEMO_STAFF_CENTER` | Employee's center | `1` | Fixed by Compose |
 | `LOG_LEVEL` | Application log verbosity | `info` | Fixed by Compose |
@@ -195,6 +198,8 @@ ticket, duplicate-ticket refusal, HTTP validation and cross-center access refusa
 It changes demo counts and stores an operational test-ticket reference in the
 metadata collection. Its cross-center token is a test-only trusted identity, not
 a second account provided by the login endpoint. No token or source PII is printed.
+The script logs in with the documented public demo password; override it with
+`BT3_SMOKE_PASSWORD` if the demo hash was rotated.
 
 For a manual check, log in, open the list, and create a new test customer/device
 and intake ticket. Reload the ticket to verify persistence; never assume a seeded
@@ -304,6 +309,9 @@ must not be represented as production-ready.
    with **database path `/mekong_bt3_render`** and `authSource=admin`; SRV uses TLS.
    The previous URI had no database path. Credentials were preserved and were
    never copied into this guide, Git, `.env.example` or Docker images.
+   Set `DEMO_STAFF_PASSWORD_HASH` to the bcrypt hash of the existing demo password
+   and delete the old plaintext `DEMO_STAFF_PASSWORD` entry. The application
+   rejects a missing/invalid hash; never paste the hash into a screenshot or log.
 6. Select **Save and deploy**, reusing the existing image. Deploy
    `dep-dbqt2he7bikc73ak2kv0` succeeded; its logs recorded `database.connected`.
    Read back the saved database path and verify health plus read-only business calls.
@@ -319,7 +327,7 @@ must not be represented as production-ready.
 | `NODE_ENV` | `development`, retained for this prototype; **not production mode** |
 | `PORT` | `3000`; the server listens on the platform-facing interface |
 | `JWT_SECRET`, `JWT_EXPIRES_IN` | Existing runtime values retained; no values disclosed; JWT key fails the application's production validation |
-| `DEMO_STAFF_USERNAME`, `DEMO_STAFF_PASSWORD`, `DEMO_STAFF_NAME`, `DEMO_STAFF_CENTER` | Existing demo identity retained, center `1`; password fails production validation |
+| `DEMO_STAFF_USERNAME`, `DEMO_STAFF_PASSWORD_HASH`, `DEMO_STAFF_NAME`, `DEMO_STAFF_CENTER` | Existing demo identity retained, center `1`; password is verified with bcrypt. The public demo credential is still not production-safe; `DEMO_STAFF_PASSWORD` is no longer read. |
 | Database timeouts | App defaults: selection/connect `3000` ms, socket `10000` ms; not separately tuned on Render |
 | Health-check configuration | Manual HTTPS `/health` verified; Render's custom Health Check Path was empty when inspected |
 

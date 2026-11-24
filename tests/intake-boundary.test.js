@@ -1,5 +1,6 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const bcrypt = require('bcryptjs');
 const { buildFixture } = require('./helpers/inMemoryRepositories');
 const validators = require('../src/validators/ticket.validator');
 
@@ -99,7 +100,8 @@ test('service: từ chối ngày không tồn tại và mô tả sai kiểu ngay
 test('HTTP thật: route từ chối ngày và kiểu sai bằng 422 có fields, không cần CSDL', async (t) => {
   // Cấu hình riêng của tiến trình test, không dùng secret hay dữ liệu trên máy.
   Object.assign(process.env, { NODE_ENV: 'test', JWT_SECRET: 'test-only-intake-boundary-key',
-    DEMO_STAFF_USERNAME: 'nhanvien', DEMO_STAFF_PASSWORD: 'test-only-password',
+    DEMO_STAFF_USERNAME: 'nhanvien',
+    DEMO_STAFF_PASSWORD_HASH: bcrypt.hashSync('test-only-password', 10),
     DEMO_STAFF_NAME: 'Test', DEMO_STAFF_CENTER: '1' });
   const { createApp } = require('../src/app');
   const { signAccessToken } = require('../src/middlewares/auth.middleware');

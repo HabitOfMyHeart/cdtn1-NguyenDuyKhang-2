@@ -36,9 +36,12 @@ async function verifyDockerDemo() {
   assert.equal(unauthorized.error, 'CHUA_DANG_NHAP');
   checks.push('missing_token_401');
 
+  // Mật khẩu demo công khai đã ghi trong README/.env.example; đây không phải
+  // bí mật production. Có thể ghi đè bằng BT3_SMOKE_PASSWORD khi cần.
+  const loginPassword = process.env.BT3_SMOKE_PASSWORD || 'nhanvien123';
   const login = await request('POST', '/api/auth/login', {
     username: process.env.DEMO_STAFF_USERNAME,
-    password: process.env.DEMO_STAFF_PASSWORD
+    password: loginPassword
   });
   const token = login.data.token;
   assert.ok(token);

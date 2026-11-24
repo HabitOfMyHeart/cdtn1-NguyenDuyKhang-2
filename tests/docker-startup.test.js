@@ -134,7 +134,7 @@ test('live smoke refuses host execution before any request even with demo enviro
 test('Docker entrypoint exits nonzero with a safe configuration category before database initialization', () => {
   const result = spawnSync(process.execPath, [path.join(__dirname, '..', 'docker/start-demo.js')], {
     encoding: 'utf8', timeout: 10000,
-    env: { ...process.env, NODE_ENV: 'test', JWT_SECRET: '', DEMO_STAFF_PASSWORD: '',
+    env: { ...process.env, NODE_ENV: 'test', JWT_SECRET: '', DEMO_STAFF_PASSWORD_HASH: '',
       MONGODB_URI: 'mongodb://db:27017/mekong_bt3_demo' }
   });
   assert.equal(result.status, 1);

@@ -3,12 +3,14 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const dotenv = require('dotenv');
+const bcrypt = require('bcryptjs');
 const { loadConfig, ConfigError } = require('../src/config');
 const { createDatabase } = require('../src/config/db');
 
+const TEST_PASSWORD_HASH = bcrypt.hashSync('unit-test-password', 10);
 const ENV = {
   NODE_ENV: 'test', JWT_SECRET: 'unit-test-key-not-for-deployment-123456789',
-  DEMO_STAFF_PASSWORD: 'unit-test-password'
+  DEMO_STAFF_PASSWORD_HASH: TEST_PASSWORD_HASH
 };
 
 test('configuration validates and freezes explicit credentials plus safe local defaults', () => {
@@ -21,7 +23,7 @@ test('configuration validates and freezes explicit credentials plus safe local d
   assert.ok(Object.isFrozen(config));
   assert.ok(Object.isFrozen(config.demoStaff));
   assert.throws(() => loadConfig({}), (error) => error instanceof ConfigError &&
-    !!error.fields.JWT_SECRET && !!error.fields.DEMO_STAFF_PASSWORD);
+    !!error.fields.JWT_SECRET && !!error.fields.DEMO_STAFF_PASSWORD_HASH);
 });
 
 test('configuration rejects invalid ports, lifetime, staff scope, log levels and timeout bounds', () => {
@@ -30,7 +32,8 @@ test('configuration rejects invalid ports, lifetime, staff scope, log levels and
     ['JWT_SECRET', ''], ['JWT_EXPIRES_IN', '0s'], ['JWT_EXPIRES_IN', '8'],
     ['JWT_EXPIRES_IN', '-1h'], ['JWT_EXPIRES_IN', '31d'], ['JWT_EXPIRES_IN', 'Infinityh'],
     ['DEMO_STAFF_USERNAME', 'a'.repeat(25)], ['DEMO_STAFF_USERNAME', 'staff name'],
-    ['DEMO_STAFF_PASSWORD', ''], ['DEMO_STAFF_CENTER', '../1'], ['DEMO_STAFF_CENTER', ''],
+    ['DEMO_STAFF_PASSWORD_HASH', ''], ['DEMO_STAFF_PASSWORD_HASH', 'plaintext-password'],
+    ['DEMO_STAFF_CENTER', '../1'], ['DEMO_STAFF_CENTER', ''],
     ['DEMO_STAFF_NAME', 'x\nInjected'], ['LOG_LEVEL', 'constructor'], ['LOG_LEVEL', 'verbose'],
     ['DB_SERVER_SELECTION_TIMEOUT_MS', '0'], ['DB_CONNECT_TIMEOUT_MS', '60001'],
     ['DB_SOCKET_TIMEOUT_MS', 'NaN'], ['HTTP_REQUEST_TIMEOUT_MS', '99'],
@@ -52,22 +55,22 @@ test('production has no secret/demo fallback and never prints supplied secrets i
   assert.equal(loadConfig(production).nodeEnv, 'production');
   assert.equal(loadConfig({ ...ENV, NODE_ENV: 'development', JWT_SECRET: 'local-demo-key' }).jwtSecret, 'local-demo-key');
   assert.throws(() => loadConfig({ ...production, JWT_SECRET: 'local-demo-key' }), (error) => !!error.fields.JWT_SECRET);
-  for (const key of ['JWT_SECRET', 'DEMO_STAFF_PASSWORD', 'DEMO_STAFF_USERNAME', 'DEMO_STAFF_NAME', 'DEMO_STAFF_CENTER', 'MONGODB_URI']) {
+  for (const key of ['JWT_SECRET', 'DEMO_STAFF_PASSWORD_HASH', 'DEMO_STAFF_USERNAME', 'DEMO_STAFF_NAME', 'DEMO_STAFF_CENTER', 'MONGODB_URI']) {
     const env = { ...production };
     delete env[key];
     assert.throws(() => loadConfig(env), (error) => !!error.fields[key]);
   }
   assert.throws(() => loadConfig({ ...production, JWT_SECRET: 'dev-only-jwt-key-change-me-before-production-2026' }),
     (error) => !!error.fields.JWT_SECRET && !error.message.includes('dev-only'));
-  assert.throws(() => loadConfig({ ...production, DEMO_STAFF_PASSWORD: 'dev-only-password-change-me' }),
-    (error) => !!error.fields.DEMO_STAFF_PASSWORD && !JSON.stringify(error).includes('dev-only-password'));
+  assert.throws(() => loadConfig({ ...production, DEMO_STAFF_PASSWORD_HASH: 'plaintext-secret-should-not-print' }),
+    (error) => !!error.fields.DEMO_STAFF_PASSWORD_HASH && !JSON.stringify(error).includes('plaintext-secret'));
 });
 
 test('.env.example is an explicit usable local configuration, not usable production credentials', () => {
   const env = dotenv.parse(fs.readFileSync(path.join(__dirname, '..', '.env.example')));
   assert.equal(loadConfig(env).nodeEnv, 'development');
   assert.throws(() => loadConfig({ ...env, NODE_ENV: 'production' }), (error) =>
-    !!error.fields.JWT_SECRET && !!error.fields.DEMO_STAFF_PASSWORD);
+    !!error.fields.JWT_SECRET && !!error.fields.DEMO_STAFF_PASSWORD_HASH);
 });
 
 test('database adapter applies all timeouts, disables buffering, shares connections and disconnects safely', async () => {

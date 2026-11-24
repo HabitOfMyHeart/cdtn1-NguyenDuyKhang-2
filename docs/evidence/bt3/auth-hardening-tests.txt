@@ -1,0 +1,11 @@
+﻿Γ£ö cß║Ñu h├¼nh chß║Ñp nhß║¡n bcrypt hash v├á production bß║»t buß╗Öc hash (90.7636ms)
+Γ£ö ─æ─âng nhß║¡p so s├ính bcrypt: ─æ├║ng mß║¡t khß║⌐u nhß║¡n token, sai mß║¡t khß║⌐u nhß║¡n 401 (341.1348ms)
+Γ£ö A01/S2: nh├ón vi├¬n trung t├óm kh├íc nhß║¡n HTTP 403 khi xem hoß║╖c sß╗¡a phiß║┐u (48.927ms)
+Γä╣ tests 3
+Γä╣ suites 0
+Γä╣ pass 3
+Γä╣ fail 0
+Γä╣ cancelled 0
+Γä╣ skipped 0
+Γä╣ todo 0
+Γä╣ duration_ms 6193.0905

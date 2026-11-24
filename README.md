@@ -27,10 +27,12 @@ docker compose up -d --build --wait --wait-timeout 180
 ```
 
 Linux thay lệnh đầu bằng `cp .env.example .env`. Mở **http://localhost:3001**,
-đăng nhập demo `nhanvien / nhanvien123` (center 1). MongoDB ở mạng/volume Docker
-riêng, không dùng CSDL chính và không publish cổng DB. App bind loopback 3001
-để không đụng ứng dụng chạy trực tiếp trên cổng 3000. Khóa JWT lấy từ `.env` lúc
-chạy; không COPY `.env` vào image, không sửa khóa hiện có.
+đăng nhập demo `nhanvien / nhanvien123` (center 1). Mật khẩu được cấu hình bằng
+`DEMO_STAFF_PASSWORD_HASH` (bcrypt); `.env.example` chỉ chứa hash của mật khẩu
+mẫu công khai này. MongoDB ở mạng/volume Docker riêng, không dùng CSDL chính và
+không publish cổng DB. App bind loopback 3001 để không đụng ứng dụng chạy trực
+tiếp trên cổng 3000. Khóa JWT lấy từ `.env` lúc chạy; không COPY `.env` vào
+image, không sửa khóa hiện có.
 
 ```powershell
 docker compose ps
@@ -41,7 +43,9 @@ Hai dịch vụ phải `healthy`. Lần đầu tự migration/seed; marker kỹ 
 `_bt3_deployment` ngăn nạp lại mẫu trên các lần restart sau khi đã thêm/sửa dữ liệu.
 Đây là gói demo local, không phải production. Xem [Deployment Guide tiếng Anh](docs/deployment-guide.md)
 và [checklist bảo mật](docs/checklist-bao-mat.md); các giới hạn phải được giữ khi nộp.
-Bộ kiểm thử chưa được chạy lại từ source của tag `v1.0`; minh chứng bên dưới là từ `main`.
+Bộ kiểm thử đã được chạy lại từ source của tag `v1.0` trong terminal thật ngày
+22/11/2026: 130/129/0/1, exit 0; log và ảnh tại
+`docs/evidence/bt3/tag-v1.0-clone/`. Bản `main` hiện tại có 133 test.
 
 ### Cách chạy trực tiếp — giữ để tham khảo BT2
 
@@ -77,7 +81,7 @@ Giữ terminal này chạy, mở `http://localhost:3000`. Ở terminal khác:
 Invoke-RestMethod http://localhost:3000/health
 ```
 
-Mong đợi `/health` trả `status=ok`, `database=connected`. Đăng nhập demo **`nhanvien / nhanvien123`**, trung tâm 1; không dùng tài khoản mẫu cho production. `npm run dev` chạy chế độ theo dõi mã.
+Mong đợi `/health` trả `status=ok`, `database=connected`. Đăng nhập demo **`nhanvien / nhanvien123`**, trung tâm 1; mật khẩu được so sánh bằng bcrypt với `DEMO_STAFF_PASSWORD_HASH`, không dùng tài khoản mẫu cho production. `npm run dev` chạy chế độ theo dõi mã.
 
 ## 3. Dữ liệu và quy tắc
 
@@ -101,7 +105,7 @@ API phiếu giới hạn theo trung tâm của token. **Khách hàng/thiết b�
 - Đã chuyển sáu collection nghiệp vụ từ Docker `mekong_bt3_demo` (MongoDB 8.0.17) sang Atlas `mekong_bt3_render` (8.0.37): **338 document, 30 index khớp**, 0 lỗi tham chiếu. Không chuyển marker `_bt3_deployment`, không sửa CSDL Windows hoặc dữ liệu Docker nguồn.
 - Sáu kiểm tra hosted chỉ đọc PASS: health, đăng nhập, danh mục, đúng 9 phiếu của center 1, chi tiết phiếu, lịch sử 5 dòng của phiếu được chọn. Đây không phải toàn bộ Postman collection hoặc kiểm thử tạo/sửa/xóa trên Render.
 - Các bước deploy và biến môi trường: [Deployment Guide, mục 6](docs/deployment-guide.md#6-optional-hosted-demo--render-and-mongodb-atlas). Minh chứng đã lược bí mật: [render/](docs/evidence/bt3/render/).
-- **Chỉ là demo, chưa production-ready:** `NODE_ENV=development`; JWT/mật khẩu demo chưa đạt validation production; 2 cảnh báo High vẫn còn. Dữ liệu case study chưa được chứng minh đã ẩn danh hoặc có quyền công khai; xem [checklist](docs/checklist-bao-mat.md). Render Free có thể ngủ, cần kiểm lại URL trước buổi chấm.
+- **Chỉ là demo, chưa production-ready:** `NODE_ENV=development`; JWT secret hiện có chưa đạt validation production; mật khẩu demo đã chuyển sang bcrypt hash nhưng vẫn là tài khoản mẫu công khai. `npm audit` đã về **0 lỗ hổng** sau khi nâng cấp trong phạm vi semver ngày 22/11/2026. Dữ liệu case study chưa được chứng minh đã ẩn danh hoặc có quyền công khai; xem [checklist](docs/checklist-bao-mat.md). Render Free có thể ngủ, cần kiểm lại URL trước buổi chấm.
 
 ## 4. Kiểm thử và minh chứng
 
@@ -109,9 +113,12 @@ API phiếu giới hạn theo trung tâm của token. **Khách hàng/thiết b�
 npm test
 ```
 
-Kết quả ngày 12/11/2026: **130 test, 129 PASS, 0 FAIL, 1 SKIP** trên host; container Docker cho cùng tổng, log tại `docs/evidence/bt3/container-tests.txt`. Test tự dựng fixture, không cần MongoDB hay CSV ngoài repo. Test tái trích nguồn được SKIP khi thiếu `DATASET_SOURCE`; đây là kiểm tra bổ sung, các loại test bắt buộc đều chạy. Ba test đại diện trong `tests/ticket.service.test.js`: happy path (dòng 53), biên bảo hành (dòng 169), dữ liệu sai (dòng 216). Coverage đo ngày 12/11: 77,56% dòng, 79,08% nhánh, 67,66% hàm — chưa đạt 80%.
+Kết quả ngày 22/11/2026: **133 test, 132 PASS, 0 FAIL, 1 SKIP** trên host. Mốc 12/11 là 130/129/0/1; log container lịch sử tại `docs/evidence/bt3/container-tests.txt`. Test tự dựng fixture, không cần MongoDB hay CSV ngoài repo. Test tái trích nguồn được SKIP khi thiếu `DATASET_SOURCE`; đây là kiểm tra bổ sung, các loại test bắt buộc đều chạy. Ba test đại diện trong `tests/ticket.service.test.js`: happy path (dòng 53), biên bảo hành (dòng 169), dữ liệu sai (dòng 216). Bổ sung S2/S3 tại `tests/auth-hardening.test.js`: 403 theo trung tâm, bcrypt đúng/sai, production bắt buộc hash. Coverage đo lại ngày 22/11: **78,83% dòng, 78,28% nhánh, 70,29% hàm** — chưa đạt 80% dòng/nhánh.
 
 - [Log test cuối](docs/evidence/final/npm-test.txt).
+- [Log S2/S3: 403 theo trung tâm và bcrypt](docs/evidence/bt3/auth-hardening-tests.txt).
+- [Audit sau nâng cấp: 0 lỗ hổng](docs/evidence/bt3/dependency-audit-after-fix.txt).
+- [Clone tag `v1.0`, `npm ci` và `npm test`](docs/evidence/bt3/tag-v1.0-clone/).
 - [Migration/seed hai lần trên MongoDB tạm riêng](docs/evidence/final/current-working-tree-check.txt).
 - [Luồng UI thật, lưu và tải lại, lỗi kết nối và thử lại](docs/evidence/final/current-ui-e2e.json).
 - [Ảnh minh chứng và cách tạo](docs/screenshots/final/README.md).

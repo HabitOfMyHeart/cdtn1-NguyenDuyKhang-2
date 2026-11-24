@@ -1,10 +1,16 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 const { loadConfig } = require('../src/config');
 const { createAuthMiddleware, getBearerToken, requireRole } = require('../src/middlewares/auth.middleware');
 
-const config = loadConfig({ NODE_ENV: 'test', JWT_SECRET: 'unit-test-key-not-for-deployment-123456789', DEMO_STAFF_PASSWORD: 'unit-test-password' });
+const TEST_PASSWORD_HASH = bcrypt.hashSync('unit-test-password', 10);
+const config = loadConfig({
+  NODE_ENV: 'test',
+  JWT_SECRET: 'unit-test-key-not-for-deployment-123456789',
+  DEMO_STAFF_PASSWORD_HASH: TEST_PASSWORD_HASH
+});
 const user = { username: 'staff', role: 'NHAN_VIEN', center_id: '1', fullName: 'Test Staff' };
 const auth = createAuthMiddleware({ config });
 const request = (token) => ({ headers: token ? { authorization: `Bearer ${token}` } : {} });

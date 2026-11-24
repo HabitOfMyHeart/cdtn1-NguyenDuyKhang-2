@@ -43,13 +43,16 @@ khai báo cũ) và phiên bổ sung tài liệu/triển khai Render–Atlas hi�
 | OpenCode | Chạy clone sạch từ `main` đã push và ghi minh chứng hai lệnh. | `docs/evidence/bt3/clean-clone/`, `docs/deployment-guide.md`, `docs/checklist-bao-mat.md`. | Clone `origin/main` tại `7d51189`, đúng hai lệnh; compose exit `0`; app và db `healthy`; health HTTP `200`; seed 34/50/50/192/6/6; test trong container 130/129/0/1. Đây không phải clone từ tag `v1.0`. |
 | OpenCode | Rà soát và cập nhật chính bảng khai báo AI cho giai đoạn 3. | `docs/ai-disclosure.md`. | Đối chiếu lại commit, tệp, log và số liệu trong bảng; không khai các mục chưa làm. Người nộp đọc lại và sửa nếu phần tự làm khác. |
 | OpenCode (GPT-6.1 Sol) | Sao lưu nguồn Docker, chuyển 6 collection sang Atlas; kiểm Network Access và cấu hình Render, redeploy; cập nhật Word và rà điều kiện chốt BT3. | Atlas `mekong_bt3_render`; Render Environment/Docker Command; `docs/evidence/bt3/render/`, báo cáo Word BT3 ngoài repo. | Official dump/restore; nguồn không đổi; 338 document, 30 index và metadata khớp, 0 lỗi quan hệ. Hosted 6/6 kiểm tra chỉ đọc PASS; đọc lại URI đích không in credentials; health 200/ok/connected. Chạy lại 14 file: 130 tổng, 129 PASS, 0 FAIL, 1 SKIP. Không sửa `.env`, Compose, SRS hay dữ liệu nguồn; không thay việc sinh viên tự chạy, không tự xác nhận quyền công khai dữ liệu. |
+| OpenCode | Bổ sung S2/S3 theo phản hồi chấm: test 403 theo trung tâm, bcrypt, bỏ plaintext fallback; xử lý audit; chạy clone tag `v1.0` trong terminal thật; sửa nhãn mức độ bug và đồng bộ tài liệu. | `tests/auth-hardening.test.js`, `src/config/index.js`, `src/routes/auth.routes.js`, `src/routes/ticket.routes.js`, `.env.example`, `docker-compose.yml`, `tests/infrastructure-*.test.js`, `tests/intake-boundary.test.js`, `tests/docker-startup.test.js`, `docs/*.md`, Word/PDF ngoài repo. | `npm test`: 133/132/0/1, exit 0; `npm audit`: 0 lỗ hổng sau khi nâng `body-parser` 2.4.0 và `mongoose` 8.24.10; coverage 78,83/78,28/70,29. Clone tag `v1.0`: `npm ci` + `npm test` cho 130/129/0/1, exit 0; ảnh terminal và log tại `docs/evidence/bt3/tag-v1.0-clone/`. Không tạo tag mới, không force-push, không sửa `docs/srs.md`, không đổi JWT secret. |
 
 ### Xác nhận
 
 Các lần chạy tự động trong bảng do OpenCode thực hiện và có log/tệp kèm theo.
 **Người nộp phải tự đọc, hiểu và chạy lại trước khi nộp**; bảng này không thay
-thế xác nhận của người nộp, peer review hay kiểm tra của giảng viên. Các mục
-checklist bảo mật 3, 4, 7 vẫn là **CHƯA LÀM**. Đã có deploy thử tại
+thế xác nhận của người nộp, peer review hay kiểm tra của giảng viên. Sau bổ sung
+22/11/2026, mục 3 đạt trong **phạm vi phiếu**, mục 4 đạt trong **phạm vi mật
+khẩu cấu hình**, mục 7 đạt trên lockfile hiện tại; quyền sở hữu khách/thiết bị
+và mã hóa dữ liệu hồ sơ vẫn là giới hạn. Đã có deploy thử tại
 https://cdtn1-nguyenduykhang-2.onrender.com/; không tuyên bố production-ready,
 không bảo đảm điểm cộng hoặc khả dụng tại thời điểm chấm.
 
@@ -57,4 +60,4 @@ không bảo đảm điểm cộng hoặc khả dụng tại thời điểm ch�
 
 **MSSV:** 2374802010212
 
-**Ngày cập nhật:** 12/11/2026
+**Ngày cập nhật:** 22/11/2026

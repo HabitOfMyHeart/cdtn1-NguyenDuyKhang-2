@@ -38,11 +38,17 @@ function loadConfig(env = process.env) {
   if (!seconds || seconds > 30 * 86400) fields.JWT_EXPIRES_IN = 'Cần thời hạn từ 1s đến 30d, có đơn vị s/m/h/d.';
   const username = text('DEMO_STAFF_USERNAME', production ? '' : 'nhanvien');
   if (!/^[A-Za-z0-9_.-]{1,24}$/.test(username)) fields.DEMO_STAFF_USERNAME = 'Cần tên đăng nhập 1–24 ký tự hợp lệ.';
-  // Credentials are always explicit; in production the sample password is rejected.
-  const password = String(env.DEMO_STAFF_PASSWORD ?? '');
-  if (password.length < (production ? 12 : 8) || password.length > 128 || !password.trim() ||
-      (production && ['nhanvien123', 'dev-only-password-change-me'].includes(password))) {
-    fields.DEMO_STAFF_PASSWORD = 'Cần mật khẩu riêng đủ độ dài, không dùng mật khẩu mẫu khi triển khai.';
+  // Mật khẩu demo chỉ nhận hash bcrypt, không nhận hoặc lưu plaintext.
+  // Hash mẫu công khai trong .env.example bị chặn ở production.
+  const SAMPLE_DEMO_PASSWORD_HASH = '$2b$10$FfRmCWIJE7yhCWxsfUUqFOHOeuUj16tvbbrtngan.yxEmw./Ju.Ci';
+  const BCRYPT_HASH = /^\$2[aby]\$(1[0-5])\$[./A-Za-z0-9]{53}$/;
+  const passwordHash = text('DEMO_STAFF_PASSWORD_HASH');
+  if (!passwordHash) {
+    fields.DEMO_STAFF_PASSWORD_HASH = 'Cần hash bcrypt cho mật khẩu demo (xem .env.example).';
+  } else if (!BCRYPT_HASH.test(passwordHash)) {
+    fields.DEMO_STAFF_PASSWORD_HASH = 'Cần hash bcrypt hợp lệ, cost 10–15 (ví dụ $2b$10$...).';
+  } else if (production && passwordHash === SAMPLE_DEMO_PASSWORD_HASH) {
+    fields.DEMO_STAFF_PASSWORD_HASH = 'Production cần hash riêng, không dùng hash mẫu công khai.';
   }
   const fullName = text('DEMO_STAFF_NAME', production ? '' : 'Nhân viên tiếp nhận');
   if (!fullName || fullName.length > 120 || /[\x00-\x1f\x7f]/.test(fullName)) fields.DEMO_STAFF_NAME = 'Cần tên hiển thị hợp lệ, tối đa 120 ký tự.';
@@ -60,7 +66,13 @@ function loadConfig(env = process.env) {
   if (Object.keys(fields).length) throw new ConfigError(fields);
   return Object.freeze({
     nodeEnv, port, mongodbUri, jwtSecret, jwtExpiresIn, logLevel,
-    demoStaff: Object.freeze({ username, password, fullName, role: 'NHAN_VIEN', center_id: centerId }),
+    demoStaff: Object.freeze({
+      username,
+      passwordHash,
+      fullName,
+      role: 'NHAN_VIEN',
+      center_id: centerId
+    }),
     dbServerSelectionTimeoutMs, dbConnectTimeoutMs, dbSocketTimeoutMs,
     httpRequestTimeoutMs, httpHeadersTimeoutMs, shutdownTimeoutMs
   });

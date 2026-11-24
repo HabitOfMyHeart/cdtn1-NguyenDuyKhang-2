@@ -1,16 +1,26 @@
 # Nhật ký lỗi
 
-## Tình trạng minh chứng commit (đối chiếu ngày 05/11/2026)
+## Thang mức độ dùng trong bài
 
-Đã đối chiếu diff và bổ sung link commit chứa thay đổi sửa cho cả 5 bug bên dưới. Đây là **bug lịch sử**, không phải lỗi mới phát hiện trong buổi 14. Các ghi nhận FAIL trước sửa/E2E bên dưới được giữ từ nhật ký cũ; lần cập nhật tài liệu này không chạy lại bản trước sửa hoặc E2E đó.
+Đề BT3 yêu cầu dùng thang **Critical / Major / Minor**. Bảng dưới là quy ước áp dụng thống nhất cho cả 5 bug; không đổi mức độ theo cảm tính và không có bug nào được xếp Critical nếu chưa có bằng chứng mất dữ liệu, truy cập trái phép hoặc chặn toàn bộ luồng.
 
-**Phạm vi commit:** BUG-001/002/004 nằm chung commit backend `4c34a07`; BUG-003/005 nằm chung commit giao diện `27cf6b0`. Đề BT3 không yêu cầu mỗi bug một commit riêng; yêu cầu là mỗi bug đủ 7 mục và link commit mở được, trỏ đúng thay đổi. Commit cập nhật tài liệu này không dùng thay link sửa lỗi.
+| Mức | Tiêu chí áp dụng | Bug trong bài |
+|---|---|---|
+| **Critical** | Mất hoặc hỏng dữ liệu không phục hồi; truy cập/thay đổi được ngoài phạm vi được cấp; hoặc chặn hoàn toàn luồng tiếp nhận cho mọi người dùng. | Không có |
+| **Major** | Sai nghiệp vụ hoặc bỏ qua ràng buộc quan trọng, ảnh hưởng trực tiếp đến bản ghi/phiếu và không có cách xử lý hợp lệ trong phạm vi L2. | BUG-002, BUG-004 |
+| **Minor** | Sai hiển thị hoặc khó dùng cục bộ, có cách tránh, không làm sai bản ghi và không chặn luồng chính. | BUG-001, BUG-003, BUG-005 |
+
+## Tình trạng minh chứng commit (đối chiếu lại ngày 22/11/2026)
+
+Đã đối chiếu diff và giữ link commit chứa thay đổi sửa cho cả 5 bug bên dưới. Đây là **bug lịch sử**, không phải lỗi mới phát hiện trong buổi 14. Các ghi nhận FAIL trước sửa/E2E bên dưới được giữ từ nhật ký cũ.
+
+**Phạm vi commit và giới hạn chứng cứ:** BUG-001/002/004 nằm chung commit backend `4c34a07`; BUG-003/005 nằm chung commit giao diện `27cf6b0`, đều ngày 29/10/2026. Hai commit này gộp nhiều thay đổi nên **chứng minh bản sửa tồn tại và đúng nội dung, nhưng không phải là commit tái hiện riêng quá trình phát hiện lỗi**. Không tách lại lịch sử đã push vì sẽ đổi SHA mà đề và tag `v1.0` đang tham chiếu. Bằng chứng quá trình phát hiện được giữ ở ba nguồn: (a) ghi chú ngày phát hiện và triệu chứng trong từng bug; (b) test hồi quy trong `tests/` chạy FAIL trên bản trước sửa và PASS trên bản hiện tại; (c) nhật ký/ảnh chụp lịch sử đã nộp ở BT2. Đề BT3 không yêu cầu mỗi bug một commit riêng; yêu cầu là mỗi bug đủ 7 mục và link commit mở được, trỏ đúng thay đổi. Commit cập nhật tài liệu không dùng thay link sửa lỗi.
 
 ## BUG-001 · Minor — Có thể xóa lý do khi ưu tiên khác gợi ý
 
 | Mục | Nội dung |
 |---|---|
-| 1. Mã và mức độ | BUG-001 · Minor — dữ liệu chỉnh sửa không còn đủ lý do đổi ưu tiên. |
+| 1. Mã và mức độ | BUG-001 · **Minor** — dữ liệu chỉnh sửa không còn đủ lý do đổi ưu tiên; chỉ ảnh hưởng nhánh sửa ưu tiên, có cách tránh và không làm sai các trường khác. |
 | 2. Phát hiện bởi | Đối chiếu quy tắc đổi ưu tiên trong `updateTicket`; test tái lập/hồi quy `tests/priority-regression.test.js:5` (phần đổi ưu tiên thuộc nhóm QT-04/TC-04, không phải riêng phép tính SLA). |
 | 3. Triệu chứng | Phiếu có mức ưu tiên khác mức gợi ý vẫn cho phép cập nhật `priority_reason` thành rỗng. |
 | 4. Cách tái lập | `node --test tests/priority-regression.test.js` với bản code trước sửa: phiếu THAP, nhóm gợi ý CAO, cập nhật riêng lý do thành chuỗi rỗng. |
@@ -22,7 +32,7 @@
 
 | Mục | Nội dung |
 |---|---|
-| 1. Mã và mức độ | BUG-002 · Major — API vượt phạm vi L2 và có thể bỏ qua kiểm tra phiếu mở. |
+| 1. Mã và mức độ | BUG-002 · **Major** — API vượt phạm vi L2 và có thể bỏ qua kiểm tra phiếu mở; ảnh hưởng trạng thái phiếu và cho phép tiếp nhận lại, nhưng không xóa mất dữ liệu gốc. |
 | 2. Phát hiện bởi | Rà soát phạm vi và chạy fixture bằng OpenCode, 28/10/2026; test tái lập/hồi quy `tests/intake-boundary.test.js:10`, ánh xạ TC-11. |
 | 3. Triệu chứng | Sửa/xóa mềm được phiếu DANG_XU_LY; sau khi xóa có thể tiếp nhận lại thiết bị đó. |
 | 4. Cách tái lập | Test đầu trong `tests/intake-boundary.test.js`: fixture có phiếu sau MOI, gọi update/delete; trước sửa FAIL với `Missing expected rejection`. |
@@ -34,7 +44,7 @@
 
 | Mục | Nội dung |
 |---|---|
-| 1. Mã và mức độ | BUG-003 · Minor — hiển thị không nhất quán QT-15. |
+| 1. Mã và mức độ | BUG-003 · **Minor** — hiển thị không nhất quán QT-15; số điện thoại vẫn được lưu đúng, chỉ sai ở lớp hiển thị. |
 | 2. Phát hiện bởi | Đối chiếu UI với case study, 28/10/2026; test tái lập/hồi quy `tests/static-assets.test.js:333`, cùng quy tắc QT-15 với TC-08 (TC-08 chỉ kiểm helper, không thay test render). |
 | 3. Triệu chứng | Kết quả hồ sơ trên màn tiếp nhận hiện số đầy đủ dù view phiếu đã che. |
 | 4. Cách tái lập | Test `QT-15: kết quả tra cứu hồ sơ che SĐT` trong `tests/static-assets.test.js`; trước sửa FAIL vì không có chuỗi đã che. |
@@ -46,7 +56,7 @@
 
 | Mục | Nội dung |
 |---|---|
-| 1. Mã và mức độ | BUG-004 · Major — dữ liệu đầu vào không được kiểm tra đúng. |
+| 1. Mã và mức độ | BUG-004 · **Major** — dữ liệu đầu vào không được kiểm tra đúng; dữ liệu sai kiểu/ngày không tồn tại có thể được ghi vào bản ghi. |
 | 2. Phát hiện bởi | Kiểm tra validation tại route và service, 28/10/2026; các test tái lập/hồi quy `tests/intake-boundary.test.js:62,76,99`, ánh xạ TC-10. |
 | 3. Triệu chứng | Ngày 2026-02-30 được coi là hợp lệ; object được ép thành mô tả đủ độ dài. |
 | 4. Cách tái lập | Các test validation/service trong `tests/intake-boundary.test.js` FAIL trước sửa vì kết quả valid=true hoặc thiếu rejection. |
@@ -58,7 +68,7 @@
 
 | Mục | Nội dung |
 |---|---|
-| 1. Mã và mức độ | BUG-005 · Minor — số liệu UI gây hiểu nhầm. |
+| 1. Mã và mức độ | BUG-005 · **Minor** — số liệu UI gây hiểu nhầm; chỉ sai chỉ số hiển thị, không thay đổi dữ liệu phiếu. |
 | 2. Phát hiện bởi | Chụp màn hình lỗi kết nối thật trên CSDL tạm, 28/10/2026; test hồi quy `tests/static-assets.test.js:309` cho UI rỗng/lỗi, kiểm tra bổ sung ngoài 12 TC nghiệp vụ. |
 | 3. Triệu chứng | Không tải được phiếu hoặc không có phiếu mở nhưng banner vẫn hiện đạt SLA 100%. |
 | 4. Cách tái lập | Mở danh sách trên CSDL chưa có phiếu hoặc dừng Express rồi tải lại danh sách từ UI đang mở. |

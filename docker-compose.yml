@@ -25,7 +25,8 @@ services:
       JWT_SECRET: ${JWT_SECRET:?Copy .env.example to .env in a fresh checkout first}
       JWT_EXPIRES_IN: 8h
       DEMO_STAFF_USERNAME: nhanvien
-      DEMO_STAFF_PASSWORD: nhanvien123
+      # Public bcrypt hash of the documented local demo password; never a production credential.
+      DEMO_STAFF_PASSWORD_HASH: $$2b$$10$$FfRmCWIJE7yhCWxsfUUqFOHOeuUj16tvbbrtngan.yxEmw./Ju.Ci
       DEMO_STAFF_NAME: Local demo employee
       DEMO_STAFF_CENTER: "1"
       LOG_LEVEL: info
