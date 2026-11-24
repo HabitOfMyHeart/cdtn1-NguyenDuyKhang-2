@@ -10,7 +10,7 @@
 | **Major** | Sai nghiệp vụ hoặc bỏ qua ràng buộc quan trọng, ảnh hưởng trực tiếp đến bản ghi/phiếu và không có cách xử lý hợp lệ trong phạm vi L2. | BUG-002, BUG-004 |
 | **Minor** | Sai hiển thị hoặc khó dùng cục bộ, có cách tránh, không làm sai bản ghi và không chặn luồng chính. | BUG-001, BUG-003, BUG-005 |
 
-## Tình trạng minh chứng commit (đối chiếu lại ngày 22/11/2026)
+## Tình trạng minh chứng commit (đối chiếu lại ngày 23/11/2026)
 
 Đã đối chiếu diff và giữ link commit chứa thay đổi sửa cho cả 5 bug bên dưới. Đây là **bug lịch sử**, không phải lỗi mới phát hiện trong buổi 14. Các ghi nhận FAIL trước sửa/E2E bên dưới được giữ từ nhật ký cũ.
 

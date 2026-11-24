@@ -18,10 +18,12 @@ the API documentation for section 2.6 live in
 - Compose project used for the final run: `bt3-final-20261112`; host HTTP port
   `127.0.0.1:3001`.
 - The existing host application on port `3000` was left running.
-- No published `v1.0` clone is claimed. Commit/tag publication and a tag-based
-  clean test remain separate actions requiring the student's approval.
-- File hashes for the candidate are in `candidate-manifest.json`; the baseline
-  commit is `ba69a763d3216b11ecd98d8b6801b1027d7668b8` plus the uncommitted files.
+- Status after 23/11/2026: the annotated tag `v1.0` (`4aaeb2a`) is published and
+  a real clone/test run exists in `tag-v1.0-clone/`. The sections below are kept
+  as the historical record of the 12/11 packaging run.
+- File hashes: `candidate-manifest.json` is the `7d51189` snapshot;
+  `candidate-manifest-2026-11-24.json` is the `d7463f0` snapshot taken after the
+  S2/S3 hardening. The old baseline was `ba69a763d3216b11ecd98d8b6801b1027d7668b8`.
 
 ## Final results
 
@@ -116,13 +118,24 @@ the API documentation for section 2.6 live in
 | `host-health.json` | Host readiness response through port 3001 |
 | `frontend-assets.txt` | HTTP 200 checks for the UI, bundle and vendor assets |
 | `restart-persistence.txt` | Ticket survives app and Docker Desktop restart |
-| `dependency-audit.json` | Raw `npm audit` result (2 High) |
-| `candidate-manifest.json` | SHA-256 of the packaging files |
+| `dependency-audit.json` | Historical raw `npm audit` result at 12/11 (2 High) |
+| `dependency-audit-after-fix.txt` | `npm audit` after the 23/11 upgrade: 0 vulnerabilities |
+| `auth-hardening-tests.txt` | S2/S3 tests: cross-center 403, bcrypt accept/reject |
+| `candidate-manifest.json` | SHA-256 of the packaging files at `7d51189` |
+| `candidate-manifest-2026-11-24.json` | SHA-256 of the same files at `d7463f0` |
+| `tag-v1.0-clone/` | Real clone of tag `v1.0`, `npm ci`, `npm test`, screenshot and transcript |
 | `clean-clone/` | Fresh clone of published `main`, two commands, two-command results |
 | `docker-login.png` | Real screenshot of the Docker build login page |
 
-## Attachments not yet available
+## Attachments added after the review
 
-- A clone of tag `v1.0` and a repeat of the two setup commands from that tag.
-- A public Render URL and any cloud-database deployment. These are optional and
-  are not claimed here.
+- `tag-v1.0-clone/` — real clone of the published annotated tag `v1.0`
+  (peeled commit `4aaeb2a`), `npm ci` and `npm test` in a real console:
+  `130/129/0/1`, exit `0`; screenshot and transcript included.
+- `auth-hardening-tests.txt` — S2/S3 hardening suite on `main`.
+- `dependency-audit-after-fix.txt` — audit after the semver upgrade: 0 findings.
+- `candidate-manifest-2026-11-24.json` — hashes of the current candidate files.
+
+Still not claimed: full browser E2E, load testing, CI, and centre-level
+ownership for customers/devices. The hosted Render/Atlas demo is documented in
+the main report and `docs/deployment-guide.md`; it is a demo, not production.

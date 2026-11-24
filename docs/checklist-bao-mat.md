@@ -1,7 +1,7 @@
 # Checklist bảo mật — BT3
 
 **Phạm vi:** Smart CRM – Mekong Mobile, track SE, luồng L2; Docker local và bản deploy thử Render/Atlas.
-**Ngày rà soát:** 22/11/2026 (bổ sung S2/S3, audit sau nâng cấp). Đây là tự đánh giá, không phải chứng nhận an toàn hoặc pentest.
+**Ngày rà soát:** 23/11/2026 (bổ sung S2/S3, audit sau nâng cấp). Đây là tự đánh giá, không phải chứng nhận an toàn hoặc pentest.
 
 | # | Mục theo đề | Kết quả | Minh chứng và giới hạn |
 |---|---|---|---|
@@ -11,7 +11,7 @@
 | 4 | Mật khẩu và dữ liệu nhạy cảm được băm hoặc mã hóa | **ĐẠT — mật khẩu cấu hình** | `src/config/index.js` chỉ nhận `DEMO_STAFF_PASSWORD_HASH` (bcrypt cost 10–15), từ chối hash mẫu khi `NODE_ENV=production`; `src/routes/auth.routes.js` dùng `bcrypt.compare`, bỏ hoàn toàn so sánh plaintext/SHA-256. `tests/auth-hardening.test.js` kiểm đúng mật khẩu nhận token, sai mật khẩu nhận 401, và biến `DEMO_STAFF_PASSWORD` cũ bị bỏ qua. **Giới hạn:** chưa có collection tài khoản/đăng ký; dữ liệu hồ sơ mẫu không mã hóa ở tầng ứng dụng; che SĐT trên UI không phải mã hóa. |
 | 5 | Thông báo lỗi không lộ cấu trúc bên trong | **ĐÃ LÀM** | `src/middlewares/error.middleware.js` chuẩn hóa lỗi, không trả raw stack/URI CSDL, thêm mã tra cứu; `tests/infrastructure-error.test.js` kiểm mapping 400/401/403/404/409/413/422/500/503 và che lỗi nội bộ. Không dùng response giả làm minh chứng mới. |
 | 6 | Nhật ký không ghi secret hoặc PII không cần thiết | **ĐÃ LÀM** | `src/logger.js` chỉ giữ metadata hữu hạn, loại body/query/header và chuỗi tự do; `tests/infrastructure-logger.test.js` kiểm secret, PII và Error causes. Bootstrap Docker chỉ ghi trạng thái khởi tạo/tên bước và số bản ghi; smoke chỉ ghi tên phép kiểm và ID phiếu kỹ thuật. |
-| 7 | Phụ thuộc được ghim và đã kiểm cảnh báo lỗ hổng cơ bản | **ĐÃ LÀM** | Có `package-lock.json`, Docker dùng `npm ci` và image ghim digest. Ngày 22/11/2026 chạy `npm audit fix` **không dùng `--force`**: `body-parser` lên 2.4.0 (qua `express` 5.3.0), `mongoose` lên 8.24.10; `npm audit` trả **0 lỗ hổng**. Chạy lại `npm test`: 133 phát hiện, 132 PASS, 0 FAIL, 1 SKIP. Không tuyên bố audit sạch cho mọi môi trường ngoài lockfile này. |
+| 7 | Phụ thuộc được ghim và đã kiểm cảnh báo lỗ hổng cơ bản | **ĐÃ LÀM** | Có `package-lock.json`, Docker dùng `npm ci` và image ghim digest. Ngày 23/11/2026 chạy `npm audit fix` **không dùng `--force`**: `body-parser` lên 2.4.0 (qua `express` 5.3.0), `mongoose` lên 8.24.10; `npm audit` trả **0 lỗ hổng**. Chạy lại `npm test`: 133 phát hiện, 132 PASS, 0 FAIL, 1 SKIP. Không tuyên bố audit sạch cho mọi môi trường ngoài lockfile này. |
 
 ## Phân biệt các mục đã kiểm với phần còn thiếu
 
@@ -26,7 +26,7 @@
 - **Mật khẩu demo:** hash mẫu trong `.env.example` tương ứng mật khẩu công khai
   `nhanvien123`; đây là hash của mật khẩu mẫu, không phải bí mật. Production từ
   chối đúng hash mẫu này. Compose phải viết `$$` trước mỗi `$` của hash để
-  Compose không nội suy; cấu hình đã sửa ngày 22/11/2026.
+  Compose không nội suy; cấu hình đã sửa ngày 23/11/2026.
 - **Dữ liệu nguồn:** mẫu case study có thông tin hồ sơ; xem
   [ghi chú dữ liệu](../data/sample/README.md). Không khẳng định dữ liệu là giả hoặc
    đã được phép công khai. Ngày 12/11 đã đưa bản Docker lên Atlas theo yêu cầu của
@@ -37,7 +37,7 @@
   response. Không công khai nguyên log hoặc ảnh chứa PII/secret.
 - **Audit:** phân loại cảnh báo dựa trên công cụ. Hai cảnh báo High của lần chạy
   12/11 đã được xử lý bằng nâng cấp trong phạm vi semver và kiểm lại bằng
-  `npm audit` 0 lỗ hổng ngày 22/11/2026; không thêm chúng vào Bug Log vì chưa
+  `npm audit` 0 lỗ hổng ngày 23/11/2026; không thêm chúng vào Bug Log vì chưa
   tái lập khai thác trong phạm vi đồ án.
 
 ## Cách kiểm chứng lại
@@ -88,7 +88,7 @@ chạy ngoài container trước khi gửi request; log tại
 | Runtime | non-root, read-only root, `cap_drop: ALL`, loopback-only | `docs/evidence/bt3/app-runtime-inspect.txt` |
 | Guard trên host | từ chối trước khi gửi request, exit `1` | `docs/evidence/bt3/host-smoke-refusal.txt` |
 | `npm audit` | 2 High, chưa xử lý (mốc 12/11) | `docs/evidence/bt3/dependency-audit.json` |
-| `npm audit` sau nâng cấp | 0 lỗ hổng; `body-parser` 2.4.0, `mongoose` 8.24.10 (22/11/2026) | `docs/evidence/bt3/dependency-audit-after-fix.txt` |
+| `npm audit` sau nâng cấp | 0 lỗ hổng; `body-parser` 2.4.0, `mongoose` 8.24.10 (23/11/2026) | `docs/evidence/bt3/dependency-audit-after-fix.txt` |
 | Test S2/S3 | 3/3 PASS: 403 theo trung tâm, bcrypt đúng/sai, production bắt buộc hash | `tests/auth-hardening.test.js`; log `docs/evidence/bt3/auth-hardening-tests.txt` |
 | Render/Atlas | 338 document, 30 index khớp; 0 lỗi quan hệ; health HTTPS 200; 6 kiểm tra hosted chỉ đọc PASS | `docs/evidence/bt3/render/` |
 
@@ -107,6 +107,6 @@ chạy ngoài container trước khi gửi request; log tại
 Mục 3 đạt trong **phạm vi phiếu**, mục 4 đạt trong **phạm vi mật khẩu cấu hình**,
 mục 7 đạt trên lockfile hiện tại. Phần chưa đạt của mục 3 là quyền sở hữu
 khách/thiết bị toàn hệ thống; phần chưa đạt của mục 4 là mã hóa dữ liệu hồ sơ và
-collection tài khoản. Phép thử clone từ tag `v1.0` đã chạy ngày 22/11/2026 và
+collection tài khoản. Phép thử clone từ tag `v1.0` đã chạy ngày 23/11/2026 và
 được ghi ở Mục 7 của báo cáo; clone `main` mới nhất được chạy bổ sung để đối
 chiếu số test sau thay đổi.

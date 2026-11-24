@@ -116,7 +116,7 @@ Bỏ `findOrCreateByPhone`, `describeSla`, `getCenter` và hàm `updateCustomer`
 
 **Làm rõ mã tiêu chí:** bảng checklist có 7 mục riêng. Theo rubric SE BT3, **S2** là test quyền truy cập, **S3** là mật khẩu băm, **S4** là lỗi không lộ nội bộ; không gọi quyền sở hữu hồ sơ là S4. Tại mốc 12/11, checklist #3/#4/#7 vẫn **CHƯA LÀM** theo phạm vi của từng dòng.
 
-### TD-10 — Bổ sung S2/S3, xử lý audit và phép thử tag `v1.0` (22/11/2026)
+### TD-10 — Bổ sung S2/S3, xử lý audit và phép thử tag `v1.0` (23/11/2026)
 
 - **Phản hồi chấm BT3:** (1) S2 chưa có test quyền theo chủ sở hữu; S3 so sánh mật khẩu demo dạng rõ; (2) link Bug Log trỏ commit gộp, không thể hiện quá trình phát hiện; (3) mức độ bug phải dùng Critical/Major/Minor; (4) Mục 7 chưa có ảnh terminal clone từ tag `v1.0`.
 - **Quyết định:** bổ sung `tests/auth-hardening.test.js` với ba test: 403 cho bốn thao tác chéo trung tâm ở HTTP thật, bcrypt đúng/sai, production bắt buộc hash. Chuyển cấu hình sang `DEMO_STAFF_PASSWORD_HASH` (bcrypt cost 10–15), bỏ plaintext fallback; chặn hash mẫu ở production. Chạy `npm audit fix` không `--force` để xử lý hai cảnh báo High trong phạm vi semver. Chạy clone thật từ tag `v1.0` bằng `npm ci` + `npm test` trong terminal và chụp ảnh. Đổi nhãn mức độ bug sang thang của đề; thêm bảng quy ước và ghi rõ giới hạn của hai commit gộp.

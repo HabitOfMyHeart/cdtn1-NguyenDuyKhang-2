@@ -1,6 +1,6 @@
 # White-box test from tag `v1.0`
 
-**Run:** 22/11/2026 (local, real PowerShell console; not a replayed image).  
+**Run:** 23/11/2026 (local, real PowerShell console; not a replayed image).  
 **Repository:** `https://github.com/HabitOfMyHeart/cdtn1-NguyenDuyKhang-2.git`  
 **Tag:** `v1.0` (annotated tag object `b2d7589`; peeled commit `4aaeb2a`).
 

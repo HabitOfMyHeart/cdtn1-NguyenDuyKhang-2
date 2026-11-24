@@ -2,15 +2,15 @@
 
 **Dự án:** Smart CRM – Mekong Mobile · Track SE · Luồng L2  
 **Sinh viên:** Nguyễn Duy Khang · MSSV 2374802010212  
-**Ngày kiểm chứng lại:** 12/11/2026 (đóng gói BT3) · **Bổ sung S2/S3:** 22/11/2026
+**Ngày kiểm chứng lại:** 12/11/2026 (đóng gói BT3) · **Bổ sung S2/S3:** 23/11/2026
 **Kế hoạch:** [Test Plan](test-plan.md)
 
 ## 1. Môi trường và kết quả tổng hợp
 
-- Mã nguồn được kiểm: `main` tại `4aaeb2a` (mốc tag `v1.0`), bổ sung test S2/S3 ngày 22/11/2026 trên `main`; bảng 12 TC và ảnh gốc được lập tại `8d9d537` ngày 05/11/2026.
+- Mã nguồn được kiểm: `main` tại `d7463f0` (24/11/2026), sau mốc tag `v1.0` = `4aaeb2a`; bổ sung test S2/S3 ngày 23/11/2026 trên `main`; bảng 12 TC và ảnh gốc được lập tại `8d9d537` ngày 05/11/2026.
 - Windows/PowerShell; Node.js `v24.21.0`, npm `11.19.0`.
 - Lệnh tại gốc repo: `npm test`; exit code **0**; không dùng CSDL chính. Lần chạy trong container Docker riêng có cùng kết quả, log tại [container-tests.txt](evidence/bt3/container-tests.txt).
-- [Ảnh tổng kết do người thực hiện cung cấp](screenshots/buoi14/testreport.png) và 12 ảnh TC được chụp ngày 05/11 với tổng 121. Lần chạy 12/11 có thêm test đóng gói (130); lần chạy 22/11 thêm 3 test S2/S3, tổng hiện tại **133**. Không dùng ảnh cũ làm số liệu hiện tại.
+- [Ảnh tổng kết do người thực hiện cung cấp](screenshots/buoi14/testreport.png) và 12 ảnh TC được chụp ngày 05/11 với tổng 121. Lần chạy 12/11 có thêm test đóng gói (130); lần chạy 23/11 thêm 3 test S2/S3, tổng hiện tại **133**. Không dùng ảnh cũ làm số liệu hiện tại.
 
 | Chỉ tiêu | Kết quả |
 |---|---:|
@@ -39,7 +39,7 @@ Bảng dưới ánh xạ 12 case vào assertion **đã chạy trong bộ test t�
 | TC-06 | Cùng thiết bị và ranh giới TC-05. | Kiểm tra bảo hành ở đầu ngày kế tiếp. | `2026-10-22T00:00:00+07:00`. | `conBaoHanh=false`, “Hết bảo hành”. | High | `false` và kết luận đúng; assertion nửa sau cùng test biên QT-05. | PASS |
 | TC-07 | Thiết bị thiếu ngày mua. | Kiểm helper và tạo phiếu qua service với thiết bị chưa xác minh. | `purchase_date=null`, BH 12 tháng. | `conBaoHanh=null`, “Chưa xác minh bảo hành”; không trả false. | Medium | Cả helper và view phiếu giữ null, kết luận đúng. | PASS |
 | TC-08 | Helper che số; không cần trình duyệt thật. | Gọi `maskPhone`; đối chiếu kết quả hiển thị. | `0901234567`. | `0901***567`. | High | Test hợp đồng QT-15 trả đúng số đã che. | PASS |
-| TC-09 | Phiếu thuộc trung tâm khác nhân viên. | Gọi service xem phiếu ngoài trung tâm; bổ sung HTTP thật cho GET chi tiết/lịch sử, PUT, DELETE. | Phiếu center 1; JWT nhân viên center 2; cùng trung tâm và ẩn danh để đối chứng. | Lỗi forbidden, mã `KHONG_DU_QUYEN`; HTTP 403 cho mọi thao tác chéo trung tâm, 200 cùng trung tâm, 401 ẩn danh. | High | Assertion service QT-14 PASS; bổ sung 22/11: cả bốn request chéo trung tâm trả đúng 403 và dữ liệu không đổi, test `auth-hardening` PASS. | PASS |
+| TC-09 | Phiếu thuộc trung tâm khác nhân viên. | Gọi service xem phiếu ngoài trung tâm; bổ sung HTTP thật cho GET chi tiết/lịch sử, PUT, DELETE. | Phiếu center 1; JWT nhân viên center 2; cùng trung tâm và ẩn danh để đối chứng. | Lỗi forbidden, mã `KHONG_DU_QUYEN`; HTTP 403 cho mọi thao tác chéo trung tâm, 200 cùng trung tâm, 401 ẩn danh. | High | Assertion service QT-14 PASS; bổ sung 23/11: cả bốn request chéo trung tâm trả đúng 403 và dữ liệu không đổi, test `auth-hardening` PASS. | PASS |
 | TC-10 | Express loopback thật, JWT test; không kết nối CSDL. | POST `/api/tickets` lần lượt ba body sai; kiểm status và fields. | (a) `issue_desc={}`; (b) `received_at=2026-02-30T09:00:00+07:00`; (c) body `[]`; trường khác theo PAYLOAD test. | Cả ba HTTP 422, `DU_LIEU_KHONG_HOP_LE`, có field lỗi ngoài mã tra cứu. | High | Cả ba response đạt assertion 422/code/fields trong test HTTP thật. | PASS |
 | TC-11 | Fixture phiếu đã qua MOI. | Thử sửa/xóa phiếu; kiểm không thể xóa để tiếp nhận lại. | Các trạng thái sau MOI trong test L2. | Từ chối sửa/xóa bằng conflict `PHIEU_CHI_DOC`; không bỏ qua ràng buộc phiếu mở. | High | Test hồi quy service L2 thành công, không phát sinh thay đổi trái phép trong fixture. | PASS |
 | TC-12 | Dependencies đã có; chạy tại gốc repo và trong clone tag `v1.0`. | Chạy lại `npm test`; đối chiếu tổng giữa hai môi trường. | Bộ `tests/*.test.js`, không có `DATASET_SOURCE`. | Kết quả tái lập: 133 tổng, 132 PASS, 0 FAIL, 1 SKIP trên `main`; tag `v1.0` giữ 130/129/0/1 theo mã tại thời điểm tag. | High | `main` cho 133/132/0/1, exit 0; clone tag cho 130/129/0/1, exit 0; log và ảnh terminal ở Mục 7 báo cáo, [container-tests.txt](evidence/bt3/container-tests.txt). | PASS |
@@ -88,7 +88,7 @@ npm test
 | Bảo mật/chất lượng dữ liệu | TC-08 che số; TC-09 phạm vi trung tâm; bổ sung HTTP 403 (S2) và bcrypt (S3). | Có. |
 | Tái lập | TC-12 chạy lại bộ test cho cùng tổng PASS/FAIL/SKIP. | Có; test tái trích xuất file nguồn vẫn SKIP. |
 
-Ảnh hiện có: [docs/screenshots/buoi14/](screenshots/buoi14/) gồm `testreport.png` và **12 ảnh riêng TC-01 → TC-12 do người thực hiện cung cấp**, chụp ngày 05/11/2026. Ảnh tổng kết và ảnh TC-12 ghi tổng 121/120 của lần chạy cũ; lần chạy 12/11 có thêm 9 test đóng gói (130/129), lần chạy 22/11 thêm 3 test S2/S3 nên tổng hiện tại là **133/132**. Không dùng ảnh cũ để thay số liệu hiện tại; ảnh terminal của phép thử clone tag nằm trong báo cáo Word và `docs/evidence/bt3/tag-v1.0-clone/`.
+Ảnh hiện có: [docs/screenshots/buoi14/](screenshots/buoi14/) gồm `testreport.png` và **12 ảnh riêng TC-01 → TC-12 do người thực hiện cung cấp**, chụp ngày 05/11/2026. Ảnh tổng kết và ảnh TC-12 ghi tổng 121/120 của lần chạy cũ; lần chạy 12/11 có thêm 9 test đóng gói (130/129), lần chạy 23/11 thêm 3 test S2/S3 nên tổng hiện tại là **133/132**. Không dùng ảnh cũ để thay số liệu hiện tại; ảnh terminal của phép thử clone tag nằm trong báo cáo Word và `docs/evidence/bt3/tag-v1.0-clone/`.
 
 **Minh chứng ảnh:** đã có 12 tệp ảnh riêng cho 12 mã TC, nội dung khác nhau. Ảnh không thay thế log máy đọc được; log mới nhất nằm trong [container-tests.txt](evidence/bt3/container-tests.txt) và [host-coverage.txt](evidence/bt3/host-coverage.txt).
 
@@ -96,12 +96,12 @@ npm test
 
 - Bộ test hiện có không phát hiện FAIL trong lần chạy lại; một test chưa thực thi do thiếu file nguồn.
 - Có nội dung đủ năm loại trong kiểm thử tự động; đã có 12 ảnh riêng TC-01 → TC-12.
-- Đã chạy tích hợp MongoDB thật trong gói Docker demo riêng và live smoke 8 kiểm tra; chưa chạy E2E trình duyệt đầy đủ, đo tải hay CI. Coverage đo lại ngày 22/11/2026: **78,83% dòng, 78,28% nhánh, 70,29% hàm** — **chưa đạt 80%** dòng/nhánh, không tuyên bố đạt.
-- Bổ sung 22/11/2026: 3 test S2/S3 PASS — 403 cho bốn thao tác chéo trung tâm, 200 cùng trung tâm, 401 ẩn danh; bcrypt đúng/sai; production bắt buộc hash. Log tại [auth-hardening-tests.txt](evidence/bt3/auth-hardening-tests.txt).
-- `npm audit fix` không `--force` ngày 22/11/2026 đưa `body-parser` lên 2.4.0 và `mongoose` lên 8.24.10; `npm audit` còn **0 lỗ hổng**; log tại [dependency-audit-after-fix.txt](evidence/bt3/dependency-audit-after-fix.txt).
+- Đã chạy tích hợp MongoDB thật trong gói Docker demo riêng và live smoke 8 kiểm tra; chưa chạy E2E trình duyệt đầy đủ, đo tải hay CI. Coverage đo lại ngày 23/11/2026: **78,83% dòng, 78,28% nhánh, 70,29% hàm** — **chưa đạt 80%** dòng/nhánh, không tuyên bố đạt.
+- Bổ sung 23/11/2026: 3 test S2/S3 PASS — 403 cho bốn thao tác chéo trung tâm, 200 cùng trung tâm, 401 ẩn danh; bcrypt đúng/sai; production bắt buộc hash. Log tại [auth-hardening-tests.txt](evidence/bt3/auth-hardening-tests.txt).
+- `npm audit fix` không `--force` ngày 23/11/2026 đưa `body-parser` lên 2.4.0 và `mongoose` lên 8.24.10; `npm audit` còn **0 lỗ hổng**; log tại [dependency-audit-after-fix.txt](evidence/bt3/dependency-audit-after-fix.txt).
 - Bug lịch sử và tình trạng commit theo [Bug Log](bug-log.md); hai commit sửa là commit gộp, chỉ chứng minh bản sửa chứ không tái hiện riêng bước phát hiện — giới hạn này được ghi rõ đầu Bug Log.
 - Kiểm lại clone `main` `c055f81` trong container riêng: 130/129/0/1, exit 0; log UTF-8 và số đếm tại [render/fresh-main/](evidence/bt3/render/fresh-main/). Ảnh `fresh-main-tests.png`/`fresh-main-services.png` chụp trình duyệt đang hiển thị nguyên log thật, không giả làm terminal đang chạy hay clone từ tag.
-- Phép thử máy trắng từ tag `v1.0` đã chạy trong terminal thật ngày 22/11/2026: clone đúng tag, `npm ci`, `npm test` cho 130/129/0/1, exit 0; ảnh và log tại `docs/evidence/bt3/tag-v1.0-clone/`.
+- Phép thử máy trắng từ tag `v1.0` đã chạy trong terminal thật ngày 23/11/2026: clone đúng tag, `npm ci`, `npm test` cho 130/129/0/1, exit 0; ảnh và log tại `docs/evidence/bt3/tag-v1.0-clone/`.
 - Bản Render/Atlas có 6/6 kiểm tra hosted chỉ đọc PASS; không thay cho 12 TC và không chứng minh CRUD trên cloud đã được chạy toàn bộ: [render-readonly-verification.json](evidence/bt3/render/render-readonly-verification.json).
 
 Sau khi commit/push tài liệu, có thể dùng:

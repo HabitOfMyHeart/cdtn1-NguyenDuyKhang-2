@@ -2,7 +2,7 @@
 
 **Dự án:** Smart CRM – Mekong Mobile · Track SE · Luồng L2 (tiếp nhận bảo hành)  
 **Sinh viên:** Nguyễn Duy Khang · MSSV 2374802010212  
-**Ngày lập:** 05/11/2026 · **Cập nhật đóng gói BT3:** 12/11/2026 · **Cập nhật bổ sung S2/S3:** 22/11/2026
+**Ngày lập:** 05/11/2026 · **Cập nhật đóng gói BT3:** 12/11/2026 · **Cập nhật bổ sung S2/S3:** 23/11/2026
 
 ## 1. Mục tiêu và phạm vi
 
@@ -25,7 +25,7 @@ Kiểm chứng quy tắc tiếp nhận, chất lượng dữ liệu và các l�
 ## 2. Chiến lược và thiết kế test
 
 - Dùng Node.js Test Runner (`node:test`), assertion và fixture có sẵn; không thêm framework hay đổi mã nguồn nghiệp vụ.
-- Bổ sung ngày 22/11/2026: `tests/auth-hardening.test.js` kiểm trực tiếp hai điểm từng thiếu minh chứng — **S2** (403 theo chủ sở hữu/phạm vi trung tâm ở ranh giới HTTP thật) và **S3** (bcrypt cho mật khẩu demo, production bắt buộc hash, plaintext cũ bị bỏ qua). Test dùng Express loopback và JWT ký trong tiến trình, không đọc/ghi MongoDB thật.
+- Bổ sung ngày 23/11/2026: `tests/auth-hardening.test.js` kiểm trực tiếp hai điểm từng thiếu minh chứng — **S2** (403 theo chủ sở hữu/phạm vi trung tâm ở ranh giới HTTP thật) và **S3** (bcrypt cho mật khẩu demo, production bắt buộc hash, plaintext cũ bị bỏ qua). Test dùng Express loopback và JWT ký trong tiến trình, không đọc/ghi MongoDB thật.
 - Phần lớn test là unit/service với repository trong bộ nhớ, helper thuần hoặc dependency giả lập. Có kiểm thử hợp đồng và HTTP thật tại ranh giới Express; không gán nhãn mọi test service là API test.
 - Chọn **12 kịch bản báo cáo** từ các test tự động để đọc và đối chiếu; chúng không phải 12 lần test tay mới. TC-05 và TC-06 là hai assertion trên cùng ranh giới ngày trong một test function.
 - Nguồn đối chiếu: [SRS](srs.md), [hợp đồng API](api-contract.md), [Bug Log](bug-log.md) và test hồi quy trong `tests/`.
@@ -56,7 +56,7 @@ npm test
 
 Lệnh tương ứng: `node --test tests/*.test.js`, hiện gồm 15 file test. Xem ánh xạ từng TC và lệnh chạy chọn lọc tại [Test Report](test-report.md).
 
-Số lượng kiểm lại theo từng nhóm file ngày 22/11/2026 (không đếm trùng; đếm bằng cách chạy riêng từng file):
+Số lượng kiểm lại theo từng nhóm file ngày 23/11/2026 (không đếm trùng; đếm bằng cách chạy riêng từng file):
 
 | Nhóm / ranh giới | Phát hiện | PASS / SKIP |
 |---|---:|---|
@@ -69,7 +69,7 @@ Số lượng kiểm lại theo từng nhóm file ngày 22/11/2026 (không đế
 Nhóm HTTP hỗn hợp có cả assertion helper/service, không gọi cả 25 là API test.
 Trong `npm test` có **0 integration test đọc/ghi MongoDB thật**; live smoke Docker
 8 kiểm tra và 6 kiểm tra Render chỉ đọc là các lần chạy riêng. Số chi tiết theo
-file được đếm lại ngày 22/11/2026; bảng cũ 14 file trong
+file được đếm lại ngày 23/11/2026; bảng cũ 14 file trong
 `docs/evidence/bt3/render/test-file-counts.json` chỉ là mốc lịch sử.
 
 Test tái trích xuất dữ liệu cần biến `DATASET_SOURCE` trỏ đến file nguồn phù hợp và Python. Nếu thiếu biến này, ghi **SKIP**, không tính PASS. Không đưa đường dẫn nguồn cá nhân hay thông tin bí mật vào minh chứng.
@@ -81,5 +81,5 @@ Test tái trích xuất dữ liệu cần biến `DATASET_SOURCE` trỏ đến f
 - Mục tiêu kỹ thuật: `npm test` exit code 0, không có FAIL; mọi SKIP có lý do. Mục tiêu hoàn chỉnh cần chạy cả test tái trích xuất khi có file nguồn.
 - Đã có ảnh riêng TC-01 → TC-12 trong `docs/screenshots/buoi14/`; ảnh `TC-12.png` là lần chạy cũ 121/120, log lần chạy hiện tại nằm trong `docs/evidence/bt3/container-tests.txt`. Một ảnh tổng kết không thay thế ảnh từng case.
 - Nếu phát hiện FAIL: giữ bằng chứng, ghi bước tái lập/nguyên nhân/cách sửa trong Bug Log; commit chứa bản sửa phải có link công khai đúng thay đổi. Đề BT3 không yêu cầu mỗi bug một commit riêng.
-- CI: **Chưa làm**. Coverage: đo lại ngày 22/11/2026 bằng `node --test --experimental-test-coverage` sau khi thêm test S2/S3: **78,83% dòng, 78,28% nhánh, 70,29% hàm**; vẫn **chưa đạt 80%** dòng/nhánh, không tuyên bố đạt.
+- CI: **Chưa làm**. Coverage: đo lại ngày 23/11/2026 bằng `node --test --experimental-test-coverage` sau khi thêm test S2/S3: **78,83% dòng, 78,28% nhánh, 70,29% hàm**; vẫn **chưa đạt 80%** dòng/nhánh, không tuyên bố đạt.
 - Đầu ra: Test Plan này và [Test Report](test-report.md); giới hạn minh chứng phải được giữ nguyên khi điền checklist nộp.

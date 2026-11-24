@@ -1,0 +1,18 @@
+{
+  "commit": "d7463f0cf4f43c70c583ceb565689f0299719c57",
+  "baseline_commit": "4aaeb2a",
+  "scope": "main at d7463f0 (24/11/2026); tag v1.0 stays at 4aaeb2a",
+  "sha256": {
+    "Dockerfile": "b7cfc89b4f5636d397cbd4fb227fc8ebea9cc517ed3ef5e6f5d729cb214dadec",
+    "docker-compose.yml": "aeaa0b73c698bf7b4de359fda2fd738930794f44689e5c6f0e8d0df1c06068d8",
+    ".dockerignore": "bf5c25a9038e4ad5b1fb0030aee3241161ebf4e2317ba8fb697a21596c0d707b",
+    ".env.example": "241ddd97e06f083c26247df39cf38647e6adf7498fbe0ac0ee95b6d04dc785f9",
+    "docker/start-demo.js": "0a99e6c2cacbea48658a1eb4524a968e170c18e12259fb7f1a3ae86a6b1d2a6d",
+    "docker/smoke-guard.js": "34e84ecc3acc77b00373fc33f0c5e43d64ea65e91c71f8b05577a22bcf1863b4",
+    "tests/docker-startup.test.js": "d98d1d656693db9921c2a3f429324f4922fa7d9f89dacbc75eceff26b45848d7",
+    "tests/docker-smoke.js": "f0a7b048b340ad78af83a81615d44bcd52133e9c4d4c186df9afe8601d787d69",
+    "tests/auth-hardening.test.js": "eeb75678f4dc683aee7d7cbd5d874d98123f190586f2d3e24f004480e361b95b",
+    "package.json": "a9508a60e94d7341ee8e3366c1f90bb7b465d40f5df27f15d103cf5183fe79de",
+    "package-lock.json": "88ad3de7cfba49b083ffb7099f615cb0a6d8bc3b4d918cc79ffebdc5ed077dcd"
+  }
+}

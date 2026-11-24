@@ -50,7 +50,7 @@ khai báo cũ) và phiên bổ sung tài liệu/triển khai Render–Atlas hi�
 Các lần chạy tự động trong bảng do OpenCode thực hiện và có log/tệp kèm theo.
 **Người nộp phải tự đọc, hiểu và chạy lại trước khi nộp**; bảng này không thay
 thế xác nhận của người nộp, peer review hay kiểm tra của giảng viên. Sau bổ sung
-22/11/2026, mục 3 đạt trong **phạm vi phiếu**, mục 4 đạt trong **phạm vi mật
+23/11/2026, mục 3 đạt trong **phạm vi phiếu**, mục 4 đạt trong **phạm vi mật
 khẩu cấu hình**, mục 7 đạt trên lockfile hiện tại; quyền sở hữu khách/thiết bị
 và mã hóa dữ liệu hồ sơ vẫn là giới hạn. Đã có deploy thử tại
 https://cdtn1-nguyenduykhang-2.onrender.com/; không tuyên bố production-ready,
@@ -60,4 +60,4 @@ không bảo đảm điểm cộng hoặc khả dụng tại thời điểm ch�
 
 **MSSV:** 2374802010212
 
-**Ngày cập nhật:** 22/11/2026
+**Ngày cập nhật:** 24/11/2026

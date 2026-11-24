@@ -44,7 +44,7 @@ Hai dịch vụ phải `healthy`. Lần đầu tự migration/seed; marker kỹ 
 Đây là gói demo local, không phải production. Xem [Deployment Guide tiếng Anh](docs/deployment-guide.md)
 và [checklist bảo mật](docs/checklist-bao-mat.md); các giới hạn phải được giữ khi nộp.
 Bộ kiểm thử đã được chạy lại từ source của tag `v1.0` trong terminal thật ngày
-22/11/2026: 130/129/0/1, exit 0; log và ảnh tại
+23/11/2026: 130/129/0/1, exit 0; log và ảnh tại
 `docs/evidence/bt3/tag-v1.0-clone/`. Bản `main` hiện tại có 133 test.
 
 ### Cách chạy trực tiếp — giữ để tham khảo BT2
@@ -105,7 +105,7 @@ API phiếu giới hạn theo trung tâm của token. **Khách hàng/thiết b�
 - Đã chuyển sáu collection nghiệp vụ từ Docker `mekong_bt3_demo` (MongoDB 8.0.17) sang Atlas `mekong_bt3_render` (8.0.37): **338 document, 30 index khớp**, 0 lỗi tham chiếu. Không chuyển marker `_bt3_deployment`, không sửa CSDL Windows hoặc dữ liệu Docker nguồn.
 - Sáu kiểm tra hosted chỉ đọc PASS: health, đăng nhập, danh mục, đúng 9 phiếu của center 1, chi tiết phiếu, lịch sử 5 dòng của phiếu được chọn. Đây không phải toàn bộ Postman collection hoặc kiểm thử tạo/sửa/xóa trên Render.
 - Các bước deploy và biến môi trường: [Deployment Guide, mục 6](docs/deployment-guide.md#6-optional-hosted-demo--render-and-mongodb-atlas). Minh chứng đã lược bí mật: [render/](docs/evidence/bt3/render/).
-- **Chỉ là demo, chưa production-ready:** `NODE_ENV=development`; JWT secret hiện có chưa đạt validation production; mật khẩu demo đã chuyển sang bcrypt hash nhưng vẫn là tài khoản mẫu công khai. `npm audit` đã về **0 lỗ hổng** sau khi nâng cấp trong phạm vi semver ngày 22/11/2026. Dữ liệu case study chưa được chứng minh đã ẩn danh hoặc có quyền công khai; xem [checklist](docs/checklist-bao-mat.md). Render Free có thể ngủ, cần kiểm lại URL trước buổi chấm.
+- **Chỉ là demo, chưa production-ready:** `NODE_ENV=development`; JWT secret hiện có chưa đạt validation production; mật khẩu demo đã chuyển sang bcrypt hash nhưng vẫn là tài khoản mẫu công khai. `npm audit` đã về **0 lỗ hổng** sau khi nâng cấp trong phạm vi semver ngày 23/11/2026. Dữ liệu case study chưa được chứng minh đã ẩn danh hoặc có quyền công khai; xem [checklist](docs/checklist-bao-mat.md). Render Free có thể ngủ, cần kiểm lại URL trước buổi chấm.
 
 ## 4. Kiểm thử và minh chứng
 
@@ -113,7 +113,7 @@ API phiếu giới hạn theo trung tâm của token. **Khách hàng/thiết b�
 npm test
 ```
 
-Kết quả ngày 22/11/2026: **133 test, 132 PASS, 0 FAIL, 1 SKIP** trên host. Mốc 12/11 là 130/129/0/1; log container lịch sử tại `docs/evidence/bt3/container-tests.txt`. Test tự dựng fixture, không cần MongoDB hay CSV ngoài repo. Test tái trích nguồn được SKIP khi thiếu `DATASET_SOURCE`; đây là kiểm tra bổ sung, các loại test bắt buộc đều chạy. Ba test đại diện trong `tests/ticket.service.test.js`: happy path (dòng 53), biên bảo hành (dòng 169), dữ liệu sai (dòng 216). Bổ sung S2/S3 tại `tests/auth-hardening.test.js`: 403 theo trung tâm, bcrypt đúng/sai, production bắt buộc hash. Coverage đo lại ngày 22/11: **78,83% dòng, 78,28% nhánh, 70,29% hàm** — chưa đạt 80% dòng/nhánh.
+Kết quả ngày 23/11/2026: **133 test, 132 PASS, 0 FAIL, 1 SKIP** trên host. Mốc 12/11 là 130/129/0/1; log container lịch sử tại `docs/evidence/bt3/container-tests.txt`. Test tự dựng fixture, không cần MongoDB hay CSV ngoài repo. Test tái trích nguồn được SKIP khi thiếu `DATASET_SOURCE`; đây là kiểm tra bổ sung, các loại test bắt buộc đều chạy. Ba test đại diện trong `tests/ticket.service.test.js`: happy path (dòng 53), biên bảo hành (dòng 169), dữ liệu sai (dòng 216). Bổ sung S2/S3 tại `tests/auth-hardening.test.js`: 403 theo trung tâm, bcrypt đúng/sai, production bắt buộc hash. Coverage đo lại ngày 23/11: **78,83% dòng, 78,28% nhánh, 70,29% hàm** — chưa đạt 80% dòng/nhánh.
 
 - [Log test cuối](docs/evidence/final/npm-test.txt).
 - [Log S2/S3: 403 theo trung tâm và bcrypt](docs/evidence/bt3/auth-hardening-tests.txt).
